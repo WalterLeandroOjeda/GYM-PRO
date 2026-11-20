@@ -71,6 +71,43 @@
         .timer-finished {
             animation: pulseGlow 1.5s infinite;
         }
+        /* Evita que el bloque central pise los botones laterales en celulares */
+.header-top-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 4px;
+    min-width: 0;
+}
+
+.header-center-status {
+    min-width: 0;
+    flex: 1 1 0%;
+    overflow: hidden;
+    text-align: center;
+}
+
+.header-center-status p {
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+@media (max-width: 420px) {
+    #header-station-title {
+        font-size: 10px;
+    }
+    #header-progress-sub {
+        font-size: 8px;
+        line-height: 1.2;
+    }
+    .header-action-btn {
+        width: 28px !important;
+        height: 28px !important;
+        border-radius: 10px !important;
+    }
+    .header-action-btn i {
+        font-size: 13px !important;
+    }
     </style>
 </head>
 <body class="min-h-screen flex flex-col pb-32 selection:bg-limeaccent selection:text-darkbg">
