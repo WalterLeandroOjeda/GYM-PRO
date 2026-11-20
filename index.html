@@ -117,6 +117,20 @@
     .header-action-btn i {
         font-size: 13px !important;
     }
+    /* Corrige la posición de la pelotita al activar el switch */
+.toggle-checkbox:checked {
+    left: auto !important;
+    right: 2px !important;
+    border-color: #0f1115;
+}
+.toggle-checkbox:checked + .toggle-label {
+    background-color: #a3e635;
+}
+
+/* Reloj grande tipo Tabata durante el descanso automático */
+#tabata-rest-overlay.is-active {
+    display: flex;
+}
     </style>
 </head>
 <body class="min-h-screen flex flex-col pb-32 selection:bg-limeaccent selection:text-darkbg">
@@ -333,6 +347,21 @@
                 </button>
             </div>
         </div>
+        <!-- RELOJ GRANDE ESTILO TABATA (SE EXPANDE AL COMPLETAR SERIE) -->
+<div id="tabata-rest-overlay" class="hidden fixed inset-0 z-40 bg-[#0f1115]/92 backdrop-blur-md flex-col items-center justify-center p-6 text-center select-none">
+    <div class="w-full max-w-sm bg-[#181b22] border border-limeaccent/40 rounded-3xl p-6 shadow-2xl">
+        <p class="text-[11px] font-black uppercase tracking-widest text-limeaccent">DESCANSO ACTIVO • TABATA</p>
+        <p id="tabata-exercise-label" class="text-xs font-bold text-slate-300 mt-1 truncate"></p>
+
+        <div id="tabata-countdown" class="my-6 text-6xl font-black font-mono text-white tracking-tight">01:30</div>
+
+        <div class="flex items-center justify-center gap-2.5">
+            <button onclick="addTabataSeconds(15)" class="px-3 py-2.5 rounded-xl bg-[#212530] hover:bg-white/15 border border-white/10 text-xs font-black text-slate-200">+15s</button>
+            <button onclick="toggleTimer()" id="tabata-pause-btn" class="px-4 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-xs font-black text-white uppercase">Pausar</button>
+            <button onclick="finishTabataNow()" class="px-4 py-2.5 rounded-xl bg-limeaccent hover:bg-limedark text-darkbg text-xs font-black uppercase">Listo</button>
+        </div>
+    </div>
+</div>
     </footer>
 
     <!-- =====================================================================
@@ -1736,7 +1765,7 @@
             }
             state = normalized;
             localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-            syncTimerWithCurrentExercise();
+            if (!isTimerRunning) syncTimerWithCurrentExercise();
             renderAll();
             if (!document.getElementById('history-modal').classList.contains('hidden')) {
                 renderHistoryList();
@@ -2506,27 +2535,66 @@
             return `${m}:${s}`;
         }
 
-        function updateTimerUI() {
+       function updateTimerUI() {
             const display = document.getElementById('timer-display');
             const icon = document.getElementById('timer-toggle-icon');
             const box = document.getElementById('timer-box');
+            const tabataCount = document.getElementById('tabata-countdown');
+            const tabataPause = document.getElementById('tabata-pause-btn');
+            const formatted = formatSeconds(timerRemaining);
 
-            display.textContent = formatSeconds(timerRemaining);
+            display.textContent = formatted;
+            if (tabataCount) tabataCount.textContent = formatted;
+            if (tabataPause) tabataPause.textContent = isTimerRunning ? 'Pausar' : 'Reanudar';
             icon.className = isTimerRunning ? 'ph-fill ph-pause text-xs' : 'ph-fill ph-play text-xs';
 
             if (timerRemaining === 0) {
                 display.className = 'text-xs font-black font-mono text-limeaccent tracking-wider';
                 box.classList.add('timer-finished', 'border-limeaccent');
+                if (tabataCount) tabataCount.className = 'my-6 text-6xl font-black font-mono text-limeaccent tracking-tight';
             } else {
                 display.className = 'text-xs font-black font-mono text-white tracking-wider';
                 box.classList.remove('timer-finished', 'border-limeaccent');
+                if (tabataCount) tabataCount.className = 'my-6 text-6xl font-black font-mono text-white tracking-tight';
             }
         }
 
-        function startRestTimer(seconds) {
+       let tabataExpanded = false;
+
+        function setTabataOverlay(expanded) {
+            tabataExpanded = expanded;
+            const overlay = document.getElementById('tabata-rest-overlay');
+            const exLabel = document.getElementById('tabata-exercise-label');
+            if (!overlay) return;
+            if (expanded) {
+                const list = getCurrentExercises();
+                const ex = list[activeStationIndex];
+                if (exLabel && ex) exLabel.textContent = ex.name;
+                overlay.classList.remove('hidden');
+                overlay.classList.add('is-active');
+            } else {
+                overlay.classList.add('hidden');
+                overlay.classList.remove('is-active');
+            }
+        }
+
+        function addTabataSeconds(sec) {
+            timerRemaining = Math.max(0, timerRemaining + sec);
+            updateTimerUI();
+        }
+
+        function finishTabataNow() {
+            stopTimerInterval();
+            timerRemaining = 0;
+            setTabataOverlay(false);
+            updateTimerUI();
+        }
+
+        function startRestTimer(seconds, expandTabata = false) {
             stopTimerInterval();
             timerRemaining = seconds;
             isTimerRunning = true;
+            if (expandTabata) setTabataOverlay(true);
             updateTimerUI();
 
             timerInterval = setInterval(() => {
@@ -2535,6 +2603,7 @@
                     updateTimerUI();
                 } else {
                     stopTimerInterval();
+                    setTabataOverlay(false);
                     updateTimerUI();
                     playBeepAlert();
                     showToast("⏰ ¡Tiempo de descanso cumplido!");
