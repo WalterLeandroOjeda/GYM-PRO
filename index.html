@@ -665,6 +665,13 @@
             { id: 'cardio', label: '🏃‍♀️ CARDIO' }
         ];
 
+        function escapeJsAttr(str) {
+            return String(str || '')
+                .replace(/\\/g, '\\\\')
+                .replace(/'/g, "\\'")
+                .replace(/"/g, '&quot;');
+        }
+
         function formatBlockWithEmoji(rawText) {
             const clean = (rawText || '').trim();
             if (!clean) return '📌 BLOQUE';
@@ -823,7 +830,7 @@
             const seedMode = document.getElementById('day-seed-select').value;
             const slug = rawName
                 .toLowerCase()
-                .normalize('NFD').replace(/[̀-ͯ]/g, '')
+                .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
                 .replace(/[^a-z0-9]+/g, '-')
                 .replace(/^-|-$/g, '') || 'dia';
             const newId = `${slug}-${Date.now().toString().slice(-3)}`;
@@ -1370,7 +1377,7 @@
             const blocks = ensureSofiBlocks(prof);
             const slug = rawLabel
                 .toLowerCase()
-                .normalize('NFD').replace(/[̀-ͯ]/g, '')
+                .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
                 .replace(/[^a-z0-9]+/g, '-')
                 .replace(/^-|-$/g, '') || ('bloque-' + Date.now());
             const uniqueId = blocks.some(b => b.id === slug) ? `${slug}-${Date.now().toString().slice(-3)}` : slug;
@@ -2629,8 +2636,7 @@
             lines.push(`────────────────────`);
             lines.push(`✅ Total series completadas: ${todays.length}`);
 
-            const text = lines.join('
-');
+            const text = lines.join('\n');
             const ta = document.createElement('textarea');
             ta.value = text;
             ta.style.position = 'fixed';
