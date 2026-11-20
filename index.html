@@ -58,15 +58,11 @@
         }
         /* Switch toggle personalizado */
         .toggle-checkbox:checked {
-            left: auto !important;
-            right: 2px !important;
-            border-color: #0f1115;
+            right: 0;
+            border-color: #a3e635;
         }
         .toggle-checkbox:checked + .toggle-label {
             background-color: #a3e635;
-        }
-        #tabata-rest-overlay.is-active {
-            display: flex;
         }
         @keyframes pulseGlow {
             0%, 100% { box-shadow: 0 0 0 0 rgba(163, 230, 53, 0.4); }
@@ -246,22 +242,6 @@
     <main id="main-station-container" class="flex-1 max-w-lg w-full mx-auto px-3.5 pt-3 space-y-3">
         <!-- Renderizado dinámico de la estación activa -->
     </main>
-
-    <!-- RELOJ GRANDE ESTILO TABATA (SE EXPANDE AL COMPLETAR SERIE) -->
-    <div id="tabata-rest-overlay" class="hidden fixed inset-0 z-40 bg-[#0f1115]/92 backdrop-blur-md flex-col items-center justify-center p-6 text-center select-none">
-        <div class="w-full max-w-sm bg-[#181b22] border border-limeaccent/40 rounded-3xl p-6 shadow-2xl">
-            <p class="text-[11px] font-black uppercase tracking-widest text-limeaccent">DESCANSO ACTIVO • TABATA</p>
-            <p id="tabata-exercise-label" class="text-xs font-bold text-slate-300 mt-1 truncate"></p>
-
-            <div id="tabata-countdown" class="my-6 text-6xl font-black font-mono text-white tracking-tight">01:30</div>
-
-            <div class="flex items-center justify-center gap-2.5">
-                <button onclick="addTabataSeconds(15)" class="px-3 py-2.5 rounded-xl bg-[#212530] hover:bg-white/15 border border-white/10 text-xs font-black text-slate-200">+15s</button>
-                <button onclick="toggleTimer()" id="tabata-pause-btn" class="px-4 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-xs font-black text-white uppercase">Pausar</button>
-                <button onclick="finishTabataNow()" class="px-4 py-2.5 rounded-xl bg-limeaccent hover:bg-limedark text-darkbg text-xs font-black uppercase">Listo</button>
-            </div>
-        </div>
-    </div>
 
     <!-- BARRA INFERIOR FIJA DE CONTROL EN VIVO Y CRONÓMETRO -->
     <footer class="fixed bottom-0 inset-x-0 z-30 bg-[#12141a]/95 backdrop-blur-lg border-t border-white/10 px-3.5 py-2.5">
@@ -687,8 +667,8 @@
 
         function escapeJsAttr(str) {
             return String(str || '')
-                .replace(/\/g, '\\')
-                .replace(/'/g, "\'")
+                .replace(/\\/g, '\\\\')
+                .replace(/'/g, "\\'")
                 .replace(/"/g, '&quot;');
         }
 
@@ -774,17 +754,6 @@
             return found;
         }
 
-        function syncActiveDayExercises(prof) {
-            if (!prof) return [];
-            const days = ensureTrainingDays(prof);
-            const activeDay = getActiveTrainingDay(prof);
-            if (activeDay) {
-                activeDay.exercises = prof.exercises;
-                activeDay.blocks = prof.blocks;
-            }
-            return days;
-        }
-
         function switchTrainingDay(dayId) {
             const prof = ensureUserProfileShape(state.profiles[state.activeProfile], state.activeProfile);
             const days = ensureTrainingDays(prof);
@@ -861,7 +830,7 @@
             const seedMode = document.getElementById('day-seed-select').value;
             const slug = rawName
                 .toLowerCase()
-                .normalize('NFD').replace(/[̀-ͯ]/g, '')
+                .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
                 .replace(/[^a-z0-9]+/g, '-')
                 .replace(/^-|-$/g, '') || 'dia';
             const newId = `${slug}-${Date.now().toString().slice(-3)}`;
@@ -1408,7 +1377,7 @@
             const blocks = ensureSofiBlocks(prof);
             const slug = rawLabel
                 .toLowerCase()
-                .normalize('NFD').replace(/[̀-ͯ]/g, '')
+                .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
                 .replace(/[^a-z0-9]+/g, '-')
                 .replace(/^-|-$/g, '') || ('bloque-' + Date.now());
             const uniqueId = blocks.some(b => b.id === slug) ? `${slug}-${Date.now().toString().slice(-3)}` : slug;
@@ -1636,7 +1605,6 @@
         let timerRemaining = 90;
         let timerInterval = null;
         let isTimerRunning = false;
-        let tabataExpanded = false;
 
         // =========================================================================
         // PERSISTENCIA LOCAL + SINCRONIZACIÓN EN TIEMPO REAL CON FIRESTORE
@@ -1701,10 +1669,6 @@
                 if (!state.activeProfile || !state.profiles[state.activeProfile]) {
                     state.activeProfile = keys[0] || 'Sofi';
                 }
-                Object.keys(state.profiles).forEach(uName => {
-                    ensureUserProfileShape(state.profiles[uName], uName);
-                    syncActiveDayExercises(state.profiles[uName]);
-                });
                 state.lastDate = getTodayStr();
                 state.updatedAt = Date.now();
                 localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
@@ -1726,7 +1690,7 @@
             }
             state = normalized;
             localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-            if (!isTimerRunning) syncTimerWithCurrentExercise();
+            syncTimerWithCurrentExercise();
             renderAll();
             if (!document.getElementById('history-modal').classList.contains('hidden')) {
                 renderHistoryList();
@@ -1791,8 +1755,7 @@
         }
 
         function getCurrentExercises() {
-            const prof = ensureUserProfileShape(state.profiles[state.activeProfile], state.activeProfile);
-            return prof.exercises.filter(e => e.category === activeTab);
+            return state.profiles[state.activeProfile].exercises.filter(e => e.category === activeTab);
         }
 
         // =========================================================================
@@ -1864,7 +1827,7 @@
         // =========================================================================
         function renderAll() {
             const profileName = state.activeProfile;
-            const profileData = ensureUserProfileShape(state.profiles[profileName], profileName);
+            const profileData = state.profiles[profileName];
             const exercises = getCurrentExercises();
 
             const profileSelect = document.getElementById('header-profile-select');
@@ -2414,7 +2377,7 @@
                 }
 
                 if (state.autoRest) {
-                    startRestTimer(ex.restSeconds || 90, true);
+                    startRestTimer(ex.restSeconds || 90);
                 }
 
                 let allRoutineDoneNow = false;
@@ -2481,40 +2444,10 @@
         }
 
         // =========================================================================
-        // CRONÓMETRO DE DESCANSO AUTOMÁTICO + MODO EXPANDIDO ESTILO TABATA
+        // CRONÓMETRO DE DESCANSO AUTOMÁTICO
         // =========================================================================
-        function setTabataOverlay(expanded) {
-            tabataExpanded = expanded;
-            const overlay = document.getElementById('tabata-rest-overlay');
-            const exLabel = document.getElementById('tabata-exercise-label');
-            if (!overlay) return;
-            if (expanded) {
-                const list = getCurrentExercises();
-                const ex = list[activeStationIndex];
-                if (exLabel && ex) exLabel.textContent = ex.name;
-                overlay.classList.remove('hidden');
-                overlay.classList.add('is-active');
-            } else {
-                overlay.classList.add('hidden');
-                overlay.classList.remove('is-active');
-            }
-        }
-
-        function addTabataSeconds(sec) {
-            timerRemaining = Math.max(0, timerRemaining + sec);
-            updateTimerUI();
-        }
-
-        function finishTabataNow() {
-            stopTimerInterval();
-            timerRemaining = 0;
-            setTabataOverlay(false);
-            updateTimerUI();
-        }
-
         function syncTimerWithCurrentExercise() {
             stopTimerInterval();
-            setTabataOverlay(false);
             const list = getCurrentExercises();
             const ex = list[activeStationIndex];
             timerRemaining = ex ? (ex.restSeconds || 90) : 90;
@@ -2531,31 +2464,23 @@
             const display = document.getElementById('timer-display');
             const icon = document.getElementById('timer-toggle-icon');
             const box = document.getElementById('timer-box');
-            const tabataCount = document.getElementById('tabata-countdown');
-            const tabataPause = document.getElementById('tabata-pause-btn');
-            const formatted = formatSeconds(timerRemaining);
 
-            display.textContent = formatted;
-            if (tabataCount) tabataCount.textContent = formatted;
-            if (tabataPause) tabataPause.textContent = isTimerRunning ? 'Pausar' : 'Reanudar';
+            display.textContent = formatSeconds(timerRemaining);
             icon.className = isTimerRunning ? 'ph-fill ph-pause text-xs' : 'ph-fill ph-play text-xs';
 
             if (timerRemaining === 0) {
                 display.className = 'text-xs font-black font-mono text-limeaccent tracking-wider';
                 box.classList.add('timer-finished', 'border-limeaccent');
-                if (tabataCount) tabataCount.className = 'my-6 text-6xl font-black font-mono text-limeaccent tracking-tight';
             } else {
                 display.className = 'text-xs font-black font-mono text-white tracking-wider';
                 box.classList.remove('timer-finished', 'border-limeaccent');
-                if (tabataCount) tabataCount.className = 'my-6 text-6xl font-black font-mono text-white tracking-tight';
             }
         }
 
-        function startRestTimer(seconds, expandTabata = false) {
+        function startRestTimer(seconds) {
             stopTimerInterval();
             timerRemaining = seconds;
             isTimerRunning = true;
-            if (expandTabata) setTabataOverlay(true);
             updateTimerUI();
 
             timerInterval = setInterval(() => {
@@ -2564,7 +2489,6 @@
                     updateTimerUI();
                 } else {
                     stopTimerInterval();
-                    setTabataOverlay(false);
                     updateTimerUI();
                     playBeepAlert();
                     showToast("⏰ ¡Tiempo de descanso cumplido!");
@@ -2582,7 +2506,7 @@
                     const ex = list[activeStationIndex];
                     timerRemaining = ex ? (ex.restSeconds || 90) : 90;
                 }
-                startRestTimer(timerRemaining, tabataExpanded);
+                startRestTimer(timerRemaining);
             }
         }
 
@@ -2712,8 +2636,7 @@
             lines.push(`────────────────────`);
             lines.push(`✅ Total series completadas: ${todays.length}`);
 
-            const text = lines.join('
-');
+            const text = lines.join('\n');
             const ta = document.createElement('textarea');
             ta.value = text;
             ta.style.position = 'fixed';
@@ -2986,7 +2909,6 @@
             };
 
             prof.exercises.push(newEx);
-            syncActiveDayExercises(prof);
             activeTab = targetCat;
             const newCatList = getCurrentExercises();
             activeStationIndex = newCatList.length - 1;
@@ -3176,7 +3098,7 @@
 
         function saveExercise(e) {
             e.preventDefault();
-            const profileData = ensureUserProfileShape(state.profiles[state.activeProfile], state.activeProfile);
+            const profileData = state.profiles[state.activeProfile];
             const editId = document.getElementById('edit-ex-id').value;
 
             const category = document.getElementById('ex-category').value;
@@ -3217,7 +3139,6 @@
                         sets: updatedSets
                     };
                 }
-                syncActiveDayExercises(profileData);
                 syncExercisesIntoCatalog([profileData.exercises[idx]]);
                 showToast("Estación actualizada y guardada en base");
             } else {
@@ -3241,7 +3162,6 @@
                     videoUrl,
                     sets: initialSets
                 });
-                syncActiveDayExercises(profileData);
                 activeTab = category;
                 const newCatList = getCurrentExercises();
                 activeStationIndex = newCatList.length - 1;
@@ -3257,37 +3177,19 @@
         }
 
         function confirmDeleteExercise(exId) {
-            const prof = ensureUserProfileShape(state.profiles[state.activeProfile], state.activeProfile);
-            const ex = prof.exercises.find(e => e.id === exId);
+            const ex = state.profiles[state.activeProfile].exercises.find(e => e.id === exId);
             if (!ex) return;
             openConfirmModal(
                 '¿Eliminar estación?',
                 `Se quitará "${ex.name}" de la rutina de ${state.activeProfile}.`,
                 () => {
-                    const currentProf = ensureUserProfileShape(state.profiles[state.activeProfile], state.activeProfile);
-                    currentProf.exercises = currentProf.exercises.filter(e => e.id !== exId);
-
-                    if (Array.isArray(currentProf.days) && currentProf.days.length > 0) {
-                        const activeDay = getActiveTrainingDay(currentProf);
-                        if (activeDay) {
-                            activeDay.exercises = currentProf.exercises;
-                        }
-                        currentProf.days.forEach(d => {
-                            if (Array.isArray(d.exercises)) {
-                                d.exercises = d.exercises.filter(e => e.id !== exId);
-                            }
-                        });
+                    const profileData = state.profiles[state.activeProfile];
+                    profileData.exercises = profileData.exercises.filter(e => e.id !== exId);
+                    if (activeStationIndex >= getCurrentExercises().length) {
+                        activeStationIndex = Math.max(0, getCurrentExercises().length - 1);
                     }
-
-                    const remainingInTab = getCurrentExercises();
-                    if (activeStationIndex >= remainingInTab.length) {
-                        activeStationIndex = Math.max(0, remainingInTab.length - 1);
-                    }
-                    activeSetIndex = 0;
-
                     saveState();
                     closeConfirmModal();
-                    syncTimerWithCurrentExercise();
                     renderAll();
                     showToast("Estación eliminada");
                 }
