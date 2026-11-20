@@ -33,15 +33,6 @@
         }
     </script>
     <style>
-        /* Deslizamiento táctil y con mouse en versión web */
-        .swipe-station-zone {
-            touch-action: pan-y;
-            user-select: none;
-            cursor: grab;
-        }
-        .swipe-station-zone:active {
-            cursor: grabbing;
-        }
         body {
             background-color: #0f1115;
             color: #f8fafc;
@@ -67,11 +58,15 @@
         }
         /* Switch toggle personalizado */
         .toggle-checkbox:checked {
-            right: 0;
-            border-color: #a3e635;
+            left: auto !important;
+            right: 2px !important;
+            border-color: #0f1115;
         }
         .toggle-checkbox:checked + .toggle-label {
             background-color: #a3e635;
+        }
+        #tabata-rest-overlay.is-active {
+            display: flex;
         }
         @keyframes pulseGlow {
             0%, 100% { box-shadow: 0 0 0 0 rgba(163, 230, 53, 0.4); }
@@ -80,43 +75,6 @@
         .timer-finished {
             animation: pulseGlow 1.5s infinite;
         }
-        /* Evita que el bloque central pise los botones laterales en celulares */
-.header-top-row {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 4px;
-    min-width: 0;
-}
-
-.header-center-status {
-    min-width: 0;
-    flex: 1 1 0%;
-    overflow: hidden;
-    text-align: center;
-}
-
-.header-center-status p {
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-@media (max-width: 420px) {
-    #header-station-title {
-        font-size: 10px;
-    }
-    #header-progress-sub {
-        font-size: 8px;
-        line-height: 1.2;
-    }
-    .header-action-btn {
-        width: 28px !important;
-        height: 28px !important;
-        border-radius: 10px !important;
-    }
-    .header-action-btn i {
-        font-size: 13px !important;
-    }
     </style>
 </head>
 <body class="min-h-screen flex flex-col pb-32 selection:bg-limeaccent selection:text-darkbg">
@@ -169,51 +127,51 @@
     <header class="sticky top-0 z-30 bg-[#0f1115]/95 backdrop-blur-md border-b border-white/5 px-3 pt-2 pb-1.5">
         <div class="max-w-lg mx-auto">
             <!-- Fila 1: Navegación / Progreso / Perfil y Acciones -->
-<div class="header-top-row">
-    <!-- Selector y Gestión de Usuarios -->
-    <div class="flex items-center gap-1 shrink-0">
-        <div class="bg-[#181b22] px-1.5 py-1 rounded-xl border border-limeaccent/30 flex items-center gap-1">
-            <i class="ph-fill ph-user text-limeaccent text-[11px] shrink-0"></i>
-            <select id="header-profile-select" onchange="switchProfile(this.value)" aria-label="Seleccionar usuario" class="bg-transparent text-[10px] sm:text-[11px] font-black text-white tracking-wide outline-none cursor-pointer max-w-[56px] sm:max-w-[68px]">
-                <option value="Sofi">Sofi</option>
-            </select>
-        </div>
-        <button onclick="openUsersModal()" aria-label="Crear o editar usuarios" class="header-action-btn w-8 h-8 rounded-xl bg-[#181b22] hover:bg-[#212530] border border-white/10 text-limeaccent flex items-center justify-center transition-colors shrink-0">
-            <i class="ph-bold ph-user-gear text-sm"></i>
-        </button>
-    </div>
+            <div class="flex items-center justify-between gap-2">
+                <!-- Selector y Gestión de Usuarios -->
+                <div class="flex items-center gap-1 shrink-0">
+                    <div class="bg-[#181b22] px-2 py-1 rounded-xl border border-limeaccent/30 flex items-center gap-1">
+                        <i class="ph-fill ph-user text-limeaccent text-[11px] shrink-0"></i>
+                        <select id="header-profile-select" onchange="switchProfile(this.value)" aria-label="Seleccionar usuario" class="bg-transparent text-[11px] font-black text-white tracking-wide outline-none cursor-pointer max-w-[64px]">
+                            <option value="Sofi">Sofi</option>
+                        </select>
+                    </div>
+                    <button onclick="openUsersModal()" aria-label="Crear o editar usuarios" class="w-8 h-8 rounded-xl bg-[#181b22] hover:bg-[#212530] border border-white/10 text-limeaccent flex items-center justify-center transition-colors">
+                        <i class="ph-bold ph-user-gear text-sm"></i>
+                    </button>
+                </div>
 
-    <!-- Indicador de Estación, Estado Nube y % Rutina -->
-    <div class="header-center-status px-0.5">
-        <div class="flex items-center justify-center gap-1 min-w-0">
-            <span id="cloud-sync-dot" title="Estado de sincronización en nube" class="w-1.5 h-1.5 rounded-full bg-amber-400 shrink-0"></span>
-            <p id="header-station-title" class="text-[11px] font-extrabold text-white truncate">Cargando...</p>
-        </div>
-        <p id="header-progress-sub" class="text-[9px] font-bold tracking-normal uppercase text-slate-400 leading-[1.25] mt-0.5 truncate">
-            EST. 1/4<br><span class="text-limeaccent">0% RUTINA</span>
-        </p>
-    </div>
+                <!-- Indicador de Estación, Estado Nube y % Rutina -->
+                <div class="text-center min-w-0 flex-1 px-1">
+                    <div class="flex items-center justify-center gap-1">
+                        <span id="cloud-sync-dot" title="Estado de sincronización en nube" class="w-1.5 h-1.5 rounded-full bg-amber-400 shrink-0"></span>
+                        <p id="header-station-title" class="text-[11px] font-extrabold text-white truncate">Cargando...</p>
+                    </div>
+                    <p id="header-progress-sub" class="text-[9px] font-bold tracking-normal uppercase text-slate-400 leading-[1.25] mt-0.5">
+                        EST. 1/4<br><span class="text-limeaccent">0% RUTINA</span>
+                    </p>
+                </div>
 
-    <!-- Botones Rápidos: Candado, Historial, Base, Nuevo y Salir -->
-    <div class="flex items-center gap-1 shrink-0">
-        <button onclick="toggleRoutineLock()" id="btn-routine-lock" aria-label="Bloquear o desbloquear edición de ejercicios" class="header-action-btn w-8 h-8 rounded-xl bg-[#181b22] hover:bg-[#212530] border border-amber-400/30 text-amber-300 flex items-center justify-center transition-colors shrink-0">
-            <i id="routine-lock-icon" class="ph-fill ph-lock text-base"></i>
-        </button>
-        <button onclick="openHistoryModal()" aria-label="Ver Historial" class="header-action-btn w-8 h-8 rounded-xl bg-[#181b22] hover:bg-[#212530] border border-white/10 text-slate-200 flex items-center justify-center relative transition-colors shrink-0">
-            <i class="ph-bold ph-clock-counter-clockwise text-base"></i>
-            <span id="history-badge" class="hidden absolute -top-1 -right-1 w-4 h-4 rounded-full bg-limeaccent text-darkbg text-[9px] font-black flex items-center justify-center">0</span>
-        </button>
-        <button onclick="openCatalogModal()" aria-label="Base general de ejercicios" class="header-action-btn w-8 h-8 rounded-xl bg-[#181b22] hover:bg-[#212530] border border-limeaccent/25 text-limeaccent flex items-center justify-center transition-colors shrink-0">
-            <i class="ph-bold ph-database text-base"></i>
-        </button>
-        <button onclick="openExerciseModal()" aria-label="Nuevo Ejercicio" class="header-action-btn w-8 h-8 rounded-xl bg-[#181b22] hover:bg-[#212530] border border-white/10 text-limeaccent flex items-center justify-center transition-colors shrink-0">
-            <i class="ph-bold ph-plus text-base"></i>
-        </button>
-        <button onclick="handleFirebaseLogout()" aria-label="Cerrar sesión" title="Cerrar sesión" class="header-action-btn w-8 h-8 rounded-xl bg-[#181b22] hover:bg-rose-500/20 border border-white/10 text-slate-400 hover:text-rose-300 flex items-center justify-center transition-colors shrink-0">
-            <i class="ph-bold ph-sign-out text-sm"></i>
-        </button>
-    </div>
-</div>
+                <!-- Botones Rápidos: Candado, Historial, Base, Nuevo y Salir -->
+                <div class="flex items-center gap-1 shrink-0">
+                    <button onclick="toggleRoutineLock()" id="btn-routine-lock" aria-label="Bloquear o desbloquear edición de ejercicios" class="w-8 h-8 rounded-xl bg-[#181b22] hover:bg-[#212530] border border-amber-400/30 text-amber-300 flex items-center justify-center transition-colors">
+                        <i id="routine-lock-icon" class="ph-fill ph-lock text-base"></i>
+                    </button>
+                    <button onclick="openHistoryModal()" aria-label="Ver Historial" class="w-8 h-8 rounded-xl bg-[#181b22] hover:bg-[#212530] border border-white/10 text-slate-200 flex items-center justify-center relative transition-colors">
+                        <i class="ph-bold ph-clock-counter-clockwise text-base"></i>
+                        <span id="history-badge" class="hidden absolute -top-1 -right-1 w-4 h-4 rounded-full bg-limeaccent text-darkbg text-[9px] font-black flex items-center justify-center">0</span>
+                    </button>
+                    <button onclick="openCatalogModal()" aria-label="Base general de ejercicios" class="w-8 h-8 rounded-xl bg-[#181b22] hover:bg-[#212530] border border-limeaccent/25 text-limeaccent flex items-center justify-center transition-colors">
+                        <i class="ph-bold ph-database text-base"></i>
+                    </button>
+                    <button onclick="openExerciseModal()" aria-label="Nuevo Ejercicio" class="w-8 h-8 rounded-xl bg-[#181b22] hover:bg-[#212530] border border-white/10 text-limeaccent flex items-center justify-center transition-colors">
+                        <i class="ph-bold ph-plus text-base"></i>
+                    </button>
+                    <button onclick="handleFirebaseLogout()" aria-label="Cerrar sesión" title="Cerrar sesión" class="w-8 h-8 rounded-xl bg-[#181b22] hover:bg-rose-500/20 border border-white/10 text-slate-400 hover:text-rose-300 flex items-center justify-center transition-colors">
+                        <i class="ph-bold ph-sign-out text-sm"></i>
+                    </button>
+                </div>
+            </div>
 
             <!-- Barra de Progreso Visual Ultra Fina -->
             <div class="w-full h-1 bg-[#181b22] rounded-full overflow-hidden mt-2">
@@ -288,6 +246,22 @@
     <main id="main-station-container" class="flex-1 max-w-lg w-full mx-auto px-3.5 pt-3 space-y-3">
         <!-- Renderizado dinámico de la estación activa -->
     </main>
+
+    <!-- RELOJ GRANDE ESTILO TABATA (SE EXPANDE AL COMPLETAR SERIE) -->
+    <div id="tabata-rest-overlay" class="hidden fixed inset-0 z-40 bg-[#0f1115]/92 backdrop-blur-md flex-col items-center justify-center p-6 text-center select-none">
+        <div class="w-full max-w-sm bg-[#181b22] border border-limeaccent/40 rounded-3xl p-6 shadow-2xl">
+            <p class="text-[11px] font-black uppercase tracking-widest text-limeaccent">DESCANSO ACTIVO • TABATA</p>
+            <p id="tabata-exercise-label" class="text-xs font-bold text-slate-300 mt-1 truncate"></p>
+
+            <div id="tabata-countdown" class="my-6 text-6xl font-black font-mono text-white tracking-tight">01:30</div>
+
+            <div class="flex items-center justify-center gap-2.5">
+                <button onclick="addTabataSeconds(15)" class="px-3 py-2.5 rounded-xl bg-[#212530] hover:bg-white/15 border border-white/10 text-xs font-black text-slate-200">+15s</button>
+                <button onclick="toggleTimer()" id="tabata-pause-btn" class="px-4 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-xs font-black text-white uppercase">Pausar</button>
+                <button onclick="finishTabataNow()" class="px-4 py-2.5 rounded-xl bg-limeaccent hover:bg-limedark text-darkbg text-xs font-black uppercase">Listo</button>
+            </div>
+        </div>
+    </div>
 
     <!-- BARRA INFERIOR FIJA DE CONTROL EN VIVO Y CRONÓMETRO -->
     <footer class="fixed bottom-0 inset-x-0 z-30 bg-[#12141a]/95 backdrop-blur-lg border-t border-white/10 px-3.5 py-2.5">
@@ -713,8 +687,8 @@
 
         function escapeJsAttr(str) {
             return String(str || '')
-                .replace(/\\/g, '\\\\')
-                .replace(/'/g, "\\'")
+                .replace(/\/g, '\\')
+                .replace(/'/g, "\'")
                 .replace(/"/g, '&quot;');
         }
 
@@ -800,6 +774,17 @@
             return found;
         }
 
+        function syncActiveDayExercises(prof) {
+            if (!prof) return [];
+            const days = ensureTrainingDays(prof);
+            const activeDay = getActiveTrainingDay(prof);
+            if (activeDay) {
+                activeDay.exercises = prof.exercises;
+                activeDay.blocks = prof.blocks;
+            }
+            return days;
+        }
+
         function switchTrainingDay(dayId) {
             const prof = ensureUserProfileShape(state.profiles[state.activeProfile], state.activeProfile);
             const days = ensureTrainingDays(prof);
@@ -876,7 +861,7 @@
             const seedMode = document.getElementById('day-seed-select').value;
             const slug = rawName
                 .toLowerCase()
-                .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+                .normalize('NFD').replace(/[̀-ͯ]/g, '')
                 .replace(/[^a-z0-9]+/g, '-')
                 .replace(/^-|-$/g, '') || 'dia';
             const newId = `${slug}-${Date.now().toString().slice(-3)}`;
@@ -1423,7 +1408,7 @@
             const blocks = ensureSofiBlocks(prof);
             const slug = rawLabel
                 .toLowerCase()
-                .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+                .normalize('NFD').replace(/[̀-ͯ]/g, '')
                 .replace(/[^a-z0-9]+/g, '-')
                 .replace(/^-|-$/g, '') || ('bloque-' + Date.now());
             const uniqueId = blocks.some(b => b.id === slug) ? `${slug}-${Date.now().toString().slice(-3)}` : slug;
@@ -1651,6 +1636,7 @@
         let timerRemaining = 90;
         let timerInterval = null;
         let isTimerRunning = false;
+        let tabataExpanded = false;
 
         // =========================================================================
         // PERSISTENCIA LOCAL + SINCRONIZACIÓN EN TIEMPO REAL CON FIRESTORE
@@ -1715,6 +1701,10 @@
                 if (!state.activeProfile || !state.profiles[state.activeProfile]) {
                     state.activeProfile = keys[0] || 'Sofi';
                 }
+                Object.keys(state.profiles).forEach(uName => {
+                    ensureUserProfileShape(state.profiles[uName], uName);
+                    syncActiveDayExercises(state.profiles[uName]);
+                });
                 state.lastDate = getTodayStr();
                 state.updatedAt = Date.now();
                 localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
@@ -1736,7 +1726,7 @@
             }
             state = normalized;
             localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-            syncTimerWithCurrentExercise();
+            if (!isTimerRunning) syncTimerWithCurrentExercise();
             renderAll();
             if (!document.getElementById('history-modal').classList.contains('hidden')) {
                 renderHistoryList();
@@ -1801,7 +1791,8 @@
         }
 
         function getCurrentExercises() {
-            return state.profiles[state.activeProfile].exercises.filter(e => e.category === activeTab);
+            const prof = ensureUserProfileShape(state.profiles[state.activeProfile], state.activeProfile);
+            return prof.exercises.filter(e => e.category === activeTab);
         }
 
         // =========================================================================
@@ -1873,7 +1864,7 @@
         // =========================================================================
         function renderAll() {
             const profileName = state.activeProfile;
-            const profileData = state.profiles[profileName];
+            const profileData = ensureUserProfileShape(state.profiles[profileName], profileName);
             const exercises = getCurrentExercises();
 
             const profileSelect = document.getElementById('header-profile-select');
@@ -2071,7 +2062,7 @@
 
             container.innerHTML = `
                 <!-- TARJETA HERO: VIDEO / TÉCNICA Y TÍTULO -->
-                <section class="swipe-station-zone bg-[#181b22] border border-white/10 rounded-3xl overflow-hidden shadow-xl">
+                <section class="bg-[#181b22] border border-white/10 rounded-3xl overflow-hidden shadow-xl">
                     <!-- Zona de Video / Banner Visual -->
                     <div class="relative bg-gradient-to-br from-[#212530] via-[#181b22] to-[#0f1115] border-b border-white/5">
                         ${showVideo && embedUrl ? `
@@ -2423,7 +2414,7 @@
                 }
 
                 if (state.autoRest) {
-                    startRestTimer(ex.restSeconds || 90);
+                    startRestTimer(ex.restSeconds || 90, true);
                 }
 
                 let allRoutineDoneNow = false;
@@ -2490,10 +2481,40 @@
         }
 
         // =========================================================================
-        // CRONÓMETRO DE DESCANSO AUTOMÁTICO
+        // CRONÓMETRO DE DESCANSO AUTOMÁTICO + MODO EXPANDIDO ESTILO TABATA
         // =========================================================================
+        function setTabataOverlay(expanded) {
+            tabataExpanded = expanded;
+            const overlay = document.getElementById('tabata-rest-overlay');
+            const exLabel = document.getElementById('tabata-exercise-label');
+            if (!overlay) return;
+            if (expanded) {
+                const list = getCurrentExercises();
+                const ex = list[activeStationIndex];
+                if (exLabel && ex) exLabel.textContent = ex.name;
+                overlay.classList.remove('hidden');
+                overlay.classList.add('is-active');
+            } else {
+                overlay.classList.add('hidden');
+                overlay.classList.remove('is-active');
+            }
+        }
+
+        function addTabataSeconds(sec) {
+            timerRemaining = Math.max(0, timerRemaining + sec);
+            updateTimerUI();
+        }
+
+        function finishTabataNow() {
+            stopTimerInterval();
+            timerRemaining = 0;
+            setTabataOverlay(false);
+            updateTimerUI();
+        }
+
         function syncTimerWithCurrentExercise() {
             stopTimerInterval();
+            setTabataOverlay(false);
             const list = getCurrentExercises();
             const ex = list[activeStationIndex];
             timerRemaining = ex ? (ex.restSeconds || 90) : 90;
@@ -2510,23 +2531,31 @@
             const display = document.getElementById('timer-display');
             const icon = document.getElementById('timer-toggle-icon');
             const box = document.getElementById('timer-box');
+            const tabataCount = document.getElementById('tabata-countdown');
+            const tabataPause = document.getElementById('tabata-pause-btn');
+            const formatted = formatSeconds(timerRemaining);
 
-            display.textContent = formatSeconds(timerRemaining);
+            display.textContent = formatted;
+            if (tabataCount) tabataCount.textContent = formatted;
+            if (tabataPause) tabataPause.textContent = isTimerRunning ? 'Pausar' : 'Reanudar';
             icon.className = isTimerRunning ? 'ph-fill ph-pause text-xs' : 'ph-fill ph-play text-xs';
 
             if (timerRemaining === 0) {
                 display.className = 'text-xs font-black font-mono text-limeaccent tracking-wider';
                 box.classList.add('timer-finished', 'border-limeaccent');
+                if (tabataCount) tabataCount.className = 'my-6 text-6xl font-black font-mono text-limeaccent tracking-tight';
             } else {
                 display.className = 'text-xs font-black font-mono text-white tracking-wider';
                 box.classList.remove('timer-finished', 'border-limeaccent');
+                if (tabataCount) tabataCount.className = 'my-6 text-6xl font-black font-mono text-white tracking-tight';
             }
         }
 
-        function startRestTimer(seconds) {
+        function startRestTimer(seconds, expandTabata = false) {
             stopTimerInterval();
             timerRemaining = seconds;
             isTimerRunning = true;
+            if (expandTabata) setTabataOverlay(true);
             updateTimerUI();
 
             timerInterval = setInterval(() => {
@@ -2535,6 +2564,7 @@
                     updateTimerUI();
                 } else {
                     stopTimerInterval();
+                    setTabataOverlay(false);
                     updateTimerUI();
                     playBeepAlert();
                     showToast("⏰ ¡Tiempo de descanso cumplido!");
@@ -2552,7 +2582,7 @@
                     const ex = list[activeStationIndex];
                     timerRemaining = ex ? (ex.restSeconds || 90) : 90;
                 }
-                startRestTimer(timerRemaining);
+                startRestTimer(timerRemaining, tabataExpanded);
             }
         }
 
@@ -2682,7 +2712,8 @@
             lines.push(`────────────────────`);
             lines.push(`✅ Total series completadas: ${todays.length}`);
 
-            const text = lines.join('\n');
+            const text = lines.join('
+');
             const ta = document.createElement('textarea');
             ta.value = text;
             ta.style.position = 'fixed';
@@ -2955,6 +2986,7 @@
             };
 
             prof.exercises.push(newEx);
+            syncActiveDayExercises(prof);
             activeTab = targetCat;
             const newCatList = getCurrentExercises();
             activeStationIndex = newCatList.length - 1;
@@ -3144,7 +3176,7 @@
 
         function saveExercise(e) {
             e.preventDefault();
-            const profileData = state.profiles[state.activeProfile];
+            const profileData = ensureUserProfileShape(state.profiles[state.activeProfile], state.activeProfile);
             const editId = document.getElementById('edit-ex-id').value;
 
             const category = document.getElementById('ex-category').value;
@@ -3185,6 +3217,7 @@
                         sets: updatedSets
                     };
                 }
+                syncActiveDayExercises(profileData);
                 syncExercisesIntoCatalog([profileData.exercises[idx]]);
                 showToast("Estación actualizada y guardada en base");
             } else {
@@ -3208,13 +3241,13 @@
                     videoUrl,
                     sets: initialSets
                 });
+                syncActiveDayExercises(profileData);
                 activeTab = category;
                 const newCatList = getCurrentExercises();
                 activeStationIndex = newCatList.length - 1;
                 activeSetIndex = 0;
                 syncExercisesIntoCatalog([profileData.exercises[profileData.exercises.length - 1]]);
-                showToast("Nueva estación agregada y guardada en base")
-                syncActiveDayExercises(profileData);
+                showToast("Nueva estación agregada y guardada en base");
             }
 
             saveState();
@@ -3223,22 +3256,10 @@
             renderAll();
         }
 
-       function syncActiveDayExercises(prof) {
-            if (!prof) return [];
-            const days = ensureTrainingDays(prof);
-            const activeDay = getActiveTrainingDay(prof);
-            if (activeDay) {
-                activeDay.exercises = prof.exercises;
-                activeDay.blocks = prof.blocks;
-            }
-            return days;
-        }
-
         function confirmDeleteExercise(exId) {
             const prof = ensureUserProfileShape(state.profiles[state.activeProfile], state.activeProfile);
             const ex = prof.exercises.find(e => e.id === exId);
             if (!ex) return;
-
             openConfirmModal(
                 '¿Eliminar estación?',
                 `Se quitará "${ex.name}" de la rutina de ${state.activeProfile}.`,
@@ -3246,7 +3267,6 @@
                     const currentProf = ensureUserProfileShape(state.profiles[state.activeProfile], state.activeProfile);
                     currentProf.exercises = currentProf.exercises.filter(e => e.id !== exId);
 
-                    // Mantener sincronizado el día activo si existe
                     if (Array.isArray(currentProf.days) && currentProf.days.length > 0) {
                         const activeDay = getActiveTrainingDay(currentProf);
                         if (activeDay) {
@@ -3591,58 +3611,8 @@
                 } else {
                     window.pushCatalogToFirestore(loadExerciseCatalog());
                 }
-                // =========================================================================
-        // DESLIZAMIENTO (SWIPE) COMPATIBLE CON TÁCTIL Y MOUSE EN PC
-        // =========================================================================
-        (function enableDesktopAndTouchSwipe() {
-            let startX = 0;
-            let startY = 0;
-            let isDragging = false;
-            let pointerIdActive = null;
-            const THRESHOLD_X = 65;
-
-            function shouldIgnoreSwipeTarget(target) {
-                if (!target) return true;
-                return Boolean(
-                    target.closest('button, a, input, select, textarea, label, iframe')
-                );
-            }
-
-            function handleSwipeEnd(endX, endY) {
-                const dx = endX - startX;
-                const dy = endY - startY;
-                if (Math.abs(dx) > THRESHOLD_X && Math.abs(dx) > Math.abs(dy) * 1.35) {
-                    if (dx < 0) {
-                        nextStation();
-                    } else {
-                        prevStation();
-                    }
-                }
-            }
-
-            document.addEventListener('pointerdown', (e) => {
-                if (e.pointerType === 'mouse' && e.button !== 0) return;
-                const zone = e.target.closest('.swipe-station-zone');
-                if (!zone || shouldIgnoreSwipeTarget(e.target)) return;
-
-                isDragging = true;
-                pointerIdActive = e.pointerId;
-                startX = e.clientX;
-                startY = e.clientY;
             });
-
-            document.addEventListener('pointerup', (e) => {
-                if (!isDragging) return;
-                if (pointerIdActive !== null && e.pointerId !== pointerIdActive) return;
-                isDragging = false;
-                pointerIdActive = null;
-                handleSwipeEnd(e.clientX, e.clientY);
-            });
-
-            document.addEventListener('pointercancel', () => {
-                isDragging = false;
-                pointerIdActive = null;
-            });
+        });
     </script>
 </body>
 </html>
