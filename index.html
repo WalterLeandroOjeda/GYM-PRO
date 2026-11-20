@@ -123,17 +123,17 @@
     <header class="sticky top-0 z-30 bg-[#0f1115]/95 backdrop-blur-md border-b border-white/5 px-3 pt-2 pb-1.5">
         <div class="max-w-lg mx-auto">
             <!-- Fila 1: Navegación / Progreso / Perfil y Acciones -->
-            <div class="flex items-center justify-between gap-2">
+            <div class="flex items-center justify-between gap-1.5">
                 <!-- Selector y Gestión de Usuarios -->
                 <div class="flex items-center gap-1 shrink-0">
-                    <div class="bg-[#181b22] px-2 py-1 rounded-xl border border-limeaccent/30 flex items-center gap-1">
+                    <div class="bg-[#181b22] px-1.5 sm:px-2 py-1 rounded-xl border border-limeaccent/30 flex items-center gap-1">
                         <i class="ph-fill ph-user text-limeaccent text-[11px] shrink-0"></i>
-                        <select id="header-profile-select" onchange="switchProfile(this.value)" aria-label="Seleccionar usuario" class="bg-transparent text-[11px] font-black text-white tracking-wide outline-none cursor-pointer max-w-[64px]">
+                        <select id="header-profile-select" onchange="switchProfile(this.value)" aria-label="Seleccionar usuario" class="bg-transparent text-[10px] sm:text-[11px] font-black text-white tracking-wide outline-none cursor-pointer max-w-[52px] sm:max-w-[68px]">
                             <option value="Sofi">Sofi</option>
                         </select>
                     </div>
-                    <button onclick="openUsersModal()" aria-label="Crear o editar usuarios" class="w-8 h-8 rounded-xl bg-[#181b22] hover:bg-[#212530] border border-white/10 text-limeaccent flex items-center justify-center transition-colors">
-                        <i class="ph-bold ph-user-gear text-sm"></i>
+                    <button onclick="openUsersModal()" aria-label="Crear o editar usuarios" class="w-7 h-7 sm:w-8 sm:h-8 rounded-lg sm:rounded-xl bg-[#181b22] hover:bg-[#212530] border border-white/10 text-limeaccent flex items-center justify-center transition-colors">
+                        <i class="ph-bold ph-user-gear text-xs sm:text-sm"></i>
                     </button>
                 </div>
 
@@ -149,21 +149,21 @@
                 </div>
 
                 <!-- Botones Rápidos: Candado, Historial, Base, Nuevo y Salir -->
-                <div class="flex items-center gap-1 shrink-0">
-                    <button onclick="toggleRoutineLock()" id="btn-routine-lock" aria-label="Bloquear o desbloquear edición de ejercicios" class="w-8 h-8 rounded-xl bg-[#181b22] hover:bg-[#212530] border border-amber-400/30 text-amber-300 flex items-center justify-center transition-colors">
-                        <i id="routine-lock-icon" class="ph-fill ph-lock text-base"></i>
+                <div class="flex items-center gap-0.5 sm:gap-1 shrink-0">
+                    <button onclick="toggleRoutineLock()" id="btn-routine-lock" aria-label="Bloquear o desbloquear edición de ejercicios" class="w-7 h-7 sm:w-8 sm:h-8 rounded-lg sm:rounded-xl bg-[#181b22] hover:bg-[#212530] border border-amber-400/30 text-amber-300 flex items-center justify-center transition-colors">
+                        <i id="routine-lock-icon" class="ph-fill ph-lock text-sm sm:text-base"></i>
                     </button>
-                    <button onclick="openHistoryModal()" aria-label="Ver Historial" class="w-8 h-8 rounded-xl bg-[#181b22] hover:bg-[#212530] border border-white/10 text-slate-200 flex items-center justify-center relative transition-colors">
-                        <i class="ph-bold ph-clock-counter-clockwise text-base"></i>
-                        <span id="history-badge" class="hidden absolute -top-1 -right-1 w-4 h-4 rounded-full bg-limeaccent text-darkbg text-[9px] font-black flex items-center justify-center">0</span>
+                    <button onclick="openHistoryModal()" aria-label="Ver Historial" class="w-7 h-7 sm:w-8 sm:h-8 rounded-lg sm:rounded-xl bg-[#181b22] hover:bg-[#212530] border border-white/10 text-slate-200 flex items-center justify-center relative transition-colors">
+                        <i class="ph-bold ph-clock-counter-clockwise text-sm sm:text-base"></i>
+                        <span id="history-badge" class="hidden absolute -top-1 -right-1 w-3.5 h-3.5 rounded-full bg-limeaccent text-darkbg text-[8px] font-black flex items-center justify-center">0</span>
                     </button>
-                    <button onclick="openCatalogModal()" aria-label="Base general de ejercicios" class="w-8 h-8 rounded-xl bg-[#181b22] hover:bg-[#212530] border border-limeaccent/25 text-limeaccent flex items-center justify-center transition-colors">
-                        <i class="ph-bold ph-database text-base"></i>
+                    <button onclick="openCatalogModal()" aria-label="Base general de ejercicios" class="w-7 h-7 sm:w-8 sm:h-8 rounded-lg sm:rounded-xl bg-[#181b22] hover:bg-[#212530] border border-limeaccent/25 text-limeaccent flex items-center justify-center transition-colors">
+                        <i class="ph-bold ph-database text-sm sm:text-base"></i>
                     </button>
-                    <button onclick="openExerciseModal()" aria-label="Nuevo Ejercicio" class="w-8 h-8 rounded-xl bg-[#181b22] hover:bg-[#212530] border border-white/10 text-limeaccent flex items-center justify-center transition-colors">
-                        <i class="ph-bold ph-plus text-base"></i>
+                    <button onclick="openExerciseModal()" aria-label="Nuevo Ejercicio" class="w-7 h-7 sm:w-8 sm:h-8 rounded-lg sm:rounded-xl bg-[#181b22] hover:bg-[#212530] border border-white/10 text-limeaccent flex items-center justify-center transition-colors">
+                        <i class="ph-bold ph-plus text-sm sm:text-base"></i>
                     </button>
-                    <button onclick="handleFirebaseLogout()" aria-label="Cerrar sesión" title="Cerrar sesión" class="w-8 h-8 rounded-xl bg-[#181b22] hover:bg-rose-500/20 border border-white/10 text-slate-400 hover:text-rose-300 flex items-center justify-center transition-colors">
+                    <button onclick="handleFirebaseLogout()" aria-label="Cerrar sesión" title="Cerrar sesión" class="w-7 h-7 sm:w-8 sm:h-8 rounded-lg sm:rounded-xl bg-[#181b22] hover:bg-rose-500/20 border border-rose-500/25 text-rose-300 hover:text-rose-200 flex items-center justify-center transition-colors">
                         <i class="ph-bold ph-sign-out text-sm"></i>
                     </button>
                 </div>
@@ -248,14 +248,16 @@
         <div class="max-w-lg mx-auto">
             <!-- Fila Superior Footer: Cronómetro de Descanso + Saltar Estación -->
             <div class="flex items-center justify-between gap-2 pb-2 mb-2 border-b border-white/5">
-                <div id="timer-box" class="flex items-center gap-2 bg-[#181b22] border border-white/10 px-2.5 py-1 rounded-xl">
-                    <i class="ph-bold ph-timer text-limeaccent text-base"></i>
-                    <span class="text-[11px] text-slate-400 font-semibold">Descanso:</span>
-                    <span id="timer-display" class="text-xs font-black font-mono text-white tracking-wider">01:30</span>
-                    <button onclick="toggleTimer()" id="timer-toggle-btn" aria-label="Iniciar o pausar cronómetro" class="ml-1 w-6 h-6 rounded-lg bg-white/10 hover:bg-white/20 text-white flex items-center justify-center">
+                <div id="timer-box" class="flex items-center gap-1.5 bg-[#181b22] border border-white/10 px-2 py-1 rounded-xl">
+                    <i class="ph-bold ph-timer text-limeaccent text-base shrink-0"></i>
+                    <span class="text-[10px] text-slate-400 font-semibold hidden xs:inline">Descanso:</span>
+                    <span id="timer-display" class="text-xs font-black font-mono text-white tracking-wider min-w-[42px] text-center">01:30</span>
+                    <button onclick="adjustTimerSeconds(-15)" aria-label="Restar 15 segundos al cronómetro" title="-15s" class="w-5 h-6 rounded-md bg-white/5 hover:bg-white/15 text-slate-300 text-[10px] font-black flex items-center justify-center">-15</button>
+                    <button onclick="adjustTimerSeconds(15)" aria-label="Sumar 15 segundos al cronómetro" title="+15s" class="w-5 h-6 rounded-md bg-white/5 hover:bg-white/15 text-slate-300 text-[10px] font-black flex items-center justify-center">+15</button>
+                    <button onclick="toggleTimer()" id="timer-toggle-btn" aria-label="Iniciar o pausar cronómetro" class="w-6 h-6 rounded-lg bg-limeaccent/20 hover:bg-limeaccent/30 border border-limeaccent/40 text-limeaccent flex items-center justify-center">
                         <i id="timer-toggle-icon" class="ph-fill ph-play text-xs"></i>
                     </button>
-                    <button onclick="resetTimer()" aria-label="Reiniciar cronómetro" class="w-6 h-6 rounded-lg bg-white/5 hover:bg-white/15 text-slate-400 flex items-center justify-center">
+                    <button onclick="resetTimer()" aria-label="Reiniciar cronómetro" class="w-6 h-6 rounded-lg bg-white/5 hover:bg-white/15 text-slate-400 hover:text-white flex items-center justify-center">
                         <i class="ph-bold ph-arrow-counter-clockwise text-xs"></i>
                     </button>
                 </div>
@@ -675,7 +677,6 @@
         function formatBlockWithEmoji(rawText) {
             const clean = (rawText || '').trim();
             if (!clean) return '📌 BLOQUE';
-            // Si ya empieza con emoji o símbolo no alfanumérico, mantenerlo tal cual
             if (/^[^\wÁÉÍÓÚÜÑáéíóúüñ0-9]/u.test(clean)) {
                 return clean.toUpperCase();
             }
@@ -951,7 +952,6 @@
             const pastRecords = prof.history.filter(h => h.exerciseId === currentEx.id && h.date !== todayStr);
             if (pastRecords.length === 0) return null;
 
-            // Tomar la última fecha registrada distinta a hoy
             const sortedPast = [...pastRecords].sort((a, b) => b.timestamp - a.timestamp);
             const latestDate = sortedPast[0].date;
             const sessionRecords = sortedPast.filter(h => h.date === latestDate);
@@ -1000,7 +1000,7 @@
             if (!prof || typeof prof !== 'object') {
                 return {
                     bodyWeightKg: 60,
-                    routineLocked: true,
+                    routineLocked: false,
                     exercises: [],
                     blocks: JSON.parse(JSON.stringify(DEFAULT_BLOCKS)),
                     history: []
@@ -1010,7 +1010,7 @@
                 prof.bodyWeightKg = 60;
             }
             if (typeof prof.routineLocked !== 'boolean') {
-                prof.routineLocked = true;
+                prof.routineLocked = false;
             }
             if (!Array.isArray(prof.exercises)) {
                 prof.exercises = [];
@@ -1076,7 +1076,6 @@
             }
 
             if (originalName) {
-                // Editar usuario existente
                 const existingProf = ensureUserProfileShape(state.profiles[originalName], originalName);
                 if (newName !== originalName && state.profiles[newName]) {
                     showToast("Ya existe otro usuario con ese nombre", true);
@@ -1105,7 +1104,6 @@
                 renderAll();
                 showToast(`Usuario "${newName}" actualizado`);
             } else {
-                // Crear usuario nuevo
                 if (state.profiles[newName]) {
                     showToast("Ese usuario ya existe", true);
                     return;
@@ -1225,15 +1223,15 @@
                         </div>
                         <div class="flex items-center gap-1 shrink-0">
                             ${!isCurrent ? `
-                                <button onclick="switchProfile('${name.replace(/'/g, "\'")}'); renderUsersModalList();" class="px-2.5 py-1.5 rounded-xl bg-limeaccent/15 hover:bg-limeaccent/25 text-limeaccent text-[10px] font-black uppercase">
+                                <button onclick="switchProfile('${escapeJsAttr(name)}'); renderUsersModalList();" class="px-2.5 py-1.5 rounded-xl bg-limeaccent/15 hover:bg-limeaccent/25 text-limeaccent text-[10px] font-black uppercase">
                                     USAR
                                 </button>
                             ` : ''}
-                            <button onclick="startEditUser('${name.replace(/'/g, "\'")}')" aria-label="Editar usuario ${name}" class="w-8 h-8 rounded-xl bg-white/5 hover:bg-white/10 text-slate-200 flex items-center justify-center">
+                            <button onclick="startEditUser('${escapeJsAttr(name)}')" aria-label="Editar usuario ${name}" class="w-8 h-8 rounded-xl bg-white/5 hover:bg-white/10 text-slate-200 flex items-center justify-center">
                                 <i class="ph-bold ph-pencil-simple text-sm"></i>
                             </button>
                             ${canDelete ? `
-                                <button onclick="deleteUserProfile('${name.replace(/'/g, "\'")}')" aria-label="Eliminar usuario ${name}" class="w-8 h-8 rounded-xl bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 flex items-center justify-center">
+                                <button onclick="deleteUserProfile('${escapeJsAttr(name)}')" aria-label="Eliminar usuario ${name}" class="w-8 h-8 rounded-xl bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 flex items-center justify-center">
                                     <i class="ph-bold ph-trash text-sm"></i>
                                 </button>
                             ` : ''}
@@ -1244,9 +1242,9 @@
         }
 
         function ensureRoutineLockedFlag(prof) {
-            if (!prof) return true;
+            if (!prof) return false;
             if (typeof prof.routineLocked !== 'boolean') {
-                prof.routineLocked = true;
+                prof.routineLocked = false;
             }
             return prof.routineLocked;
         }
@@ -1261,7 +1259,6 @@
         }
 
         function estimateWorkoutKcal(profileData) {
-            // Estimación práctica basada en peso corporal de referencia del usuario y tipo de estación/serie
             const bodyWeightKg = (profileData && typeof profileData.bodyWeightKg === 'number' && profileData.bodyWeightKg > 0)
                 ? profileData.bodyWeightKg
                 : 60;
@@ -1280,7 +1277,6 @@
 
                     if (cat.includes('cardio') || tag === 'CARDIO') {
                         const mins = unit === 'seg' ? valNum / 60 : (unit === 'reps' ? valNum * 0.5 : valNum);
-                        // ~6.5 kcal/min moderado en ~60 kg
                         totalKcal += mins * 6.5;
                     } else if (tag.includes('ISOM') || unit === 'seg' || unit === 'min') {
                         const mins = unit === 'min' ? valNum : (unit === 'seg' ? valNum / 60 : valNum / 60);
@@ -1288,7 +1284,6 @@
                     } else if (cat.includes('movil') || tag === 'MOVILIDAD' || tag === 'ACTIVACIÓN') {
                         totalKcal += Math.max(8, valNum * 0.8);
                     } else {
-                        // Fuerza / hipertrofia por repeticiones + ajuste leve por carga externa
                         const loadBonus = Math.min(8, (parseFloat(s.weight) || 0) * 0.25);
                         totalKcal += Math.max(10, valNum * 1.45 + loadBonus);
                     }
@@ -1428,7 +1423,6 @@
             sel.innerHTML = blocks.map(b => `<option value="${b.id}" ${b.id === selectedId ? 'selected' : ''}>${b.label}</option>`).join('');
         }
 
-        // Rutinas iniciales realistas para Sofi
         const DEFAULT_STATE = {
             activeProfile: 'Sofi',
             autoRest: true,
@@ -1604,6 +1598,7 @@
         // Variables del Cronómetro de Descanso
         let timerRemaining = 90;
         let timerInterval = null;
+        let timerEndTimestamp = null;
         let isTimerRunning = false;
 
         // =========================================================================
@@ -1791,7 +1786,6 @@
             const list = getCurrentExercises();
             if (index < 0 || index >= list.length) return;
             activeStationIndex = index;
-            // Seleccionar automáticamente la primera serie incompleta o la 0
             const firstUnchecked = list[index].sets.findIndex(s => !s.completed);
             activeSetIndex = firstUnchecked !== -1 ? firstUnchecked : 0;
             showVideo = false;
@@ -1836,7 +1830,6 @@
                 profileSelect.innerHTML = userNames.map(u => `<option value="${u.replace(/"/g, '&quot;')}" ${u === profileName ? 'selected' : ''}>${u}</option>`).join('');
             }
 
-            // 2. Badge Historial
             const histBadge = document.getElementById('history-badge');
             const todayHistCount = profileData.history.filter(h => h.date === getTodayStr()).length;
             if (todayHistCount > 0) {
@@ -1846,7 +1839,6 @@
                 histBadge.classList.add('hidden');
             }
 
-            // 2B. Barra de Días de Entrenamiento
             const trainingDays = ensureTrainingDays(profileData);
             const daysBar = document.getElementById('training-days-bar');
             if (daysBar) {
@@ -1864,7 +1856,6 @@
                 }).join('');
             }
 
-            // 3. Pestañas dinámicas superiores
             const blocks = ensureSofiBlocks(profileData);
             if (!blocks.some(b => b.id === activeTab)) {
                 activeTab = blocks[0].id;
@@ -1884,7 +1875,6 @@
                 `;
             }).join('');
 
-            // 4. Progreso total de todas las series del perfil
             let totalSetsAll = 0;
             let completedSetsAll = 0;
             profileData.exercises.forEach(ex => {
@@ -1897,10 +1887,10 @@
             const lockBtn = document.getElementById('btn-routine-lock');
             const lockIcon = document.getElementById('routine-lock-icon');
             if (lockBtn && lockIcon) {
-                lockIcon.className = isLocked ? 'ph-fill ph-lock text-base' : 'ph-fill ph-lock-open text-base';
+                lockIcon.className = isLocked ? 'ph-fill ph-lock text-xs sm:text-base' : 'ph-fill ph-lock-open text-xs sm:text-base';
                 lockBtn.className = isLocked
-                    ? 'w-8 h-8 rounded-xl bg-[#181b22] hover:bg-[#212530] border border-amber-400/35 text-amber-300 flex items-center justify-center transition-colors'
-                    : 'w-8 h-8 rounded-xl bg-limeaccent/15 hover:bg-limeaccent/25 border border-limeaccent/40 text-limeaccent flex items-center justify-center transition-colors';
+                    ? 'w-7 h-7 sm:w-8 sm:h-8 rounded-lg sm:rounded-xl bg-[#181b22] hover:bg-[#212530] border border-amber-400/35 text-amber-300 flex items-center justify-center transition-colors'
+                    : 'w-7 h-7 sm:w-8 sm:h-8 rounded-lg sm:rounded-xl bg-limeaccent/15 hover:bg-limeaccent/25 border border-limeaccent/40 text-limeaccent flex items-center justify-center transition-colors';
             }
 
             const isDayDone = totalSetsAll > 0 && completedSetsAll === totalSetsAll;
@@ -1914,7 +1904,6 @@
                 }
             }
 
-            // 5. Carrusel de Estaciones
             const carousel = document.getElementById('station-carousel');
             const dayLabel = getTodayLabel();
             if (exercises.length === 0) {
@@ -1952,7 +1941,6 @@
                 `;
             }).join('');
 
-            // 5B. Banner de sugerencia de progresión según historial previo
             const progBanner = document.getElementById('progression-suggestion-banner');
             const progText = document.getElementById('progression-suggestion-text');
             const progBtn = document.getElementById('progression-apply-btn');
@@ -1968,10 +1956,8 @@
                 }
             }
 
-            // 6. Renderizar Tarjeta de Estación Activa
             renderFocusedStation(currentEx);
 
-            // 7. Actualizar indicador serie en barra inferior
             const completedCount = currentEx.sets.filter(s => s.completed).length;
             const currentSetNum = Math.min(activeSetIndex + 1, currentEx.sets.length);
             document.getElementById('footer-set-indicator').textContent = `SERIE ${currentSetNum}/${currentEx.sets.length}`;
@@ -2010,18 +1996,18 @@
             const activeSet = ex.sets[activeSetIndex] || ex.sets[0];
             const completedSetsCount = ex.sets.filter(s => s.completed).length;
 
-            // Buscar último registro histórico de este ejercicio
             const prevRecords = state.profiles[state.activeProfile].history
                 .filter(h => h.exerciseId === ex.id)
                 .sort((a, b) => b.timestamp - a.timestamp);
             const lastRec = prevRecords[0];
 
-            // Color del badge de etiqueta
             const tagStyle = ex.tag === 'SUPERSERIE' 
                 ? 'bg-purple-500/25 text-purple-300 border-purple-400/40' 
                 : ex.tag === 'MOVILIDAD' || ex.tag === 'ACTIVACIÓN'
                     ? 'bg-amber-500/20 text-amber-300 border-amber-400/30'
                     : 'bg-limeaccent/15 text-limeaccent border-limeaccent/30';
+
+            const lockedNow = ensureRoutineLockedFlag(state.profiles[state.activeProfile]);
 
             container.innerHTML = `
                 <!-- TARJETA HERO: VIDEO / TÉCNICA Y TÍTULO -->
@@ -2034,23 +2020,23 @@
                             </div>
                         ` : `
                             <div class="px-4 py-5 flex flex-col items-center justify-center text-center relative">
-                                <div class="absolute top-3 right-3 flex items-center gap-1.5">
-                                    <button onclick="saveExerciseToGeneralCatalog('${ex.id}')" aria-label="Guardar ejercicio en base general" title="Guardar en base general" class="w-8 h-8 rounded-xl border bg-black/50 hover:bg-limeaccent/20 border-limeaccent/30 text-limeaccent flex items-center justify-center transition-colors">
-                                        <i class="ph-bold ph-bookmark-simple text-sm"></i>
+                                <div class="absolute top-2.5 right-2.5 z-10 flex items-center gap-1">
+                                    <button onclick="saveExerciseToGeneralCatalog('${ex.id}')" aria-label="Guardar ejercicio en base general" title="Guardar en base general" class="w-7 h-7 rounded-lg border bg-[#0f1115]/90 hover:bg-limeaccent/20 border-limeaccent/30 text-limeaccent flex items-center justify-center transition-colors">
+                                        <i class="ph-bold ph-bookmark-simple text-xs"></i>
                                     </button>
-                                    <button onclick="handleEditStationClick('${ex.id}')" aria-label="Editar estación" class="w-8 h-8 rounded-xl border flex items-center justify-center transition-colors ${
-                                        ensureRoutineLockedFlag(state.profiles[state.activeProfile])
-                                            ? 'bg-black/50 border-amber-400/25 text-amber-300/75'
-                                            : 'bg-black/40 hover:bg-black/60 border-white/10 text-slate-300'
+                                    <button onclick="handleEditStationClick('${ex.id}')" aria-label="Editar estación" title="Editar ejercicio" class="w-7 h-7 rounded-lg border flex items-center justify-center transition-colors ${
+                                        lockedNow
+                                            ? 'bg-[#0f1115]/90 border-amber-400/25 text-amber-300/80'
+                                            : 'bg-[#0f1115]/90 hover:bg-white/10 border-white/10 text-slate-200'
                                     }">
-                                        <i class="ph-bold ${ensureRoutineLockedFlag(state.profiles[state.activeProfile]) ? 'ph-lock' : 'ph-pencil-simple'} text-sm"></i>
+                                        <i class="ph-bold ${lockedNow ? 'ph-lock' : 'ph-pencil-simple'} text-xs"></i>
                                     </button>
-                                    <button onclick="handleDeleteStationClick('${ex.id}')" aria-label="Eliminar estación" class="w-8 h-8 rounded-xl border flex items-center justify-center transition-colors ${
-                                        ensureRoutineLockedFlag(state.profiles[state.activeProfile])
-                                            ? 'bg-black/50 border-amber-400/25 text-amber-300/75'
-                                            : 'bg-black/40 hover:bg-rose-500/30 border-white/10 text-slate-300 hover:text-rose-300'
+                                    <button onclick="handleDeleteStationClick('${ex.id}')" aria-label="Quitar ejercicio" title="Quitar ejercicio" class="w-7 h-7 rounded-lg border flex items-center justify-center transition-colors ${
+                                        lockedNow
+                                            ? 'bg-[#0f1115]/90 border-amber-400/25 text-amber-300/80'
+                                            : 'bg-[#0f1115]/90 hover:bg-rose-500/30 border-rose-500/25 text-rose-300'
                                     }">
-                                        <i class="ph-bold ${ensureRoutineLockedFlag(state.profiles[state.activeProfile]) ? 'ph-lock' : 'ph-trash'} text-sm"></i>
+                                        <i class="ph-bold ${lockedNow ? 'ph-lock' : 'ph-trash'} text-xs"></i>
                                     </button>
                                 </div>
 
@@ -2095,9 +2081,15 @@
                             </span>
                         </div>
 
-                        <h2 class="text-lg font-black text-white mt-2 leading-tight">
-                            "${ex.name}"
-                        </h2>
+                        <div class="mt-2 flex items-start justify-between gap-2">
+                            <h2 class="text-lg font-black text-white leading-tight min-w-0 flex-1">
+                                "${ex.name}"
+                            </h2>
+                            <button onclick="handleDeleteStationClick('${ex.id}')" class="px-2.5 py-1 rounded-xl bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/25 text-rose-300 text-[10px] font-black uppercase tracking-wider shrink-0 flex items-center gap-1 transition-colors">
+                                <i class="ph-bold ph-trash text-xs"></i>
+                                <span>Quitar</span>
+                            </button>
+                        </div>
 
                         <!-- Acordeón: Músculo y Sensación Clave -->
                         <div class="mt-3 bg-[#0f1115] border border-white/5 rounded-2xl overflow-hidden">
@@ -2118,7 +2110,6 @@
 
                 <!-- DOS COLUMNAS: OBJETIVO vs CARGA ACTUAL (SERIE ACTIVA) -->
                 <section class="grid grid-cols-2 gap-2.5">
-                    <!-- Columna Izquierda: Objetivo + Medida -->
                     <div class="bg-[#181b22] border border-white/10 rounded-2xl p-3.5 flex flex-col justify-between">
                         <div class="flex items-center justify-between gap-1">
                             <span class="text-[10px] font-extrabold uppercase tracking-wider text-slate-400">OBJETIVO</span>
@@ -2134,7 +2125,6 @@
                         </div>
                     </div>
 
-                    <!-- Columna Derecha: Carga Serie Activa con Stepper - / + -->
                     <div class="bg-[#181b22] border border-white/10 rounded-2xl p-3.5 flex flex-col justify-between">
                         <div class="flex items-center justify-between">
                             <span class="text-[10px] font-extrabold uppercase tracking-wider text-slate-400">CARGA (S${activeSetIndex + 1})</span>
@@ -2174,7 +2164,6 @@
 
                 <!-- TARJETA INTERACTIVA DE SERIES (S1, S2, S3, S4) + RIR + AUTO DESCANSO -->
                 <section class="bg-[#181b22] border border-white/10 rounded-3xl p-4 shadow-xl">
-                    <!-- Cabecera Series + Switch Auto Descanso -->
                     <div class="flex items-center justify-between pb-3 border-b border-white/5">
                         <div class="flex items-center gap-2">
                             <i class="ph-bold ph-check-circle text-limeaccent text-base"></i>
@@ -2192,7 +2181,6 @@
                         </label>
                     </div>
 
-                    <!-- Filas por Serie -->
                     <div class="mt-3 space-y-2.5">
                         ${ex.sets.map((set, sIdx) => {
                             const isSelected = sIdx === activeSetIndex;
@@ -2204,7 +2192,6 @@
                                         ? 'bg-[#212530] border-limeaccent/60 shadow-md' 
                                         : 'bg-[#0f1115] border-white/5'
                             }">
-                                <!-- Fila superior: Serie + Objetivo/Medida -->
                                 <div class="flex items-center justify-between gap-2">
                                     <div class="flex items-center gap-2 min-w-0">
                                         <span class="text-xs font-black ${isSelected || set.completed ? 'text-limeaccent' : 'text-slate-400'}">S${sIdx + 1}</span>
@@ -2222,7 +2209,6 @@
                                     </span>
                                 </div>
 
-                                <!-- Fila inferior: Peso junto al RIR + Botón Check -->
                                 <div class="flex items-center justify-between gap-2">
                                     <div class="flex items-center gap-1.5 flex-wrap" onclick="event.stopPropagation()">
                                         <div class="flex items-center gap-1 bg-black/50 px-1.5 py-1 rounded-xl border border-white/10">
@@ -2240,7 +2226,6 @@
                                         </select>
                                     </div>
 
-                                    <!-- Botón Circular Numerado de Check (1, 2, 3, 4) -->
                                     <button onclick="event.stopPropagation(); toggleSetCompleted(${sIdx})" aria-label="Completar serie ${sIdx + 1}" class="w-8 h-8 rounded-full font-black text-xs flex items-center justify-center shrink-0 transition-all active:scale-90 border ${
                                         set.completed 
                                             ? 'bg-limeaccent border-limeaccent text-darkbg shadow-md shadow-limeaccent/30' 
@@ -2256,7 +2241,6 @@
                         }).join('')}
                     </div>
 
-                    <!-- Botón sutil para agregar o quitar serie -->
                     <div class="mt-3 pt-2 border-t border-white/5 flex items-center justify-between gap-2">
                         <button onclick="confirmNewSession()" class="text-[11px] font-bold text-slate-400 hover:text-amber-300 flex items-center gap-1">
                             <i class="ph-bold ph-arrow-counter-clockwise"></i> Nueva sesión
@@ -2446,17 +2430,23 @@
         // =========================================================================
         // CRONÓMETRO DE DESCANSO AUTOMÁTICO
         // =========================================================================
-        function syncTimerWithCurrentExercise() {
-            stopTimerInterval();
+        function getDefaultRestForActiveExercise() {
             const list = getCurrentExercises();
             const ex = list[activeStationIndex];
-            timerRemaining = ex ? (ex.restSeconds || 90) : 90;
+            const parsed = ex ? parseInt(ex.restSeconds, 10) : 90;
+            return (!isNaN(parsed) && parsed > 0) ? parsed : 90;
+        }
+
+        function syncTimerWithCurrentExercise() {
+            stopTimerInterval();
+            timerRemaining = getDefaultRestForActiveExercise();
             updateTimerUI();
         }
 
         function formatSeconds(sec) {
-            const m = Math.floor(sec / 60).toString().padStart(2, '0');
-            const s = (sec % 60).toString().padStart(2, '0');
+            const safeSec = Math.max(0, Math.floor(Number(sec) || 0));
+            const m = Math.floor(safeSec / 60).toString().padStart(2, '0');
+            const s = (safeSec % 60).toString().padStart(2, '0');
             return `${m}:${s}`;
         }
 
@@ -2464,59 +2454,90 @@
             const display = document.getElementById('timer-display');
             const icon = document.getElementById('timer-toggle-icon');
             const box = document.getElementById('timer-box');
+            if (!display || !icon || !box) return;
 
             display.textContent = formatSeconds(timerRemaining);
             icon.className = isTimerRunning ? 'ph-fill ph-pause text-xs' : 'ph-fill ph-play text-xs';
 
             if (timerRemaining === 0) {
-                display.className = 'text-xs font-black font-mono text-limeaccent tracking-wider';
+                display.className = 'text-xs font-black font-mono text-limeaccent tracking-wider min-w-[42px] text-center';
                 box.classList.add('timer-finished', 'border-limeaccent');
             } else {
-                display.className = 'text-xs font-black font-mono text-white tracking-wider';
+                display.className = 'text-xs font-black font-mono text-white tracking-wider min-w-[42px] text-center';
                 box.classList.remove('timer-finished', 'border-limeaccent');
             }
         }
 
+        function tickRestTimer() {
+            if (!isTimerRunning || !timerEndTimestamp) return;
+            const left = Math.max(0, Math.ceil((timerEndTimestamp - Date.now()) / 1000));
+            timerRemaining = left;
+            updateTimerUI();
+
+            if (left <= 0) {
+                stopTimerInterval();
+                timerRemaining = 0;
+                updateTimerUI();
+                playBeepAlert();
+                showToast("⏰ ¡Tiempo de descanso cumplido!");
+            }
+        }
+
         function startRestTimer(seconds) {
+            const safeSeconds = Math.max(1, parseInt(seconds, 10) || getDefaultRestForActiveExercise());
             stopTimerInterval();
-            timerRemaining = seconds;
+            timerRemaining = safeSeconds;
+            timerEndTimestamp = Date.now() + safeSeconds * 1000;
             isTimerRunning = true;
             updateTimerUI();
 
-            timerInterval = setInterval(() => {
-                if (timerRemaining > 0) {
-                    timerRemaining--;
+            timerInterval = setInterval(tickRestTimer, 250);
+        }
+
+        function adjustTimerSeconds(deltaSec) {
+            if (isTimerRunning && timerEndTimestamp) {
+                const currentLeft = Math.max(0, Math.ceil((timerEndTimestamp - Date.now()) / 1000));
+                const nextLeft = Math.max(0, currentLeft + deltaSec);
+                timerRemaining = nextLeft;
+                if (nextLeft <= 0) {
+                    stopTimerInterval();
+                    timerRemaining = 0;
                     updateTimerUI();
                 } else {
-                    stopTimerInterval();
+                    timerEndTimestamp = Date.now() + nextLeft * 1000;
                     updateTimerUI();
-                    playBeepAlert();
-                    showToast("⏰ ¡Tiempo de descanso cumplido!");
                 }
-            }, 1000);
+            } else {
+                timerRemaining = Math.max(0, (parseInt(timerRemaining, 10) || 0) + deltaSec);
+                updateTimerUI();
+            }
         }
 
         function toggleTimer() {
             if (isTimerRunning) {
+                if (timerEndTimestamp) {
+                    timerRemaining = Math.max(0, Math.ceil((timerEndTimestamp - Date.now()) / 1000));
+                }
                 stopTimerInterval();
                 updateTimerUI();
             } else {
-                if (timerRemaining === 0) {
-                    const list = getCurrentExercises();
-                    const ex = list[activeStationIndex];
-                    timerRemaining = ex ? (ex.restSeconds || 90) : 90;
-                }
-                startRestTimer(timerRemaining);
+                const startSec = timerRemaining > 0 ? timerRemaining : getDefaultRestForActiveExercise();
+                startRestTimer(startSec);
             }
         }
 
         function resetTimer() {
-            syncTimerWithCurrentExercise();
+            stopTimerInterval();
+            timerRemaining = getDefaultRestForActiveExercise();
+            updateTimerUI();
         }
 
         function stopTimerInterval() {
-            clearInterval(timerInterval);
-            timerInterval = null;
+            if (timerInterval) {
+                clearInterval(timerInterval);
+                timerInterval = null;
+            }
+            timerEndTimestamp = null;
             isTimerRunning = false;
         }
 
@@ -2708,7 +2729,6 @@
         function closeExerciseModal() {
             document.getElementById('exercise-modal').classList.add('hidden');
         }
-
 
         // =====================================================================
         // BASE GENERAL COMPARTIDA DE EJERCICIOS (TODOS LOS USUARIOS Y FUTUROS)
@@ -3180,18 +3200,30 @@
             const ex = state.profiles[state.activeProfile].exercises.find(e => e.id === exId);
             if (!ex) return;
             openConfirmModal(
-                '¿Eliminar estación?',
+                '¿Quitar ejercicio?',
                 `Se quitará "${ex.name}" de la rutina de ${state.activeProfile}.`,
                 () => {
                     const profileData = state.profiles[state.activeProfile];
                     profileData.exercises = profileData.exercises.filter(e => e.id !== exId);
+                    if (Array.isArray(profileData.days)) {
+                        profileData.days.forEach(d => {
+                            if (Array.isArray(d.exercises)) {
+                                d.exercises = d.exercises.filter(e => e.id !== exId);
+                            }
+                        });
+                        const curDay = getActiveTrainingDay(profileData);
+                        if (curDay) profileData.exercises = curDay.exercises;
+                    }
                     if (activeStationIndex >= getCurrentExercises().length) {
                         activeStationIndex = Math.max(0, getCurrentExercises().length - 1);
                     }
+                    activeSetIndex = 0;
+                    showVideo = false;
                     saveState();
                     closeConfirmModal();
+                    syncTimerWithCurrentExercise();
                     renderAll();
-                    showToast("Estación eliminada");
+                    showToast("Ejercicio quitado");
                 }
             );
         }
@@ -3328,7 +3360,6 @@
             );
         }
 
-        // Arrancar interfaz local inmediata (y luego se sincroniza al autenticar Firebase)
         window.addEventListener('DOMContentLoaded', () => {
             loadExerciseCatalog();
             syncExercisesIntoCatalog(state?.profiles?.[state?.activeProfile]?.exercises || []);
@@ -3340,6 +3371,9 @@
         document.addEventListener('visibilitychange', () => {
             if (!document.hidden) {
                 checkDayRolloverLive();
+                if (isTimerRunning) {
+                    tickRestTimer();
+                }
             }
         });
 
@@ -3481,7 +3515,6 @@
             setAuthGateState('authenticated');
             updateCloudSyncDot('syncing');
 
-            // Suscripción en tiempo real a perfiles, días, pesos e historial
             unsubState = onSnapshot(STATE_DOC_REF, (snap) => {
                 if (snap.exists()) {
                     isApplyingRemote = true;
@@ -3492,7 +3525,6 @@
                     }
                     updateCloudSyncDot('synced');
                 } else {
-                    // Primera vez en la nube: subir el estado inicial
                     window.pushStateToFirestore(state);
                 }
             }, (err) => {
@@ -3501,7 +3533,6 @@
                 showToast('Error de permisos en Firestore (revisá Reglas)', true);
             });
 
-            // Suscripción en tiempo real a la base general de ejercicios
             unsubCatalog = onSnapshot(CATALOG_DOC_REF, (snap) => {
                 if (snap.exists() && Array.isArray(snap.data().exercises)) {
                     isApplyingRemote = true;
