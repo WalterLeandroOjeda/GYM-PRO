@@ -2071,7 +2071,7 @@
 
             container.innerHTML = `
                 <!-- TARJETA HERO: VIDEO / TÉCNICA Y TÍTULO -->
-                <section class="bg-[#181b22] border border-white/10 rounded-3xl overflow-hidden shadow-xl">
+                <section class="swipe-station-zone bg-[#181b22] border border-white/10 rounded-3xl overflow-hidden shadow-xl">
                     <!-- Zona de Video / Banner Visual -->
                     <div class="relative bg-gradient-to-br from-[#212530] via-[#181b22] to-[#0f1115] border-b border-white/5">
                         ${showVideo && embedUrl ? `
@@ -3591,8 +3591,58 @@
                 } else {
                     window.pushCatalogToFirestore(loadExerciseCatalog());
                 }
+                // =========================================================================
+        // DESLIZAMIENTO (SWIPE) COMPATIBLE CON TÁCTIL Y MOUSE EN PC
+        // =========================================================================
+        (function enableDesktopAndTouchSwipe() {
+            let startX = 0;
+            let startY = 0;
+            let isDragging = false;
+            let pointerIdActive = null;
+            const THRESHOLD_X = 65;
+
+            function shouldIgnoreSwipeTarget(target) {
+                if (!target) return true;
+                return Boolean(
+                    target.closest('button, a, input, select, textarea, label, iframe')
+                );
+            }
+
+            function handleSwipeEnd(endX, endY) {
+                const dx = endX - startX;
+                const dy = endY - startY;
+                if (Math.abs(dx) > THRESHOLD_X && Math.abs(dx) > Math.abs(dy) * 1.35) {
+                    if (dx < 0) {
+                        nextStation();
+                    } else {
+                        prevStation();
+                    }
+                }
+            }
+
+            document.addEventListener('pointerdown', (e) => {
+                if (e.pointerType === 'mouse' && e.button !== 0) return;
+                const zone = e.target.closest('.swipe-station-zone');
+                if (!zone || shouldIgnoreSwipeTarget(e.target)) return;
+
+                isDragging = true;
+                pointerIdActive = e.pointerId;
+                startX = e.clientX;
+                startY = e.clientY;
             });
-        });
+
+            document.addEventListener('pointerup', (e) => {
+                if (!isDragging) return;
+                if (pointerIdActive !== null && e.pointerId !== pointerIdActive) return;
+                isDragging = false;
+                pointerIdActive = null;
+                handleSwipeEnd(e.clientX, e.clientY);
+            });
+
+            document.addEventListener('pointercancel', () => {
+                isDragging = false;
+                pointerIdActive = null;
+            });
     </script>
 </body>
 </html>
