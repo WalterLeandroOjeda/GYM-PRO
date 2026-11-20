@@ -39,7 +39,6 @@
             -webkit-tap-highlight-color: transparent;
             overscroll-behavior-y: none;
         }
-        /* Ocultar scrollbars en carrusel horizontal */
         .no-scrollbar::-webkit-scrollbar {
             display: none;
         }
@@ -47,7 +46,6 @@
             -ms-overflow-style: none;
             scrollbar-width: none;
         }
-        /* Ocultar flechas de inputs numéricos */
         input[type=number]::-webkit-inner-spin-button, 
         input[type=number]::-webkit-outer-spin-button { 
             -webkit-appearance: none; 
@@ -56,7 +54,6 @@
         input[type=number] {
             -moz-appearance: textfield;
         }
-        /* Switch toggle personalizado */
         .toggle-checkbox:checked {
             right: 0;
             border-color: #a3e635;
@@ -126,13 +123,14 @@
             <div class="flex items-center justify-between gap-1.5">
                 <!-- Selector y Gestión de Usuarios -->
                 <div class="flex items-center gap-1 shrink-0">
-                    <div class="bg-[#181b22] px-1.5 sm:px-2 py-1 rounded-xl border border-limeaccent/30 flex items-center gap-1">
-                        <i class="ph-fill ph-user text-limeaccent text-[11px] shrink-0"></i>
-                        <select id="header-profile-select" onchange="switchProfile(this.value)" aria-label="Seleccionar usuario" class="bg-transparent text-[10px] sm:text-[11px] font-black text-white tracking-wide outline-none cursor-pointer max-w-[52px] sm:max-w-[68px]">
+                    <div id="header-profile-box" class="bg-[#181b22] px-1.5 sm:px-2 py-1 rounded-xl border border-limeaccent/30 flex items-center gap-1">
+                        <i id="header-role-icon" class="ph-fill ph-user text-limeaccent text-[11px] shrink-0"></i>
+                        <select id="header-profile-select" onchange="switchProfile(this.value)" aria-label="Seleccionar usuario" class="bg-transparent text-[10px] sm:text-[11px] font-black text-white tracking-wide outline-none cursor-pointer max-w-[62px] sm:max-w-[78px]">
                             <option value="Sofi">Sofi</option>
                         </select>
+                        <span id="header-admin-badge" class="hidden text-[8px] font-black uppercase px-1.5 py-0.5 rounded bg-amber-400/20 text-amber-300 border border-amber-400/40">ADMIN</span>
                     </div>
-                    <button onclick="openUsersModal()" aria-label="Crear o editar usuarios" class="w-7 h-7 sm:w-8 sm:h-8 rounded-lg sm:rounded-xl bg-[#181b22] hover:bg-[#212530] border border-white/10 text-limeaccent flex items-center justify-center transition-colors">
+                    <button id="header-users-btn" onclick="openUsersModal()" aria-label="Crear o editar usuarios" title="Gestión de usuarios y permisos" class="w-7 h-7 sm:w-8 sm:h-8 rounded-lg sm:rounded-xl bg-[#181b22] hover:bg-[#212530] border border-white/10 text-limeaccent flex items-center justify-center transition-colors">
                         <i class="ph-bold ph-user-gear text-xs sm:text-sm"></i>
                     </button>
                 </div>
@@ -148,23 +146,26 @@
                     </p>
                 </div>
 
-                <!-- Botones Rápidos: Candado, Historial, Base, Nuevo y Salir -->
+                <!-- Botones Rápidos: Candado, Calendario, Historial, Base, Nuevo y Salir -->
                 <div class="flex items-center gap-0.5 sm:gap-1 shrink-0">
-                    <button onclick="toggleRoutineLock()" id="btn-routine-lock" aria-label="Bloquear o desbloquear edición de ejercicios" class="w-7 h-7 sm:w-8 sm:h-8 rounded-lg sm:rounded-xl bg-[#181b22] hover:bg-[#212530] border border-amber-400/30 text-amber-300 flex items-center justify-center transition-colors">
-                        <i id="routine-lock-icon" class="ph-fill ph-lock text-sm sm:text-base"></i>
+                    <button onclick="toggleRoutineLock()" id="btn-routine-lock" aria-label="Bloquear o desbloquear edición de ejercicios" title="Bloquear/desbloquear edición" class="w-7 h-7 sm:w-8 sm:h-8 rounded-lg sm:rounded-xl bg-[#181b22] hover:bg-[#212530] border border-amber-400/30 text-amber-300 flex items-center justify-center transition-colors">
+                        <i id="routine-lock-icon" class="ph-fill ph-lock text-xs sm:text-base"></i>
                     </button>
-                    <button onclick="openHistoryModal()" aria-label="Ver Historial" class="w-7 h-7 sm:w-8 sm:h-8 rounded-lg sm:rounded-xl bg-[#181b22] hover:bg-[#212530] border border-white/10 text-slate-200 flex items-center justify-center relative transition-colors">
-                        <i class="ph-bold ph-clock-counter-clockwise text-sm sm:text-base"></i>
+                    <button onclick="openCalendarModal()" aria-label="Calendario de entrenamientos y pesos" title="Calendario y registro de días pasados" class="w-7 h-7 sm:w-8 sm:h-8 rounded-lg sm:rounded-xl bg-[#181b22] hover:bg-[#212530] border border-sky-400/30 text-sky-300 flex items-center justify-center transition-colors">
+                        <i class="ph-bold ph-calendar-blank text-xs sm:text-base"></i>
+                    </button>
+                    <button onclick="openHistoryModal()" aria-label="Ver Historial" title="Historial de series" class="w-7 h-7 sm:w-8 sm:h-8 rounded-lg sm:rounded-xl bg-[#181b22] hover:bg-[#212530] border border-white/10 text-slate-200 flex items-center justify-center relative transition-colors">
+                        <i class="ph-bold ph-clock-counter-clockwise text-xs sm:text-base"></i>
                         <span id="history-badge" class="hidden absolute -top-1 -right-1 w-3.5 h-3.5 rounded-full bg-limeaccent text-darkbg text-[8px] font-black flex items-center justify-center">0</span>
                     </button>
-                    <button onclick="openCatalogModal()" aria-label="Base general de ejercicios" class="w-7 h-7 sm:w-8 sm:h-8 rounded-lg sm:rounded-xl bg-[#181b22] hover:bg-[#212530] border border-limeaccent/25 text-limeaccent flex items-center justify-center transition-colors">
-                        <i class="ph-bold ph-database text-sm sm:text-base"></i>
+                    <button onclick="openCatalogModal()" aria-label="Base general de ejercicios" title="Base general de ejercicios" class="w-7 h-7 sm:w-8 sm:h-8 rounded-lg sm:rounded-xl bg-[#181b22] hover:bg-[#212530] border border-limeaccent/25 text-limeaccent flex items-center justify-center transition-colors">
+                        <i class="ph-bold ph-database text-xs sm:text-base"></i>
                     </button>
-                    <button onclick="openExerciseModal()" aria-label="Nuevo Ejercicio" class="w-7 h-7 sm:w-8 sm:h-8 rounded-lg sm:rounded-xl bg-[#181b22] hover:bg-[#212530] border border-white/10 text-limeaccent flex items-center justify-center transition-colors">
-                        <i class="ph-bold ph-plus text-sm sm:text-base"></i>
+                    <button onclick="openExerciseModal()" aria-label="Nuevo Ejercicio" title="Nuevo ejercicio" class="w-7 h-7 sm:w-8 sm:h-8 rounded-lg sm:rounded-xl bg-[#181b22] hover:bg-[#212530] border border-white/10 text-limeaccent flex items-center justify-center transition-colors">
+                        <i class="ph-bold ph-plus text-xs sm:text-base"></i>
                     </button>
                     <button onclick="handleFirebaseLogout()" aria-label="Cerrar sesión" title="Cerrar sesión" class="w-7 h-7 sm:w-8 sm:h-8 rounded-lg sm:rounded-xl bg-[#181b22] hover:bg-rose-500/20 border border-rose-500/25 text-rose-300 hover:text-rose-200 flex items-center justify-center transition-colors">
-                        <i class="ph-bold ph-sign-out text-sm"></i>
+                        <i class="ph-bold ph-sign-out text-xs sm:text-sm"></i>
                     </button>
                 </div>
             </div>
@@ -252,17 +253,17 @@
                     <i class="ph-bold ph-timer text-limeaccent text-base shrink-0"></i>
                     <span class="text-[10px] text-slate-400 font-semibold hidden xs:inline">Descanso:</span>
                     <span id="timer-display" class="text-xs font-black font-mono text-white tracking-wider min-w-[42px] text-center">01:30</span>
-                    <button onclick="adjustTimerSeconds(-15)" aria-label="Restar 15 segundos al cronómetro" title="-15s" class="w-5 h-6 rounded-md bg-white/5 hover:bg-white/15 text-slate-300 text-[10px] font-black flex items-center justify-center">-15</button>
-                    <button onclick="adjustTimerSeconds(15)" aria-label="Sumar 15 segundos al cronómetro" title="+15s" class="w-5 h-6 rounded-md bg-white/5 hover:bg-white/15 text-slate-300 text-[10px] font-black flex items-center justify-center">+15</button>
-                    <button onclick="toggleTimer()" id="timer-toggle-btn" aria-label="Iniciar o pausar cronómetro" class="w-6 h-6 rounded-lg bg-limeaccent/20 hover:bg-limeaccent/30 border border-limeaccent/40 text-limeaccent flex items-center justify-center">
+                    <button type="button" onclick="adjustTimerSeconds(-15)" aria-label="Restar 15 segundos al cronómetro" title="-15s" class="w-5 h-6 rounded-md bg-white/5 hover:bg-white/15 text-slate-300 text-[10px] font-black flex items-center justify-center">-15</button>
+                    <button type="button" onclick="adjustTimerSeconds(15)" aria-label="Sumar 15 segundos al cronómetro" title="+15s" class="w-5 h-6 rounded-md bg-white/5 hover:bg-white/15 text-slate-300 text-[10px] font-black flex items-center justify-center">+15</button>
+                    <button type="button" onclick="toggleTimer()" id="timer-toggle-btn" aria-label="Iniciar o pausar cronómetro" class="w-6 h-6 rounded-lg bg-limeaccent/20 hover:bg-limeaccent/30 border border-limeaccent/40 text-limeaccent flex items-center justify-center">
                         <i id="timer-toggle-icon" class="ph-fill ph-play text-xs"></i>
                     </button>
-                    <button onclick="resetTimer()" aria-label="Reiniciar cronómetro" class="w-6 h-6 rounded-lg bg-white/5 hover:bg-white/15 text-slate-400 hover:text-white flex items-center justify-center">
+                    <button type="button" onclick="resetTimer()" aria-label="Reiniciar cronómetro" class="w-6 h-6 rounded-lg bg-white/5 hover:bg-white/15 text-slate-400 hover:text-white flex items-center justify-center">
                         <i class="ph-bold ph-arrow-counter-clockwise text-xs"></i>
                     </button>
                 </div>
 
-                <button onclick="nextStation()" class="text-[11px] font-bold text-slate-300 hover:text-limeaccent flex items-center gap-1 py-1 px-2 rounded-lg transition-colors">
+                <button type="button" onclick="nextStation()" class="text-[11px] font-bold text-slate-300 hover:text-limeaccent flex items-center gap-1 py-1 px-2 rounded-lg transition-colors">
                     <span>Siguiente estación</span>
                     <i class="ph-bold ph-arrow-right"></i>
                 </button>
@@ -270,11 +271,11 @@
 
             <!-- Fila Inferior Footer: Navegación + Indicador Serie + Botón Principal COMPLETAR -->
             <div class="flex items-center gap-2">
-                <button onclick="openHistoryModal()" aria-label="Abrir historial" class="w-11 h-12 rounded-xl bg-[#181b22] border border-white/10 text-slate-300 hover:text-white flex items-center justify-center shrink-0">
+                <button type="button" onclick="openHistoryModal()" aria-label="Abrir historial" class="w-11 h-12 rounded-xl bg-[#181b22] border border-white/10 text-slate-300 hover:text-white flex items-center justify-center shrink-0">
                     <i class="ph-bold ph-list-bullets text-xl"></i>
                 </button>
 
-                <button onclick="prevStation()" aria-label="Estación anterior" class="w-10 h-12 rounded-xl bg-[#181b22] border border-white/10 text-slate-300 hover:text-white flex items-center justify-center shrink-0">
+                <button type="button" onclick="prevStation()" aria-label="Estación anterior" class="w-10 h-12 rounded-xl bg-[#181b22] border border-white/10 text-slate-300 hover:text-white flex items-center justify-center shrink-0">
                     <i class="ph-bold ph-caret-left text-lg"></i>
                 </button>
 
@@ -283,13 +284,65 @@
                     <span id="footer-set-indicator" class="text-xs font-extrabold text-white truncate">SERIE 1/4</span>
                 </div>
 
-                <button onclick="completeNextUncheckedSet()" id="btn-complete-main" class="h-12 px-4 rounded-xl bg-limeaccent hover:bg-limedark active:scale-95 text-darkbg font-black text-xs sm:text-sm tracking-wide uppercase shadow-lg shadow-limeaccent/20 flex items-center justify-center gap-1.5 shrink-0 transition-all">
+                <button type="button" onclick="completeNextUncheckedSet()" id="btn-complete-main" class="h-12 px-4 rounded-xl bg-limeaccent hover:bg-limedark active:scale-95 text-darkbg font-black text-xs sm:text-sm tracking-wide uppercase shadow-lg shadow-limeaccent/20 flex items-center justify-center gap-1.5 shrink-0 transition-all">
                     <span>COMPLETAR</span>
                     <i class="ph-bold ph-checks text-lg"></i>
                 </button>
             </div>
         </div>
     </footer>
+
+    <!-- =====================================================================
+         MODAL DE CALENDARIO RETROACTIVO Y REGISTRO CON CANDADO DE PESO
+         ===================================================================== -->
+    <div id="calendar-modal" class="fixed inset-0 z-50 hidden bg-black/85 backdrop-blur-sm flex items-end sm:items-center justify-center p-0 sm:p-4">
+        <div class="bg-[#181b22] border-t sm:border border-white/10 w-full max-w-lg rounded-t-3xl sm:rounded-3xl p-5 max-h-[92vh] flex flex-col shadow-2xl">
+            <div class="flex items-center justify-between pb-3 border-b border-white/10 shrink-0">
+                <div>
+                    <h2 class="text-base font-black text-white flex items-center gap-2">
+                        <i class="ph-bold ph-calendar-check text-sky-300 text-xl"></i>
+                        Calendario de Entrenamientos (<span id="cal-modal-profile">Sofi</span>)
+                    </h2>
+                    <p class="text-[11px] text-slate-400">Tocá cualquier día para ver o cargar pesos atrasados con candado</p>
+                </div>
+                <button onclick="closeCalendarModal()" class="w-9 h-9 rounded-full bg-white/5 text-slate-400 hover:text-white flex items-center justify-center">
+                    <i class="ph-bold ph-x text-lg"></i>
+                </button>
+            </div>
+
+            <!-- Navegación de Mes -->
+            <div class="mt-3 flex items-center justify-between bg-[#0f1115] border border-white/10 rounded-2xl px-3 py-2 shrink-0">
+                <button type="button" onclick="changeCalendarMonth(-1)" aria-label="Mes anterior" class="w-8 h-8 rounded-xl bg-white/5 hover:bg-white/10 text-slate-200 flex items-center justify-center">
+                    <i class="ph-bold ph-caret-left text-base"></i>
+                </button>
+                <span id="cal-month-label" class="text-xs font-black uppercase tracking-wider text-white">Noviembre 2026</span>
+                <button type="button" onclick="changeCalendarMonth(1)" aria-label="Mes siguiente" class="w-8 h-8 rounded-xl bg-white/5 hover:bg-white/10 text-slate-200 flex items-center justify-center">
+                    <i class="ph-bold ph-caret-right text-base"></i>
+                </button>
+            </div>
+
+            <!-- Cabecera días de la semana -->
+            <div class="mt-2.5 grid grid-cols-7 gap-1 text-center shrink-0">
+                <span class="text-[10px] font-black text-slate-500">LU</span>
+                <span class="text-[10px] font-black text-slate-500">MA</span>
+                <span class="text-[10px] font-black text-slate-500">MI</span>
+                <span class="text-[10px] font-black text-slate-500">JU</span>
+                <span class="text-[10px] font-black text-slate-500">VI</span>
+                <span class="text-[10px] font-black text-slate-500">SA</span>
+                <span class="text-[10px] font-black text-slate-500">DO</span>
+            </div>
+
+            <!-- Grilla de días del mes -->
+            <div id="cal-days-grid" class="mt-1 grid grid-cols-7 gap-1 shrink-0">
+                <!-- Renderizado dinámico -->
+            </div>
+
+            <!-- Panel Detalle del Día Seleccionado + Candado de Peso -->
+            <div id="cal-day-detail-panel" class="mt-3 pt-3 border-t border-white/10 flex-1 overflow-y-auto space-y-2.5 pr-1">
+                <!-- Renderizado dinámico -->
+            </div>
+        </div>
+    </div>
 
     <!-- =====================================================================
          MODAL DE HISTORIAL Y EXPORTACIÓN WHATSAPP
@@ -399,26 +452,21 @@
                     </button>
                 </div>
 
-
-                <!-- Bloque -->
                 <div>
                     <label for="ex-category" class="block text-[11px] font-extrabold uppercase tracking-wider text-slate-400 mb-1">Pestaña / Bloque</label>
                     <select id="ex-category" class="w-full bg-[#0f1115] border border-white/10 focus:border-limeaccent rounded-xl px-3.5 py-2.5 text-xs font-extrabold text-white outline-none">
-                        <!-- Renderizado dinámico con bloques activos -->
                     </select>
                 </div>
 
-                <!-- Nombre -->
                 <div>
                     <label for="ex-name" class="block text-[11px] font-extrabold uppercase tracking-wider text-slate-400 mb-1">Nombre del ejercicio *</label>
                     <input type="text" id="ex-name" required placeholder="Ej: Plancha Frontal Isométrica o Cinta" class="w-full bg-[#0f1115] border border-white/10 focus:border-limeaccent rounded-xl px-3.5 py-2.5 text-sm text-white placeholder-slate-600 outline-none">
                 </div>
 
-                <!-- Etiqueta + Músculo -->
                 <div class="grid grid-cols-2 gap-2.5">
                     <div>
                         <label for="ex-tag" class="block text-[11px] font-extrabold uppercase tracking-wider text-slate-400 mb-1">Etiqueta</label>
-                        <select id="ex-tag" class="w-full bg-[#0f1115] border border-white/10 focus:border-limeaccent rounded-xl px-3 py-2.5 text-xs font-bold text-white outline-none">
+                        <select id="ex-tag" class="w-full bg-[#0f1115] border border-white/10 focus:border-limeaccent rounded-xl px-3.5 py-2.5 text-xs font-bold text-white outline-none">
                             <option value="FUERZA">FUERZA</option>
                             <option value="HIPERTROFIA">HIPERTROFIA</option>
                             <option value="CARDIO">CARDIO</option>
@@ -434,7 +482,6 @@
                     </div>
                 </div>
 
-                <!-- Series, Objetivo (Valor + Unidad: reps / seg / min) y Descanso -->
                 <div class="grid grid-cols-12 gap-2">
                     <div class="col-span-3">
                         <label for="ex-num-sets" class="block text-[10px] font-extrabold uppercase tracking-wider text-slate-400 mb-1">Series</label>
@@ -458,13 +505,11 @@
                     </div>
                 </div>
 
-                <!-- Sensación Clave y Técnica -->
                 <div>
                     <label for="ex-notes" class="block text-[11px] font-extrabold uppercase tracking-wider text-slate-400 mb-1">Técnica y sensación clave a buscar *</label>
                     <textarea id="ex-notes" rows="3" required placeholder="Ej: Cadera atrás con espalda neutra. Buscá sentir el estiramiento claro del isquiotibial antes de subir." class="w-full bg-[#0f1115] border border-white/10 focus:border-limeaccent rounded-xl px-3.5 py-2.5 text-xs text-white placeholder-slate-600 outline-none"></textarea>
                 </div>
 
-                <!-- Link de Video YouTube -->
                 <div>
                     <label for="ex-video" class="block text-[11px] font-extrabold uppercase tracking-wider text-slate-400 mb-1">Video guía (Link YouTube opcional)</label>
                     <input type="url" id="ex-video" placeholder="https://www.youtube.com/watch?v=..." class="w-full bg-[#0f1115] border border-white/10 focus:border-limeaccent rounded-xl px-3.5 py-2.5 text-xs text-white placeholder-slate-600 outline-none">
@@ -479,7 +524,7 @@
     </div>
 
     <!-- =====================================================================
-         MODAL PARA CREAR Y EDITAR USUARIOS
+         MODAL PARA CREAR Y EDITAR USUARIOS (CONTROL TOTAL SOLO PARA WALTER ADMIN)
          ===================================================================== -->
     <div id="users-modal" class="fixed inset-0 z-50 hidden bg-black/85 backdrop-blur-sm flex items-end sm:items-center justify-center p-0 sm:p-4">
         <div class="bg-[#181b22] border-t sm:border border-white/10 w-full max-w-lg rounded-t-3xl sm:rounded-3xl p-5 max-h-[90vh] flex flex-col shadow-2xl">
@@ -487,17 +532,22 @@
                 <div>
                     <h2 class="text-base font-black text-white flex items-center gap-2">
                         <i class="ph-bold ph-users-three text-limeaccent text-xl"></i>
-                        Usuarios / Perfiles
+                        Usuarios & Permisos
                     </h2>
-                    <p class="text-[11px] text-slate-400">Creá tu usuario o editá los perfiles guardados</p>
+                    <p id="users-modal-subtitle" class="text-[11px] text-slate-400">Control de cuentas y privacidad por correo</p>
                 </div>
                 <button onclick="closeUsersModal()" class="w-9 h-9 rounded-full bg-white/5 text-slate-400 hover:text-white flex items-center justify-center">
                     <i class="ph-bold ph-x text-lg"></i>
                 </button>
             </div>
 
+            <!-- Estado de Rol Actual -->
+            <div id="user-role-banner" class="mt-3 bg-[#0f1115] border border-white/10 rounded-2xl p-3 shrink-0">
+                <!-- Renderizado dinámico -->
+            </div>
+
             <!-- Formulario Crear / Editar Usuario -->
-            <form onsubmit="saveUserProfile(event)" class="mt-3.5 bg-[#0f1115] border border-white/10 rounded-2xl p-3.5 space-y-2.5 shrink-0">
+            <form id="user-profile-form" onsubmit="saveUserProfile(event)" class="mt-3 bg-[#0f1115] border border-white/10 rounded-2xl p-3.5 space-y-2.5 shrink-0">
                 <input type="hidden" id="user-edit-original-name">
                 <div class="flex items-center justify-between">
                     <span id="user-form-title" class="text-[11px] font-black uppercase tracking-wider text-limeaccent">Nuevo usuario</span>
@@ -509,11 +559,22 @@
                 <div class="grid grid-cols-12 gap-2">
                     <div class="col-span-7">
                         <label for="user-name-input" class="block text-[10px] font-extrabold uppercase tracking-wider text-slate-400 mb-1">Nombre *</label>
-                        <input type="text" id="user-name-input" required placeholder="Ej: Walter" class="w-full bg-[#181b22] border border-white/10 focus:border-limeaccent rounded-xl px-3 py-2 text-xs font-bold text-white placeholder-slate-600 outline-none">
+                        <input type="text" id="user-name-input" required placeholder="Ej: Sofi" class="w-full bg-[#181b22] border border-white/10 focus:border-limeaccent rounded-xl px-3 py-2 text-xs font-bold text-white placeholder-slate-600 outline-none">
                     </div>
                     <div class="col-span-5">
                         <label for="user-weight-input" class="block text-[10px] font-extrabold uppercase tracking-wider text-slate-400 mb-1">Peso ref. (kg)</label>
                         <input type="number" id="user-weight-input" step="0.5" min="30" max="250" value="60" class="w-full bg-[#181b22] border border-white/10 focus:border-limeaccent rounded-xl px-3 py-2 text-xs font-bold text-white outline-none">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-12 gap-2">
+                    <div class="col-span-7">
+                        <label for="user-email-input" class="block text-[10px] font-extrabold uppercase tracking-wider text-slate-400 mb-1">Mail de acceso asignado</label>
+                        <input type="email" id="user-email-input" placeholder="Ej: sofi@gmail.com" class="w-full bg-[#181b22] border border-white/10 focus:border-limeaccent rounded-xl px-3 py-2 text-xs font-semibold text-white placeholder-slate-600 outline-none">
+                    </div>
+                    <div class="col-span-5" id="user-password-box">
+                        <label for="user-password-input" class="block text-[10px] font-extrabold uppercase tracking-wider text-slate-400 mb-1">Clave cuenta (opc.)</label>
+                        <input type="password" id="user-password-input" minlength="6" placeholder="Mín. 6 car." class="w-full bg-[#181b22] border border-white/10 focus:border-limeaccent rounded-xl px-3 py-2 text-xs font-semibold text-white placeholder-slate-600 outline-none">
                     </div>
                 </div>
 
@@ -522,19 +583,19 @@
                     <select id="user-seed-mode" class="bg-[#181b22] border border-white/10 rounded-xl px-2.5 py-1.5 text-[11px] font-extrabold text-limeaccent outline-none">
                         <option value="catalog">Cargar desde base general de ejercicios</option>
                         <option value="copy">Copiar rutina actual</option>
-                        <option value="blank">Empezar vacío (crear mis estaciones)</option>
+                        <option value="blank">Empezar vacío (crear sus estaciones)</option>
                     </select>
                 </div>
 
                 <button type="submit" id="user-submit-btn" class="w-full py-2.5 rounded-xl bg-limeaccent hover:bg-limedark text-darkbg font-black text-xs shadow-md flex items-center justify-center gap-1.5">
                     <i class="ph-bold ph-user-plus text-sm"></i>
-                    <span>CREAR USUARIO</span>
+                    <span>CREAR USUARIO Y CUENTA</span>
                 </button>
             </form>
 
             <!-- Lista de Usuarios -->
-            <div class="flex items-center justify-between mt-3.5 mb-2 shrink-0">
-                <span class="text-[11px] font-extrabold uppercase tracking-wider text-slate-400">Usuarios registrados</span>
+            <div class="flex items-center justify-between mt-3 mb-2 shrink-0">
+                <span class="text-[11px] font-extrabold uppercase tracking-wider text-slate-400">Usuarios visibles para tu sesión</span>
             </div>
             <div id="users-list-container" class="flex-1 overflow-y-auto space-y-2 pr-1">
                 <!-- Renderizado dinámico -->
@@ -611,18 +672,15 @@
                 </button>
             </div>
 
-            <!-- Buscador y Filtro -->
             <div class="mt-3 space-y-2 shrink-0">
                 <div class="relative">
                     <i class="ph-bold ph-magnifying-glass text-slate-400 text-sm absolute left-3 top-1/2 -translate-y-1/2"></i>
                     <input type="text" id="catalog-search-input" oninput="renderCatalogModalList()" placeholder="Buscar por nombre, músculo o etiqueta..." class="w-full bg-[#0f1115] border border-white/10 focus:border-limeaccent rounded-xl pl-9 pr-3 py-2 text-xs font-semibold text-white placeholder-slate-500 outline-none">
                 </div>
                 <div id="catalog-filter-chips" class="flex items-center gap-1.5 overflow-x-auto no-scrollbar pb-0.5">
-                    <!-- Chips dinámicos -->
                 </div>
             </div>
 
-            <!-- Acciones de Base General: Guardar actual o importar/exportar catálogo -->
             <div class="mt-2.5 grid grid-cols-3 gap-1.5 shrink-0">
                 <button type="button" onclick="saveActiveStationToCatalog()" class="py-2 px-2 rounded-xl bg-limeaccent/15 hover:bg-limeaccent/25 border border-limeaccent/35 text-[10px] font-black text-limeaccent flex items-center justify-center gap-1">
                     <i class="ph-bold ph-bookmark-simple text-sm"></i> GUARDAR ACTUAL
@@ -636,9 +694,7 @@
                 </label>
             </div>
 
-            <!-- Lista de Ejercicios en Base General -->
             <div id="catalog-list-container" class="mt-3 flex-1 overflow-y-auto space-y-2 pr-1">
-                <!-- Renderizado dinámico -->
             </div>
         </div>
     </div>
@@ -660,6 +716,7 @@
          ===================================================================== -->
     <script>
         const STORAGE_KEY = 'gymtrack_stations_v2';
+        const SESSION_ROLE_KEY = 'gymtrack_session_owner_v1';
 
         const DEFAULT_BLOCKS = [
             { id: 'movilidad', label: '🔥 MOVILIDAD PREVIA' },
@@ -671,6 +728,14 @@
             return String(str || '')
                 .replace(/\\/g, '\\\\')
                 .replace(/'/g, "\\'")
+                .replace(/"/g, '&quot;');
+        }
+
+        function escapeHtml(str) {
+            return String(str || '')
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
                 .replace(/"/g, '&quot;');
         }
 
@@ -694,14 +759,110 @@
             return `${emoji} ${clean.toUpperCase()}`;
         }
 
-        const DEFAULT_DAY_ID = 'dia-1';
+        // =========================================================================
+        // CONTROL DE PERMISOS Y VISIBILIDAD (WALTER = ADMIN VE TODO / RESTO SOLO LO SUYO)
+        // =========================================================================
+        let currentAuthEmail = '';
+        let sessionOwnerName = localStorage.getItem(SESSION_ROLE_KEY) || 'Sofi';
 
-        function createDefaultDayRoutine(exercises = null, blocks = null) {
-            return {
-                blocks: blocks ? JSON.parse(JSON.stringify(blocks)) : JSON.parse(JSON.stringify(DEFAULT_BLOCKS)),
-                exercises: exercises ? JSON.parse(JSON.stringify(exercises)) : []
-            };
+        function isAdminUser(name) {
+            return String(name || '').trim().toLowerCase() === 'walter';
         }
+
+        function getSessionOwner() {
+            const profiles = (state && state.profiles) ? state.profiles : {};
+            const allKeys = Object.keys(profiles);
+
+            if (currentAuthEmail) {
+                const emailLower = currentAuthEmail.trim().toLowerCase();
+
+                // 1. Buscar coincidencia exacta por correo asignado en el perfil
+                const matchedByEmail = allKeys.find(k => {
+                    const p = profiles[k];
+                    return p && p.assignedEmail && String(p.assignedEmail).trim().toLowerCase() === emailLower;
+                });
+                if (matchedByEmail) {
+                    sessionOwnerName = matchedByEmail;
+                    localStorage.setItem(SESSION_ROLE_KEY, matchedByEmail);
+                    return matchedByEmail;
+                }
+
+                // 2. Si el correo contiene "walter", automáticamente es Walter (Admin)
+                if (emailLower.includes('walter')) {
+                    const walterKey = allKeys.find(k => isAdminUser(k)) || 'Walter';
+                    sessionOwnerName = walterKey;
+                    localStorage.setItem(SESSION_ROLE_KEY, walterKey);
+                    return walterKey;
+                }
+
+                // 3. Buscar si el correo contiene el nombre de algún usuario estándar (ej: sofi@...)
+                const nonAdminKeys = allKeys.filter(k => !isAdminUser(k));
+                const matchedByNameInEmail = nonAdminKeys.find(k => emailLower.includes(k.trim().toLowerCase()));
+                if (matchedByNameInEmail) {
+                    sessionOwnerName = matchedByNameInEmail;
+                    localStorage.setItem(SESSION_ROLE_KEY, matchedByNameInEmail);
+                    return matchedByNameInEmail;
+                }
+
+                // 4. Cualquier otro correo que NO sea Walter nunca tiene acceso Admin: se le asigna su perfil estándar
+                if (nonAdminKeys.length > 0) {
+                    const fallbackUser = nonAdminKeys[0];
+                    sessionOwnerName = fallbackUser;
+                    localStorage.setItem(SESSION_ROLE_KEY, fallbackUser);
+                    return fallbackUser;
+                }
+            }
+
+            // Antes de autenticar por correo, nunca exponer privilegios Admin por defecto
+            const nonAdminDefault = allKeys.find(k => !isAdminUser(k));
+            return nonAdminDefault || allKeys[0] || 'Sofi';
+        }
+
+        function isCurrentSessionAdmin() {
+            return isAdminUser(getSessionOwner());
+        }
+
+        function getVisibleUserNames() {
+            const all = getAllUserNames();
+            if (isCurrentSessionAdmin()) {
+                return all;
+            }
+            const owner = getSessionOwner();
+            // Los usuarios normales SOLO ven su propio perfil (nunca el de Walter ni el de otros)
+            return all.filter(name => !isAdminUser(name) && name === owner);
+        }
+
+        function enforceAccessPermissions() {
+            if (!state || !state.profiles) return;
+            // Asegurar que exista el perfil Admin "Walter"
+            const hasWalter = Object.keys(state.profiles).some(k => isAdminUser(k));
+            if (!hasWalter) {
+                state.profiles['Walter'] = ensureUserProfileShape({
+                    bodyWeightKg: 76,
+                    isAdmin: true,
+                    routineLocked: false,
+                    blocks: JSON.parse(JSON.stringify(DEFAULT_BLOCKS)),
+                    exercises: [],
+                    history: [],
+                    lockedCalendarDates: {}
+                }, 'Walter');
+            }
+
+            const visible = getVisibleUserNames();
+            if (visible.length === 0) {
+                const nonAdmin = Object.keys(state.profiles).find(k => !isAdminUser(k));
+                if (nonAdmin) {
+                    sessionOwnerName = nonAdmin;
+                    state.activeProfile = nonAdmin;
+                }
+                return;
+            }
+            if (!visible.includes(state.activeProfile)) {
+                state.activeProfile = visible[0];
+            }
+        }
+
+        const DEFAULT_DAY_ID = 'dia-1';
 
         function ensureTrainingDays(prof) {
             if (!prof || typeof prof !== 'object') return [];
@@ -918,7 +1079,7 @@
                     <div class="bg-[#0f1115] border ${isCur ? 'border-limeaccent/50' : 'border-white/10'} rounded-2xl p-3 flex items-center justify-between gap-2">
                         <div class="min-w-0 flex-1">
                             <div class="flex items-center gap-1.5">
-                                <span class="text-xs font-black text-white truncate">${d.name}</span>
+                                <span class="text-xs font-black text-white truncate">${escapeHtml(d.name)}</span>
                                 ${isCur ? '<span class="px-2 py-0.5 rounded-full bg-limeaccent/15 text-limeaccent text-[9px] font-black uppercase">ACTIVO</span>' : ''}
                             </div>
                             <p class="text-[10px] text-slate-400 mt-0.5">${exCnt} ${exCnt === 1 ? 'estación' : 'estaciones'}</p>
@@ -929,11 +1090,11 @@
                                     USAR
                                 </button>
                             ` : ''}
-                            <button onclick="startEditTrainingDay('${d.id}')" aria-label="Editar día ${d.name}" class="w-8 h-8 rounded-xl bg-white/5 hover:bg-white/10 text-slate-200 flex items-center justify-center">
+                            <button onclick="startEditTrainingDay('${d.id}')" aria-label="Editar día ${escapeHtml(d.name)}" class="w-8 h-8 rounded-xl bg-white/5 hover:bg-white/10 text-slate-200 flex items-center justify-center">
                                 <i class="ph-bold ph-pencil-simple text-sm"></i>
                             </button>
                             ${canDel ? `
-                                <button onclick="removeTrainingDay('${d.id}')" aria-label="Eliminar día ${d.name}" class="w-8 h-8 rounded-xl bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 flex items-center justify-center">
+                                <button onclick="removeTrainingDay('${d.id}')" aria-label="Eliminar día ${escapeHtml(d.name)}" class="w-8 h-8 rounded-xl bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 flex items-center justify-center">
                                     <i class="ph-bold ph-trash text-sm"></i>
                                 </button>
                             ` : ''}
@@ -999,15 +1160,22 @@
         function ensureUserProfileShape(prof, nameFallback = 'Usuario') {
             if (!prof || typeof prof !== 'object') {
                 return {
-                    bodyWeightKg: 60,
+                    bodyWeightKg: isAdminUser(nameFallback) ? 76 : 60,
+                    isAdmin: isAdminUser(nameFallback),
+                    assignedEmail: '',
                     routineLocked: false,
                     exercises: [],
                     blocks: JSON.parse(JSON.stringify(DEFAULT_BLOCKS)),
-                    history: []
+                    history: [],
+                    lockedCalendarDates: {}
                 };
             }
             if (typeof prof.bodyWeightKg !== 'number' || isNaN(prof.bodyWeightKg) || prof.bodyWeightKg <= 0) {
-                prof.bodyWeightKg = 60;
+                prof.bodyWeightKg = isAdminUser(nameFallback) ? 76 : 60;
+            }
+            prof.isAdmin = isAdminUser(nameFallback);
+            if (typeof prof.assignedEmail !== 'string') {
+                prof.assignedEmail = '';
             }
             if (typeof prof.routineLocked !== 'boolean') {
                 prof.routineLocked = false;
@@ -1018,17 +1186,24 @@
             if (!Array.isArray(prof.history)) {
                 prof.history = [];
             }
+            if (!prof.lockedCalendarDates || typeof prof.lockedCalendarDates !== 'object') {
+                prof.lockedCalendarDates = {};
+            }
             ensureTrainingDays(prof);
             return prof;
         }
 
         function getAllUserNames() {
-            if (!state || !state.profiles) return ['Sofi'];
+            if (!state || !state.profiles) return ['Walter', 'Sofi'];
             const keys = Object.keys(state.profiles);
-            return keys.length > 0 ? keys : ['Sofi'];
+            return keys.length > 0 ? keys : ['Walter', 'Sofi'];
         }
 
         function openUsersModal() {
+            if (!isCurrentSessionAdmin()) {
+                showToast("Solo el administrador (Walter) puede gestionar usuarios", true);
+                return;
+            }
             resetUserForm();
             renderUsersModalList();
             document.getElementById('users-modal').classList.remove('hidden');
@@ -1042,32 +1217,45 @@
             document.getElementById('user-edit-original-name').value = '';
             document.getElementById('user-form-title').textContent = 'Nuevo usuario';
             document.getElementById('user-name-input').value = '';
-            const activeProf = ensureUserProfileShape(state.profiles[state.activeProfile]);
+            document.getElementById('user-email-input').value = '';
+            const pwInp = document.getElementById('user-password-input');
+            if (pwInp) pwInp.value = '';
+            const pwBox = document.getElementById('user-password-box');
+            if (pwBox) pwBox.classList.remove('hidden');
+            const activeProf = ensureUserProfileShape(state.profiles[state.activeProfile], state.activeProfile);
             document.getElementById('user-weight-input').value = activeProf.bodyWeightKg || 60;
             document.getElementById('user-seed-mode').value = 'catalog';
             document.getElementById('user-create-mode-box').classList.remove('hidden');
             document.getElementById('user-cancel-edit-btn').classList.add('hidden');
-            document.getElementById('user-submit-btn').innerHTML = '<i class="ph-bold ph-user-plus text-sm"></i><span>CREAR USUARIO</span>';
+            document.getElementById('user-submit-btn').innerHTML = '<i class="ph-bold ph-user-plus text-sm"></i><span>CREAR USUARIO Y CUENTA</span>';
         }
 
         function startEditUser(userName) {
+            if (!isCurrentSessionAdmin() && userName !== getSessionOwner()) {
+                showToast("Solo podés editar tu propio usuario", true);
+                return;
+            }
             const prof = ensureUserProfileShape(state.profiles[userName], userName);
             document.getElementById('user-edit-original-name').value = userName;
             document.getElementById('user-form-title').textContent = `Editando a ${userName}`;
             document.getElementById('user-name-input').value = userName;
             document.getElementById('user-weight-input').value = prof.bodyWeightKg || 60;
+            document.getElementById('user-email-input').value = prof.assignedEmail || '';
+            const pwBoxEdit = document.getElementById('user-password-box');
+            if (pwBoxEdit) pwBoxEdit.classList.add('hidden');
             document.getElementById('user-create-mode-box').classList.add('hidden');
             document.getElementById('user-cancel-edit-btn').classList.remove('hidden');
             document.getElementById('user-submit-btn').innerHTML = '<i class="ph-bold ph-check text-sm"></i><span>GUARDAR CAMBIOS</span>';
             document.getElementById('user-name-input').focus();
         }
 
-        function saveUserProfile(e) {
+        async function saveUserProfile(e) {
             e.preventDefault();
             const originalName = document.getElementById('user-edit-original-name').value.trim();
             const newName = document.getElementById('user-name-input').value.trim();
             const parsedWeight = parseFloat(document.getElementById('user-weight-input').value);
             const weightKg = (!isNaN(parsedWeight) && parsedWeight >= 30 && parsedWeight <= 250) ? parsedWeight : 60;
+            const assignedEmail = document.getElementById('user-email-input').value.trim().toLowerCase();
             const seedMode = document.getElementById('user-seed-mode').value;
 
             if (!newName) {
@@ -1075,13 +1263,23 @@
                 return;
             }
 
+            if (!originalName && !isCurrentSessionAdmin()) {
+                showToast("Solo el administrador (Walter) puede crear nuevos usuarios", true);
+                return;
+            }
+
             if (originalName) {
+                if (!isCurrentSessionAdmin() && originalName !== getSessionOwner()) {
+                    showToast("No tenés permiso para editar otro usuario", true);
+                    return;
+                }
                 const existingProf = ensureUserProfileShape(state.profiles[originalName], originalName);
                 if (newName !== originalName && state.profiles[newName]) {
                     showToast("Ya existe otro usuario con ese nombre", true);
                     return;
                 }
                 existingProf.bodyWeightKg = weightKg;
+                existingProf.assignedEmail = assignedEmail;
 
                 if (newName !== originalName) {
                     const rebuilt = {};
@@ -1095,6 +1293,10 @@
                     state.profiles = rebuilt;
                     if (state.activeProfile === originalName) {
                         state.activeProfile = newName;
+                    }
+                    if (sessionOwnerName === originalName) {
+                        sessionOwnerName = newName;
+                        localStorage.setItem(SESSION_ROLE_KEY, newName);
                     }
                 }
 
@@ -1139,15 +1341,21 @@
                     });
                     newProf = {
                         bodyWeightKg: weightKg,
+                        isAdmin: isAdminUser(newName),
+                        assignedEmail,
                         routineLocked: false,
                         blocks: JSON.parse(JSON.stringify(DEFAULT_BLOCKS)),
                         exercises: seededExercises,
-                        history: []
+                        history: [],
+                        lockedCalendarDates: {}
                     };
                 } else if (seedMode === 'copy') {
                     newProf = JSON.parse(JSON.stringify(sourceProf));
                     newProf.bodyWeightKg = weightKg;
+                    newProf.isAdmin = isAdminUser(newName);
+                    newProf.assignedEmail = assignedEmail;
                     newProf.history = [];
+                    newProf.lockedCalendarDates = {};
                     newProf.exercises = (newProf.exercises || []).map((ex, idx) => ({
                         ...ex,
                         id: `${newName.toLowerCase().replace(/[^a-z0-9]+/g, '-')}-${Date.now()}-${idx}`,
@@ -1156,26 +1364,51 @@
                 } else {
                     newProf = {
                         bodyWeightKg: weightKg,
+                        isAdmin: isAdminUser(newName),
+                        assignedEmail,
                         routineLocked: false,
                         blocks: JSON.parse(JSON.stringify(DEFAULT_BLOCKS)),
                         exercises: [],
-                        history: []
+                        history: [],
+                        lockedCalendarDates: {}
                     };
                 }
 
+                ensureUserProfileShape(newProf, newName);
                 state.profiles[newName] = newProf;
                 state.activeProfile = newName;
                 activeStationIndex = 0;
                 activeSetIndex = 0;
+                const newPassword = (document.getElementById('user-password-input')?.value || '').trim();
                 saveState();
                 resetUserForm();
                 renderUsersModalList();
                 renderAll();
-                showToast(`¡Usuario "${newName}" creado!`);
+
+                if (assignedEmail && newPassword && typeof window.createFirebaseAccountForUser === 'function') {
+                    const res = await window.createFirebaseAccountForUser(assignedEmail, newPassword);
+                    if (res.ok) {
+                        showToast(res.alreadyExists
+                            ? `¡Usuario "${newName}" creado y vinculado a ${assignedEmail}!`
+                            : `¡Usuario "${newName}" y cuenta (${assignedEmail}) creados!`);
+                    } else {
+                        showToast(`Perfil "${newName}" creado, pero revisá la clave: ${res.reason}`, true);
+                    }
+                } else {
+                    showToast(`¡Usuario "${newName}" creado!`);
+                }
             }
         }
 
         function deleteUserProfile(userName) {
+            if (!isCurrentSessionAdmin()) {
+                showToast("Solo el administrador (Walter) puede eliminar usuarios", true);
+                return;
+            }
+            if (isAdminUser(userName)) {
+                showToast("No se puede eliminar el usuario administrador principal (Walter)", true);
+                return;
+            }
             const names = getAllUserNames();
             if (names.length <= 1) {
                 showToast("Debe quedar al menos un usuario", true);
@@ -1186,9 +1419,9 @@
                 'Se borrarán su rutina, bloques e historial guardados.',
                 () => {
                     delete state.profiles[userName];
-                    const remaining = getAllUserNames();
+                    const remaining = getVisibleUserNames();
                     if (state.activeProfile === userName) {
-                        state.activeProfile = remaining[0];
+                        state.activeProfile = remaining[0] || getSessionOwner();
                         activeStationIndex = 0;
                         activeSetIndex = 0;
                     }
@@ -1205,33 +1438,78 @@
 
         function renderUsersModalList() {
             const container = document.getElementById('users-list-container');
+            const roleBanner = document.getElementById('user-role-banner');
+            const formEl = document.getElementById('user-profile-form');
             if (!container) return;
-            const names = getAllUserNames();
-            container.innerHTML = names.map(name => {
+
+            const owner = getSessionOwner();
+            const amIAdmin = isCurrentSessionAdmin();
+            const allNames = getAllUserNames();
+            const visibleNames = getVisibleUserNames();
+
+            if (roleBanner) {
+                if (amIAdmin) {
+                    roleBanner.innerHTML = `
+                        <div class="flex items-center justify-between gap-2">
+                            <div class="min-w-0">
+                                <div class="flex items-center gap-1.5">
+                                    <i class="ph-fill ph-crown text-amber-300 text-sm"></i>
+                                    <span class="text-[11px] font-black uppercase tracking-wider text-amber-300">Sesión Admin: ${escapeHtml(owner)}</span>
+                                </div>
+                                <p class="text-[10px] text-slate-400 mt-0.5">Conectado como <span class="text-white font-bold">${escapeHtml(currentAuthEmail || 'Walter')}</span>. Tenés control total para crear cuentas y ver todos los perfiles.</p>
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    roleBanner.innerHTML = `
+                        <div class="flex items-center justify-between gap-2">
+                            <div class="min-w-0">
+                                <div class="flex items-center gap-1.5">
+                                    <i class="ph-fill ph-shield-check text-limeaccent text-sm"></i>
+                                    <span class="text-[11px] font-black uppercase tracking-wider text-white">Perfil Privado: ${escapeHtml(owner)}</span>
+                                </div>
+                                <p class="text-[10px] text-slate-400 mt-0.5">Conectado como <span class="text-white font-bold">${escapeHtml(currentAuthEmail || owner)}</span>. Solo tenés acceso a tu propia rutina, calendario e historial.</p>
+                            </div>
+                        </div>
+                    `;
+                }
+            }
+
+            if (formEl) {
+                const isEditingSelf = document.getElementById('user-edit-original-name').value === owner;
+                formEl.classList.toggle('hidden', !amIAdmin && !isEditingSelf);
+            }
+
+            container.innerHTML = visibleNames.map(name => {
                 const prof = ensureUserProfileShape(state.profiles[name], name);
                 const isCurrent = state.activeProfile === name;
+                const isThisAdmin = isAdminUser(name);
                 const exCount = prof.exercises.length;
-                const canDelete = names.length > 1;
+                const canDelete = amIAdmin && !isThisAdmin && allNames.length > 1;
                 return `
                     <div class="bg-[#0f1115] border ${isCurrent ? 'border-limeaccent/50' : 'border-white/10'} rounded-2xl p-3 flex items-center justify-between gap-2">
                         <div class="min-w-0 flex-1">
-                            <div class="flex items-center gap-1.5">
-                                <span class="text-xs font-black text-white truncate">${name}</span>
+                            <div class="flex items-center gap-1.5 flex-wrap">
+                                <span class="text-xs font-black text-white truncate">${escapeHtml(name)}</span>
+                                ${isThisAdmin ? '<span class="px-2 py-0.5 rounded-full bg-amber-400/15 text-amber-300 border border-amber-400/30 text-[9px] font-black uppercase">ADMIN</span>' : ''}
                                 ${isCurrent ? '<span class="px-2 py-0.5 rounded-full bg-limeaccent/15 text-limeaccent text-[9px] font-black uppercase">ACTIVO</span>' : ''}
                             </div>
-                            <p class="text-[10px] text-slate-400 mt-0.5">${exCount} ${exCount === 1 ? 'estación' : 'estaciones'} • Peso ref: <span class="text-slate-200 font-bold">${prof.bodyWeightKg} kg</span></p>
+                            <p class="text-[10px] text-slate-400 mt-0.5">
+                                ${exCount} ${exCount === 1 ? 'estación' : 'estaciones'} • Peso ref: <span class="text-slate-200 font-bold">${prof.bodyWeightKg} kg</span>
+                                ${prof.assignedEmail ? ` • <span class="text-sky-300">${escapeHtml(prof.assignedEmail)}</span>` : ''}
+                            </p>
                         </div>
                         <div class="flex items-center gap-1 shrink-0">
                             ${!isCurrent ? `
                                 <button onclick="switchProfile('${escapeJsAttr(name)}'); renderUsersModalList();" class="px-2.5 py-1.5 rounded-xl bg-limeaccent/15 hover:bg-limeaccent/25 text-limeaccent text-[10px] font-black uppercase">
-                                    USAR
+                                    VER RUTINA
                                 </button>
                             ` : ''}
-                            <button onclick="startEditUser('${escapeJsAttr(name)}')" aria-label="Editar usuario ${name}" class="w-8 h-8 rounded-xl bg-white/5 hover:bg-white/10 text-slate-200 flex items-center justify-center">
+                            <button onclick="startEditUser('${escapeJsAttr(name)}')" aria-label="Editar usuario ${escapeHtml(name)}" class="w-8 h-8 rounded-xl bg-white/5 hover:bg-white/10 text-slate-200 flex items-center justify-center">
                                 <i class="ph-bold ph-pencil-simple text-sm"></i>
                             </button>
                             ${canDelete ? `
-                                <button onclick="deleteUserProfile('${escapeJsAttr(name)}')" aria-label="Eliminar usuario ${name}" class="w-8 h-8 rounded-xl bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 flex items-center justify-center">
+                                <button onclick="deleteUserProfile('${escapeJsAttr(name)}')" aria-label="Eliminar usuario ${escapeHtml(name)}" class="w-8 h-8 rounded-xl bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 flex items-center justify-center">
                                     <i class="ph-bold ph-trash text-sm"></i>
                                 </button>
                             ` : ''}
@@ -1340,7 +1618,7 @@
                 return `
                     <div class="bg-[#0f1115] border border-white/10 rounded-2xl p-3 flex items-center justify-between gap-2">
                         <div class="min-w-0">
-                            <p class="text-xs font-black text-white uppercase truncate">${b.label}</p>
+                            <p class="text-xs font-black text-white uppercase truncate">${escapeHtml(b.label)}</p>
                             <p class="text-[10px] text-slate-400 mt-0.5">${count} ${count === 1 ? 'estación' : 'estaciones'}</p>
                         </div>
                         <div class="flex items-center gap-1.5">
@@ -1348,7 +1626,7 @@
                                 IR
                             </button>
                             ${canDelete ? `
-                                <button onclick="removeCustomBlock('${b.id}')" aria-label="Quitar bloque ${b.label}" class="w-8 h-8 rounded-xl bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 flex items-center justify-center">
+                                <button onclick="removeCustomBlock('${b.id}')" aria-label="Quitar bloque ${escapeHtml(b.label)}" class="w-8 h-8 rounded-xl bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 flex items-center justify-center">
                                     <i class="ph-bold ph-trash text-sm"></i>
                                 </button>
                             ` : ''}
@@ -1420,7 +1698,7 @@
             const blocks = ensureSofiBlocks(prof);
             const sel = document.getElementById('ex-category');
             if (!sel) return;
-            sel.innerHTML = blocks.map(b => `<option value="${b.id}" ${b.id === selectedId ? 'selected' : ''}>${b.label}</option>`).join('');
+            sel.innerHTML = blocks.map(b => `<option value="${b.id}" ${b.id === selectedId ? 'selected' : ''}>${escapeHtml(b.label)}</option>`).join('');
         }
 
         const DEFAULT_STATE = {
@@ -1428,7 +1706,61 @@
             autoRest: true,
             lastDate: '',
             profiles: {
+                Walter: {
+                    bodyWeightKg: 76,
+                    isAdmin: true,
+                    assignedEmail: '',
+                    routineLocked: false,
+                    lockedCalendarDates: {},
+                    blocks: [
+                        { id: 'movilidad', label: '🔥 MOVILIDAD PREVIA' },
+                        { id: 'fuerza', label: '🏋️ FUERZA / RUTINA' },
+                        { id: 'cardio', label: '🏃‍♀️ CARDIO' }
+                    ],
+                    exercises: [
+                        {
+                            id: 'walter-f-1',
+                            category: 'fuerza',
+                            tag: 'FUERZA',
+                            name: 'Sentadilla Sumo Libre',
+                            muscle: 'Cuádriceps, aductores y glúteos',
+                            targetReps: '8',
+                            unit: 'reps',
+                            restSeconds: 120,
+                            notes: 'Puntas hacia afuera, rodillas alineadas y pecho firme. Empujá el piso desde los talones.',
+                            videoUrl: '',
+                            sets: [
+                                { weight: 80, reps: '8', unit: 'reps', rir: '2', completed: false },
+                                { weight: 90, reps: '8', unit: 'reps', rir: '2', completed: false },
+                                { weight: 100, reps: '6', unit: 'reps', rir: '1', completed: false }
+                            ]
+                        },
+                        {
+                            id: 'walter-f-2',
+                            category: 'fuerza',
+                            tag: 'FUERZA',
+                            name: 'Peso Muerto Estricto',
+                            muscle: 'Cadena posterior, dorsales y agarre',
+                            targetReps: '6',
+                            unit: 'reps',
+                            restSeconds: 120,
+                            notes: 'Barra pegada a las tibias, espalda neutra y activación dorsal antes de despegar.',
+                            videoUrl: '',
+                            sets: [
+                                { weight: 90, reps: '6', unit: 'reps', rir: '2', completed: false },
+                                { weight: 100, reps: '6', unit: 'reps', rir: '2', completed: false },
+                                { weight: 110, reps: '5', unit: 'reps', rir: '1', completed: false }
+                            ]
+                        }
+                    ],
+                    history: []
+                },
                 Sofi: {
+                    bodyWeightKg: 60,
+                    isAdmin: false,
+                    assignedEmail: '',
+                    routineLocked: false,
+                    lockedCalendarDates: {},
                     exercises: [
                         {
                             id: 'sofi-mov-1',
@@ -1595,11 +1927,483 @@
         let showVideo = false;
         let showTechnique = true;
 
-        // Variables del Cronómetro de Descanso
+        // =========================================================================
+        // CRONÓMETRO DE DESCANSO ROBUSTO (POR MARCA DE TIEMPO REAL)
+        // =========================================================================
         let timerRemaining = 90;
         let timerInterval = null;
         let timerEndTimestamp = null;
         let isTimerRunning = false;
+
+        function getDefaultRestForActiveExercise() {
+            const list = getCurrentExercises();
+            const ex = list[activeStationIndex];
+            const parsed = ex ? parseInt(ex.restSeconds, 10) : 90;
+            return (!isNaN(parsed) && parsed > 0) ? parsed : 90;
+        }
+
+        function syncTimerWithCurrentExercise(forceStop = false) {
+            if (isTimerRunning && !forceStop) {
+                updateTimerUI();
+                return;
+            }
+            stopTimerInterval();
+            timerRemaining = getDefaultRestForActiveExercise();
+            updateTimerUI();
+        }
+
+        function formatSeconds(sec) {
+            const safeSec = Math.max(0, Math.floor(Number(sec) || 0));
+            const m = Math.floor(safeSec / 60).toString().padStart(2, '0');
+            const s = (safeSec % 60).toString().padStart(2, '0');
+            return `${m}:${s}`;
+        }
+
+        function updateTimerUI() {
+            const display = document.getElementById('timer-display');
+            const icon = document.getElementById('timer-toggle-icon');
+            const box = document.getElementById('timer-box');
+            if (!display || !icon || !box) return;
+
+            display.textContent = formatSeconds(timerRemaining);
+            icon.className = isTimerRunning ? 'ph-fill ph-pause text-xs' : 'ph-fill ph-play text-xs';
+
+            if (timerRemaining === 0 && !isTimerRunning) {
+                display.className = 'text-xs font-black font-mono text-limeaccent tracking-wider min-w-[42px] text-center';
+                box.classList.add('timer-finished', 'border-limeaccent');
+            } else if (isTimerRunning) {
+                display.className = 'text-xs font-black font-mono text-limeaccent tracking-wider min-w-[42px] text-center';
+                box.classList.remove('timer-finished');
+                box.classList.add('border-limeaccent/60');
+            } else {
+                display.className = 'text-xs font-black font-mono text-white tracking-wider min-w-[42px] text-center';
+                box.classList.remove('timer-finished', 'border-limeaccent', 'border-limeaccent/60');
+            }
+        }
+
+        function tickRestTimer() {
+            if (!isTimerRunning || !timerEndTimestamp) return;
+            const msLeft = timerEndTimestamp - Date.now();
+            if (msLeft <= 0) {
+                stopTimerInterval();
+                timerRemaining = 0;
+                updateTimerUI();
+                playBeepAlert();
+                showToast("⏰ ¡Tiempo de descanso cumplido!");
+                return;
+            }
+            const secLeft = Math.ceil(msLeft / 1000);
+            if (secLeft !== timerRemaining) {
+                timerRemaining = secLeft;
+                updateTimerUI();
+            }
+        }
+
+        function startRestTimer(seconds) {
+            const parsed = parseInt(seconds, 10);
+            const safeSeconds = (!isNaN(parsed) && parsed > 0) ? parsed : getDefaultRestForActiveExercise();
+            stopTimerInterval();
+            timerRemaining = safeSeconds;
+            timerEndTimestamp = Date.now() + safeSeconds * 1000;
+            isTimerRunning = true;
+            updateTimerUI();
+
+            timerInterval = window.setInterval(tickRestTimer, 200);
+        }
+
+        function adjustTimerSeconds(deltaSec) {
+            if (isTimerRunning && timerEndTimestamp) {
+                const currentLeft = Math.max(0, Math.ceil((timerEndTimestamp - Date.now()) / 1000));
+                const nextLeft = Math.max(0, currentLeft + deltaSec);
+                if (nextLeft <= 0) {
+                    stopTimerInterval();
+                    timerRemaining = 0;
+                    updateTimerUI();
+                } else {
+                    timerRemaining = nextLeft;
+                    timerEndTimestamp = Date.now() + nextLeft * 1000;
+                    updateTimerUI();
+                }
+            } else {
+                const base = parseInt(timerRemaining, 10) || 0;
+                timerRemaining = Math.max(0, base + deltaSec);
+                updateTimerUI();
+            }
+        }
+
+        function toggleTimer() {
+            if (isTimerRunning) {
+                if (timerEndTimestamp) {
+                    timerRemaining = Math.max(1, Math.ceil((timerEndTimestamp - Date.now()) / 1000));
+                }
+                stopTimerInterval();
+                updateTimerUI();
+            } else {
+                const startSec = (Number(timerRemaining) > 0) ? Number(timerRemaining) : getDefaultRestForActiveExercise();
+                startRestTimer(startSec);
+            }
+        }
+
+        function resetTimer() {
+            stopTimerInterval();
+            timerRemaining = getDefaultRestForActiveExercise();
+            updateTimerUI();
+        }
+
+        function stopTimerInterval() {
+            if (timerInterval !== null) {
+                clearInterval(timerInterval);
+                timerInterval = null;
+            }
+            timerEndTimestamp = null;
+            isTimerRunning = false;
+        }
+
+        function playBeepAlert() {
+            try {
+                const ctx = new (window.AudioContext || window.webkitAudioContext)();
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(880, ctx.currentTime);
+                gain.gain.setValueAtTime(0.15, ctx.currentTime);
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+                osc.start();
+                osc.stop(ctx.currentTime + 0.25);
+            } catch (e) {}
+        }
+
+        // =========================================================================
+        // CALENDARIO RETROACTIVO CON CANDADO DE PESO LEVANTADO
+        // =========================================================================
+        let calViewYear = new Date().getFullYear();
+        let calViewMonth = new Date().getMonth();
+        let calSelectedDateStr = getTodayStr();
+
+        function formatDateStrFromParts(year, monthZeroIndexed, day) {
+            const d = String(day).padStart(2, '0');
+            const m = String(monthZeroIndexed + 1).padStart(2, '0');
+            return `${d}/${m}/${year}`;
+        }
+
+        function parseDateStrToObj(dateStr) {
+            const parts = String(dateStr || '').split('/');
+            if (parts.length !== 3) return null;
+            const d = parseInt(parts[0], 10);
+            const m = parseInt(parts[1], 10) - 1;
+            const y = parseInt(parts[2], 10);
+            if (isNaN(d) || isNaN(m) || isNaN(y)) return null;
+            return new Date(y, m, d, 12, 0, 0);
+        }
+
+        function isCalendarDateLocked(prof, dateStr) {
+            if (!prof || !prof.lockedCalendarDates) return false;
+            return Boolean(prof.lockedCalendarDates[dateStr]);
+        }
+
+        function toggleCalendarDateLock(dateStr) {
+            const prof = ensureUserProfileShape(state.profiles[state.activeProfile], state.activeProfile);
+            const nextState = !isCalendarDateLocked(prof, dateStr);
+            prof.lockedCalendarDates[dateStr] = nextState;
+
+            prof.history.forEach(h => {
+                if (h.date === dateStr) {
+                    h.weightLocked = nextState;
+                }
+            });
+
+            saveState();
+            renderCalendarGrid();
+            renderCalendarDayDetail();
+            showToast(nextState
+                ? `🔒 Pesos del ${dateStr} bloqueados con candado`
+                : `🔓 Candado del ${dateStr} desbloqueado para editar`);
+        }
+
+        function openCalendarModal(preselectDateStr = null) {
+            const now = new Date();
+            if (preselectDateStr) {
+                calSelectedDateStr = preselectDateStr;
+                const parsed = parseDateStrToObj(preselectDateStr);
+                if (parsed) {
+                    calViewYear = parsed.getFullYear();
+                    calViewMonth = parsed.getMonth();
+                }
+            } else {
+                calSelectedDateStr = getTodayStr();
+                calViewYear = now.getFullYear();
+                calViewMonth = now.getMonth();
+            }
+            document.getElementById('cal-modal-profile').textContent = state.activeProfile;
+            renderCalendarGrid();
+            renderCalendarDayDetail();
+            document.getElementById('calendar-modal').classList.remove('hidden');
+        }
+
+        function closeCalendarModal() {
+            document.getElementById('calendar-modal').classList.add('hidden');
+        }
+
+        function changeCalendarMonth(delta) {
+            calViewMonth += delta;
+            if (calViewMonth < 0) {
+                calViewMonth = 11;
+                calViewYear -= 1;
+            } else if (calViewMonth > 11) {
+                calViewMonth = 0;
+                calViewYear += 1;
+            }
+            renderCalendarGrid();
+        }
+
+        function selectCalendarDate(dateStr) {
+            calSelectedDateStr = dateStr;
+            renderCalendarGrid();
+            renderCalendarDayDetail();
+        }
+
+        function renderCalendarGrid() {
+            const labelEl = document.getElementById('cal-month-label');
+            const gridEl = document.getElementById('cal-days-grid');
+            if (!labelEl || !gridEl) return;
+
+            const monthNames = [
+                'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
+                'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'
+            ];
+            labelEl.textContent = `${monthNames[calViewMonth]} ${calViewYear}`;
+
+            const prof = ensureUserProfileShape(state.profiles[state.activeProfile], state.activeProfile);
+            const historyByDate = {};
+            prof.history.forEach(h => {
+                if (!historyByDate[h.date]) historyByDate[h.date] = [];
+                historyByDate[h.date].push(h);
+            });
+
+            const firstDay = new Date(calViewYear, calViewMonth, 1);
+            const startOffset = (firstDay.getDay() + 6) % 7;
+            const daysInMonth = new Date(calViewYear, calViewMonth + 1, 0).getDate();
+            const todayStr = getTodayStr();
+
+            let cellsHtml = '';
+            for (let i = 0; i < startOffset; i++) {
+                cellsHtml += `<div class="h-10 rounded-xl bg-transparent"></div>`;
+            }
+
+            for (let day = 1; day <= daysInMonth; day++) {
+                const dateStr = formatDateStrFromParts(calViewYear, calViewMonth, day);
+                const recs = historyByDate[dateStr] || [];
+                const hasWork = recs.length > 0;
+                const locked = isCalendarDateLocked(prof, dateStr);
+                const isSelected = dateStr === calSelectedDateStr;
+                const isToday = dateStr === todayStr;
+
+                cellsHtml += `
+                    <button type="button" onclick="selectCalendarDate('${dateStr}')" class="h-11 rounded-xl border flex flex-col items-center justify-center relative transition-all ${
+                        isSelected
+                            ? 'bg-sky-400/20 border-sky-400 text-white shadow-sm'
+                            : hasWork
+                                ? 'bg-limeaccent/10 border-limeaccent/35 text-white hover:bg-limeaccent/20'
+                                : 'bg-[#0f1115] border-white/5 text-slate-400 hover:border-white/20 hover:text-white'
+                    }">
+                        <span class="text-xs font-black ${isToday ? 'text-limeaccent underline' : ''}">${day}</span>
+                        <div class="flex items-center gap-0.5 mt-0.5 h-3">
+                            ${hasWork ? '<span class="w-1.5 h-1.5 rounded-full bg-limeaccent"></span>' : ''}
+                            ${locked ? '<i class="ph-fill ph-lock text-[9px] text-amber-300"></i>' : ''}
+                        </div>
+                    </button>
+                `;
+            }
+
+            gridEl.innerHTML = cellsHtml;
+        }
+
+        function renderCalendarDayDetail() {
+            const panel = document.getElementById('cal-day-detail-panel');
+            if (!panel) return;
+
+            const prof = ensureUserProfileShape(state.profiles[state.activeProfile], state.activeProfile);
+            const dateStr = calSelectedDateStr;
+            const locked = isCalendarDateLocked(prof, dateStr);
+            const dayRecords = prof.history
+                .filter(h => h.date === dateStr)
+                .sort((a, b) => a.timestamp - b.timestamp);
+
+            const allUserExercises = [];
+            const seenExNames = new Set();
+            (prof.days || []).forEach(d => {
+                (d.exercises || []).forEach(ex => {
+                    const key = ex.name.trim().toLowerCase();
+                    if (!seenExNames.has(key)) {
+                        seenExNames.add(key);
+                        allUserExercises.push(ex);
+                    }
+                });
+            });
+
+            panel.innerHTML = `
+                <div class="flex items-center justify-between gap-2 bg-[#0f1115] border ${locked ? 'border-amber-400/40' : 'border-white/10'} rounded-2xl p-3">
+                    <div>
+                        <div class="flex items-center gap-1.5">
+                            <span class="text-xs font-black text-white">Fecha: ${dateStr}</span>
+                            ${locked
+                                ? '<span class="px-2 py-0.5 rounded-full bg-amber-400/20 text-amber-300 border border-amber-400/40 text-[9px] font-black uppercase">PESO BLOQUEADO</span>'
+                                : '<span class="px-2 py-0.5 rounded-full bg-white/5 text-slate-400 text-[9px] font-bold uppercase">EDITABLE</span>'}
+                        </div>
+                        <p class="text-[10px] text-slate-400 mt-0.5">${dayRecords.length} ${dayRecords.length === 1 ? 'serie anotada' : 'series anotadas'} en este día</p>
+                    </div>
+                    <button type="button" onclick="toggleCalendarDateLock('${dateStr}')" class="px-3 py-2 rounded-xl border font-black text-[10px] uppercase flex items-center gap-1.5 shrink-0 transition-all ${
+                        locked
+                            ? 'bg-amber-400/20 border-amber-400/50 text-amber-300 hover:bg-amber-400/30'
+                            : 'bg-limeaccent/15 border-limeaccent/40 text-limeaccent hover:bg-limeaccent/25'
+                    }">
+                        <i class="ph-fill ${locked ? 'ph-lock' : 'ph-lock-open'} text-sm"></i>
+                        <span>${locked ? 'DESBLOQUEAR' : 'CANDADO PESO'}</span>
+                    </button>
+                </div>
+
+                <!-- Formulario rápido para anotar un día que se te pasó -->
+                <form onsubmit="addRetroactiveWorkoutLog(event)" class="bg-[#0f1115] border border-white/10 rounded-2xl p-3 space-y-2 ${locked ? 'opacity-60' : ''}">
+                    <div class="flex items-center justify-between">
+                        <span class="text-[10px] font-black uppercase tracking-wider text-sky-300">Anotar ejercicio en ${dateStr}</span>
+                        <label class="flex items-center gap-1 text-[10px] font-bold text-amber-300 cursor-pointer">
+                            <input type="checkbox" id="cal-auto-lock-check" checked class="accent-amber-400">
+                            <span>Guardar con candado</span>
+                        </label>
+                    </div>
+
+                    <div>
+                        <input type="text" id="cal-ex-name" list="cal-ex-datalist" required ${locked ? 'disabled' : ''} placeholder="Elegí o escribí el ejercicio..." class="w-full bg-[#181b22] border border-white/10 focus:border-sky-400 rounded-xl px-3 py-2 text-xs font-bold text-white placeholder-slate-500 outline-none">
+                        <datalist id="cal-ex-datalist">
+                            ${allUserExercises.map(ex => `<option value="${escapeHtml(ex.name)}"></option>`).join('')}
+                        </datalist>
+                    </div>
+
+                    <div class="grid grid-cols-12 gap-1.5">
+                        <div class="col-span-4">
+                            <label class="block text-[9px] font-extrabold uppercase text-slate-400 mb-0.5">Peso (kg)</label>
+                            <input type="number" id="cal-ex-weight" step="0.5" min="0" value="10" required ${locked ? 'disabled' : ''} class="w-full bg-[#181b22] border border-white/10 focus:border-sky-400 rounded-xl px-2 py-1.5 text-xs font-black text-center text-limeaccent outline-none">
+                        </div>
+                        <div class="col-span-3">
+                            <label class="block text-[9px] font-extrabold uppercase text-slate-400 mb-0.5">Reps/Tiempo</label>
+                            <input type="text" id="cal-ex-reps" value="10" required ${locked ? 'disabled' : ''} class="w-full bg-[#181b22] border border-white/10 focus:border-sky-400 rounded-xl px-2 py-1.5 text-xs font-bold text-center text-white outline-none">
+                        </div>
+                        <div class="col-span-2">
+                            <label class="block text-[9px] font-extrabold uppercase text-slate-400 mb-0.5">Series</label>
+                            <input type="number" id="cal-ex-sets" min="1" max="10" value="3" required ${locked ? 'disabled' : ''} class="w-full bg-[#181b22] border border-white/10 focus:border-sky-400 rounded-xl px-1.5 py-1.5 text-xs font-bold text-center text-white outline-none">
+                        </div>
+                        <div class="col-span-3">
+                            <label class="block text-[9px] font-extrabold uppercase text-slate-400 mb-0.5">RIR</label>
+                            <select id="cal-ex-rir" ${locked ? 'disabled' : ''} class="w-full bg-[#181b22] border border-white/10 rounded-xl px-1.5 py-1.5 text-xs font-black text-amber-300 outline-none">
+                                <option value="0">0</option>
+                                <option value="1">1</option>
+                                <option value="2" selected>2</option>
+                                <option value="3">3</option>
+                                <option value="4+">4+</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <button type="submit" ${locked ? 'disabled' : ''} class="w-full py-2.5 rounded-xl bg-sky-400 hover:bg-sky-300 disabled:bg-white/10 disabled:text-slate-500 text-darkbg font-black text-[11px] uppercase tracking-wider flex items-center justify-center gap-1.5 transition-colors">
+                        <i class="ph-bold ph-floppy-disk text-sm"></i>
+                        <span>${locked ? 'DESBLOQUEÁ EL CANDADO PARA AGREGAR' : 'GUARDAR PESO EN ESTE DÍA'}</span>
+                    </button>
+                </form>
+
+                <!-- Registros guardados en la fecha seleccionada -->
+                <div class="space-y-1.5">
+                    ${dayRecords.length === 0 ? `
+                        <p class="text-[11px] text-slate-500 text-center py-2">No hay pesos registrados en ${dateStr}.</p>
+                    ` : dayRecords.map(rec => `
+                        <div class="bg-[#0f1115] border ${locked || rec.weightLocked ? 'border-amber-400/25' : 'border-white/5'} rounded-xl px-3 py-2 flex items-center justify-between gap-2">
+                            <div class="min-w-0 flex-1">
+                                <div class="flex items-center gap-1.5">
+                                    <span class="text-[10px] font-black text-limeaccent">S${rec.setNumber || 1}</span>
+                                    <span class="text-xs font-extrabold text-white truncate">${escapeHtml(rec.exerciseName)}</span>
+                                    ${(locked || rec.weightLocked) ? '<i class="ph-fill ph-lock text-amber-300 text-xs shrink-0" title="Peso bloqueado con candado"></i>' : ''}
+                                </div>
+                                <p class="text-[11px] text-slate-300 mt-0.5">
+                                    <strong class="text-limeaccent">${rec.weight} kg</strong> × ${escapeHtml(rec.reps)} ${formatUnitLabel(rec.unit, false)} • <span class="text-amber-300 font-bold">RIR ${escapeHtml(rec.rir)}</span>
+                                </p>
+                            </div>
+                            <button type="button" onclick="deleteCalendarRecord('${rec.id}')" class="w-7 h-7 rounded-lg bg-white/5 hover:bg-rose-500/20 text-slate-400 hover:text-rose-400 flex items-center justify-center shrink-0">
+                                <i class="ph-bold ${locked || rec.weightLocked ? 'ph-lock' : 'ph-trash'} text-xs"></i>
+                            </button>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+        }
+
+        function addRetroactiveWorkoutLog(e) {
+            e.preventDefault();
+            const prof = ensureUserProfileShape(state.profiles[state.activeProfile], state.activeProfile);
+            const dateStr = calSelectedDateStr;
+            if (isCalendarDateLocked(prof, dateStr)) {
+                showToast("🔒 Desbloqueá el candado de este día primero", true);
+                return;
+            }
+
+            const exName = document.getElementById('cal-ex-name').value.trim();
+            const weight = Math.max(0, parseFloat(document.getElementById('cal-ex-weight').value) || 0);
+            const reps = document.getElementById('cal-ex-reps').value.trim() || '10';
+            const numSets = Math.max(1, Math.min(10, parseInt(document.getElementById('cal-ex-sets').value, 10) || 1));
+            const rir = document.getElementById('cal-ex-rir').value || '2';
+            const lockAfterSave = document.getElementById('cal-auto-lock-check').checked;
+
+            if (!exName) return;
+
+            const matchedEx = (prof.exercises || []).find(item => item.name.trim().toLowerCase() === exName.toLowerCase());
+            const exId = matchedEx ? matchedEx.id : ('retro-' + exName.toLowerCase().replace(/[^a-z0-9]+/g, '-'));
+            const unit = matchedEx ? normalizeUnit(matchedEx.unit) : 'reps';
+            const parsedDate = parseDateStrToObj(dateStr);
+            const baseTs = parsedDate ? parsedDate.getTime() : Date.now();
+
+            for (let s = 1; s <= numSets; s++) {
+                prof.history.push({
+                    id: `cal-${Date.now()}-${s}-${Math.random().toString(36).slice(2, 5)}`,
+                    exerciseId: exId,
+                    exerciseName: matchedEx ? matchedEx.name : exName,
+                    setNumber: s,
+                    weight,
+                    reps,
+                    unit,
+                    rir,
+                    date: dateStr,
+                    weightLocked: lockAfterSave,
+                    timestamp: baseTs + s * 1000
+                });
+            }
+
+            if (lockAfterSave) {
+                prof.lockedCalendarDates[dateStr] = true;
+            }
+
+            saveState();
+            renderCalendarGrid();
+            renderCalendarDayDetail();
+            renderAll();
+            showToast(lockAfterSave
+                ? `🔒 Guardado y bloqueado (${weight} kg) en ${dateStr}`
+                : `✓ Guardado (${weight} kg) en ${dateStr}`);
+        }
+
+        function deleteCalendarRecord(recordId) {
+            const prof = ensureUserProfileShape(state.profiles[state.activeProfile], state.activeProfile);
+            const rec = prof.history.find(h => h.id === recordId);
+            if (!rec) return;
+            if (isCalendarDateLocked(prof, rec.date) || rec.weightLocked) {
+                showToast("🔒 Este día tiene candado activo. Desbloquealo arriba para borrar o editar.", true);
+                return;
+            }
+            prof.history = prof.history.filter(h => h.id !== recordId);
+            saveState();
+            renderCalendarGrid();
+            renderCalendarDayDetail();
+            renderAll();
+            showToast("Registro eliminado");
+        }
 
         // =========================================================================
         // PERSISTENCIA LOCAL + SINCRONIZACIÓN EN TIEMPO REAL CON FIRESTORE
@@ -1660,10 +2464,7 @@
 
         function saveState(skipCloud = false) {
             try {
-                const keys = Object.keys(state.profiles || {});
-                if (!state.activeProfile || !state.profiles[state.activeProfile]) {
-                    state.activeProfile = keys[0] || 'Sofi';
-                }
+                enforceAccessPermissions();
                 state.lastDate = getTodayStr();
                 state.updatedAt = Date.now();
                 localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
@@ -1684,6 +2485,10 @@
                 normalized.activeProfile = currentActiveProfile;
             }
             state = normalized;
+            enforceAccessPermissions();
+            if (!isCurrentSessionAdmin()) {
+                state.activeProfile = getSessionOwner();
+            }
             localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
             syncTimerWithCurrentExercise();
             renderAll();
@@ -1695,6 +2500,10 @@
             }
             if (!document.getElementById('days-modal').classList.contains('hidden')) {
                 renderDaysModalList();
+            }
+            if (!document.getElementById('calendar-modal').classList.contains('hidden')) {
+                renderCalendarGrid();
+                renderCalendarDayDetail();
             }
         };
 
@@ -1758,6 +2567,12 @@
         // =========================================================================
         function switchProfile(profileName) {
             if (!state.profiles || !state.profiles[profileName]) return;
+            const visible = getVisibleUserNames();
+            if (!visible.includes(profileName)) {
+                showToast("No tenés permiso para ver ese perfil", true);
+                renderAll();
+                return;
+            }
             state.activeProfile = profileName;
             ensureUserProfileShape(state.profiles[profileName], profileName);
             const blocks = ensureSofiBlocks(state.profiles[profileName]);
@@ -1768,7 +2583,7 @@
             activeSetIndex = 0;
             showVideo = false;
             saveState();
-            syncTimerWithCurrentExercise();
+            syncTimerWithCurrentExercise(true);
             renderAll();
             showToast(`Perfil activo: ${profileName}`);
         }
@@ -1820,14 +2635,29 @@
         // RENDERIZADO PRINCIPAL
         // =========================================================================
         function renderAll() {
+            enforceAccessPermissions();
             const profileName = state.activeProfile;
             const profileData = state.profiles[profileName];
             const exercises = getCurrentExercises();
+            const amIAdmin = isCurrentSessionAdmin();
 
             const profileSelect = document.getElementById('header-profile-select');
+            const adminBadge = document.getElementById('header-admin-badge');
+            const roleIcon = document.getElementById('header-role-icon');
+            const usersBtn = document.getElementById('header-users-btn');
             if (profileSelect) {
-                const userNames = getAllUserNames();
-                profileSelect.innerHTML = userNames.map(u => `<option value="${u.replace(/"/g, '&quot;')}" ${u === profileName ? 'selected' : ''}>${u}</option>`).join('');
+                const visibleUsers = getVisibleUserNames();
+                profileSelect.innerHTML = visibleUsers.map(u => `<option value="${escapeHtml(u)}" ${u === profileName ? 'selected' : ''}>${escapeHtml(u)}</option>`).join('');
+                profileSelect.disabled = visibleUsers.length <= 1;
+            }
+            if (adminBadge && roleIcon) {
+                adminBadge.classList.toggle('hidden', !amIAdmin);
+                roleIcon.className = amIAdmin
+                    ? 'ph-fill ph-crown text-amber-300 text-[11px] shrink-0'
+                    : 'ph-fill ph-user text-limeaccent text-[11px] shrink-0';
+            }
+            if (usersBtn) {
+                usersBtn.classList.toggle('hidden', !amIAdmin);
             }
 
             const histBadge = document.getElementById('history-badge');
@@ -1850,7 +2680,7 @@
                                 ? 'font-black bg-purple-500/25 text-purple-200 border border-purple-400/50'
                                 : 'font-bold text-slate-400 hover:text-white'
                         }">
-                            <span>${d.name}</span>
+                            <span>${escapeHtml(d.name)}</span>
                         </button>
                     `;
                 }).join('');
@@ -1870,7 +2700,7 @@
                             ? 'font-black bg-limeaccent text-darkbg shadow-md shadow-limeaccent/20'
                             : 'font-bold text-slate-400 hover:text-white'
                     }">
-                        <span>${b.label} (${cnt})</span>
+                        <span>${escapeHtml(b.label)} (${cnt})</span>
                     </button>
                 `;
             }).join('');
@@ -1936,7 +2766,7 @@
                         <span class="w-4 h-4 rounded-full text-[10px] font-black flex items-center justify-center ${
                             isActive ? 'bg-purple-400 text-darkbg' : allDone ? 'bg-limeaccent text-darkbg' : 'bg-white/10 text-slate-300'
                         }">${allDone ? '✓' : idx + 1}</span>
-                        <span class="max-w-[140px] truncate uppercase">${ex.name}</span>
+                        <span class="max-w-[140px] truncate uppercase">${escapeHtml(ex.name)}</span>
                     </button>
                 `;
             }).join('');
@@ -1977,7 +2807,7 @@
                         <i class="ph-bold ph-barbell text-2xl"></i>
                     </div>
                     <p class="text-sm font-extrabold text-white">No hay estaciones en este bloque</p>
-                    <p class="text-xs text-slate-400 mt-1 mb-4">Agregá un ejercicio nuevo para ${state.activeProfile}.</p>
+                    <p class="text-xs text-slate-400 mt-1 mb-4">Agregá un ejercicio nuevo para ${escapeHtml(state.activeProfile)}.</p>
                     <div class="flex items-center justify-center gap-2 flex-wrap">
                         <button onclick="openCatalogModal()" class="bg-white/10 hover:bg-white/15 text-limeaccent border border-limeaccent/30 font-black text-xs px-4 py-3 rounded-xl inline-flex items-center gap-1.5">
                             <i class="ph-bold ph-database"></i> USAR BASE GENERAL
@@ -2010,13 +2840,11 @@
             const lockedNow = ensureRoutineLockedFlag(state.profiles[state.activeProfile]);
 
             container.innerHTML = `
-                <!-- TARJETA HERO: VIDEO / TÉCNICA Y TÍTULO -->
                 <section class="bg-[#181b22] border border-white/10 rounded-3xl overflow-hidden shadow-xl">
-                    <!-- Zona de Video / Banner Visual -->
                     <div class="relative bg-gradient-to-br from-[#212530] via-[#181b22] to-[#0f1115] border-b border-white/5">
                         ${showVideo && embedUrl ? `
                             <div class="aspect-video w-full bg-black">
-                                <iframe class="w-full h-full" src="${embedUrl}" title="${ex.name}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                                <iframe class="w-full h-full" src="${embedUrl}" title="${escapeHtml(ex.name)}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
                             </div>
                         ` : `
                             <div class="px-4 py-5 flex flex-col items-center justify-center text-center relative">
@@ -2052,7 +2880,7 @@
                                 ` : `
                                     <div class="py-1 flex items-center gap-2 text-slate-400">
                                         <i class="ph-duotone ph-person-simple-run text-3xl text-limeaccent/80"></i>
-                                        <span class="text-xs font-bold text-slate-300">${ex.muscle}</span>
+                                        <span class="text-xs font-bold text-slate-300">${escapeHtml(ex.muscle)}</span>
                                     </div>
                                 `}
                             </div>
@@ -2070,20 +2898,19 @@
                         ` : ''}
                     </div>
 
-                    <!-- Info del Ejercicio -->
                     <div class="p-4">
                         <div class="flex items-center justify-between gap-2 flex-wrap">
                             <span class="text-[10px] font-black uppercase tracking-wider px-2.5 py-0.5 rounded-full border ${tagStyle}">
-                                ${ex.tag}
+                                ${escapeHtml(ex.tag)}
                             </span>
                             <span class="text-[11px] font-bold text-slate-400">
-                                ${ex.muscle}
+                                ${escapeHtml(ex.muscle)}
                             </span>
                         </div>
 
                         <div class="mt-2 flex items-start justify-between gap-2">
                             <h2 class="text-lg font-black text-white leading-tight min-w-0 flex-1">
-                                "${ex.name}"
+                                "${escapeHtml(ex.name)}"
                             </h2>
                             <button onclick="handleDeleteStationClick('${ex.id}')" class="px-2.5 py-1 rounded-xl bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/25 text-rose-300 text-[10px] font-black uppercase tracking-wider shrink-0 flex items-center gap-1 transition-colors">
                                 <i class="ph-bold ph-trash text-xs"></i>
@@ -2091,7 +2918,6 @@
                             </button>
                         </div>
 
-                        <!-- Acordeón: Músculo y Sensación Clave -->
                         <div class="mt-3 bg-[#0f1115] border border-white/5 rounded-2xl overflow-hidden">
                             <button onclick="toggleTechniqueBox()" class="w-full px-3.5 py-2.5 flex items-center justify-between text-left">
                                 <span class="text-[11px] font-extrabold uppercase tracking-wider text-limeaccent flex items-center gap-1.5">
@@ -2101,14 +2927,13 @@
                             </button>
                             ${showTechnique ? `
                                 <div class="px-3.5 pb-3 text-xs text-slate-300 leading-relaxed border-t border-white/5 pt-2">
-                                    ${ex.notes}
+                                    ${escapeHtml(ex.notes)}
                                 </div>
                             ` : ''}
                         </div>
                     </div>
                 </section>
 
-                <!-- DOS COLUMNAS: OBJETIVO vs CARGA ACTUAL (SERIE ACTIVA) -->
                 <section class="grid grid-cols-2 gap-2.5">
                     <div class="bg-[#181b22] border border-white/10 rounded-2xl p-3.5 flex flex-col justify-between">
                         <div class="flex items-center justify-between gap-1">
@@ -2120,7 +2945,7 @@
                             </select>
                         </div>
                         <div class="mt-2 flex items-baseline gap-1.5">
-                            <span class="text-2xl font-black text-white">${ex.targetReps}</span>
+                            <span class="text-2xl font-black text-white">${escapeHtml(ex.targetReps)}</span>
                             <span class="text-xs font-extrabold text-limeaccent uppercase">${formatUnitLabel(ex.unit, true)}</span>
                         </div>
                     </div>
@@ -2128,7 +2953,7 @@
                     <div class="bg-[#181b22] border border-white/10 rounded-2xl p-3.5 flex flex-col justify-between">
                         <div class="flex items-center justify-between">
                             <span class="text-[10px] font-extrabold uppercase tracking-wider text-slate-400">CARGA (S${activeSetIndex + 1})</span>
-                            <span class="text-[10px] font-extrabold text-amber-300">RIR ${activeSet.rir}</span>
+                            <span class="text-[10px] font-extrabold text-amber-300">RIR ${escapeHtml(activeSet.rir)}</span>
                         </div>
                         <div class="mt-2 flex items-center justify-between gap-1">
                             <div class="flex items-baseline gap-1">
@@ -2147,22 +2972,20 @@
                     </div>
                 </section>
 
-                <!-- FRANJA COMPARATIVA CON ÚLTIMA SESIÓN -->
                 <div class="bg-[#181b22] border border-white/10 rounded-2xl px-3.5 py-2.5 flex items-center justify-between gap-2">
                     <div class="flex items-center gap-2 min-w-0">
                         <i class="ph-fill ph-flame text-amber-400 text-base shrink-0"></i>
                         <span class="text-[11px] font-extrabold uppercase tracking-wide text-slate-300 truncate">
                             ${lastRec 
-                                ? `ÚLTIMA: <span class="text-white">${lastRec.weight} KG × ${lastRec.reps}</span> <span class="text-limeaccent">(RIR ${lastRec.rir})</span>` 
+                                ? `ÚLTIMA: <span class="text-white">${lastRec.weight} KG × ${escapeHtml(lastRec.reps)}</span> <span class="text-limeaccent">(RIR ${escapeHtml(lastRec.rir)})</span>` 
                                 : 'SIN REGISTRO PREVIO'}
                         </span>
                     </div>
-                    <button onclick="openHistoryModal()" class="px-2.5 py-1 rounded-lg bg-amber-400/15 border border-amber-400/30 text-amber-300 text-[10px] font-black uppercase tracking-wider shrink-0">
-                        HISTORIAL
+                    <button onclick="openCalendarModal()" class="px-2.5 py-1 rounded-lg bg-sky-400/15 border border-sky-400/30 text-sky-300 text-[10px] font-black uppercase tracking-wider shrink-0">
+                        CALENDARIO
                     </button>
                 </div>
 
-                <!-- TARJETA INTERACTIVA DE SERIES (S1, S2, S3, S4) + RIR + AUTO DESCANSO -->
                 <section class="bg-[#181b22] border border-white/10 rounded-3xl p-4 shadow-xl">
                     <div class="flex items-center justify-between pb-3 border-b border-white/5">
                         <div class="flex items-center gap-2">
@@ -2196,7 +3019,7 @@
                                     <div class="flex items-center gap-2 min-w-0">
                                         <span class="text-xs font-black ${isSelected || set.completed ? 'text-limeaccent' : 'text-slate-400'}">S${sIdx + 1}</span>
                                         <div class="flex items-center gap-1 bg-black/40 px-2 py-1 rounded-lg border border-white/5" onclick="event.stopPropagation()">
-                                            <input type="text" value="${set.reps}" onchange="updateSetReps(${sIdx}, this.value)" aria-label="Valor serie ${sIdx + 1}" class="w-8 bg-transparent text-center text-xs font-extrabold text-white outline-none">
+                                            <input type="text" value="${escapeHtml(set.reps)}" onchange="updateSetReps(${sIdx}, this.value)" aria-label="Valor serie ${sIdx + 1}" class="w-8 bg-transparent text-center text-xs font-extrabold text-white outline-none">
                                             <select onchange="updateSetUnit(${sIdx}, this.value)" aria-label="Unidad serie ${sIdx + 1}" class="bg-transparent text-[10px] text-limeaccent font-extrabold outline-none cursor-pointer">
                                                 <option value="reps" ${normalizeUnit(set.unit || ex.unit) === 'reps' ? 'selected' : ''}>reps</option>
                                                 <option value="seg" ${normalizeUnit(set.unit || ex.unit) === 'seg' ? 'selected' : ''}>seg</option>
@@ -2342,7 +3165,9 @@
             setObj.completed = !setObj.completed;
 
             if (setObj.completed) {
-                state.profiles[state.activeProfile].history.push({
+                const todayStr = getTodayStr();
+                const prof = state.profiles[state.activeProfile];
+                prof.history.push({
                     id: 'rec-' + Date.now() + '-' + setIndex,
                     exerciseId: ex.id,
                     exerciseName: ex.name,
@@ -2351,7 +3176,8 @@
                     reps: setObj.reps,
                     unit: normalizeUnit(setObj.unit || ex.unit),
                     rir: setObj.rir,
-                    date: getTodayStr(),
+                    date: todayStr,
+                    weightLocked: isCalendarDateLocked(prof, todayStr),
                     timestamp: Date.now()
                 });
 
@@ -2365,10 +3191,9 @@
                 }
 
                 let allRoutineDoneNow = false;
-                const profNow = state.profiles[state.activeProfile];
-                if (profNow && Array.isArray(profNow.exercises)) {
+                if (prof && Array.isArray(prof.exercises)) {
                     let tot = 0, done = 0;
-                    profNow.exercises.forEach(e => {
+                    prof.exercises.forEach(e => {
                         tot += e.sets.length;
                         done += e.sets.filter(s => s.completed).length;
                     });
@@ -2428,135 +3253,6 @@
         }
 
         // =========================================================================
-        // CRONÓMETRO DE DESCANSO AUTOMÁTICO
-        // =========================================================================
-        function getDefaultRestForActiveExercise() {
-            const list = getCurrentExercises();
-            const ex = list[activeStationIndex];
-            const parsed = ex ? parseInt(ex.restSeconds, 10) : 90;
-            return (!isNaN(parsed) && parsed > 0) ? parsed : 90;
-        }
-
-        function syncTimerWithCurrentExercise() {
-            stopTimerInterval();
-            timerRemaining = getDefaultRestForActiveExercise();
-            updateTimerUI();
-        }
-
-        function formatSeconds(sec) {
-            const safeSec = Math.max(0, Math.floor(Number(sec) || 0));
-            const m = Math.floor(safeSec / 60).toString().padStart(2, '0');
-            const s = (safeSec % 60).toString().padStart(2, '0');
-            return `${m}:${s}`;
-        }
-
-        function updateTimerUI() {
-            const display = document.getElementById('timer-display');
-            const icon = document.getElementById('timer-toggle-icon');
-            const box = document.getElementById('timer-box');
-            if (!display || !icon || !box) return;
-
-            display.textContent = formatSeconds(timerRemaining);
-            icon.className = isTimerRunning ? 'ph-fill ph-pause text-xs' : 'ph-fill ph-play text-xs';
-
-            if (timerRemaining === 0) {
-                display.className = 'text-xs font-black font-mono text-limeaccent tracking-wider min-w-[42px] text-center';
-                box.classList.add('timer-finished', 'border-limeaccent');
-            } else {
-                display.className = 'text-xs font-black font-mono text-white tracking-wider min-w-[42px] text-center';
-                box.classList.remove('timer-finished', 'border-limeaccent');
-            }
-        }
-
-        function tickRestTimer() {
-            if (!isTimerRunning || !timerEndTimestamp) return;
-            const left = Math.max(0, Math.ceil((timerEndTimestamp - Date.now()) / 1000));
-            timerRemaining = left;
-            updateTimerUI();
-
-            if (left <= 0) {
-                stopTimerInterval();
-                timerRemaining = 0;
-                updateTimerUI();
-                playBeepAlert();
-                showToast("⏰ ¡Tiempo de descanso cumplido!");
-            }
-        }
-
-        function startRestTimer(seconds) {
-            const safeSeconds = Math.max(1, parseInt(seconds, 10) || getDefaultRestForActiveExercise());
-            stopTimerInterval();
-            timerRemaining = safeSeconds;
-            timerEndTimestamp = Date.now() + safeSeconds * 1000;
-            isTimerRunning = true;
-            updateTimerUI();
-
-            timerInterval = setInterval(tickRestTimer, 250);
-        }
-
-        function adjustTimerSeconds(deltaSec) {
-            if (isTimerRunning && timerEndTimestamp) {
-                const currentLeft = Math.max(0, Math.ceil((timerEndTimestamp - Date.now()) / 1000));
-                const nextLeft = Math.max(0, currentLeft + deltaSec);
-                timerRemaining = nextLeft;
-                if (nextLeft <= 0) {
-                    stopTimerInterval();
-                    timerRemaining = 0;
-                    updateTimerUI();
-                } else {
-                    timerEndTimestamp = Date.now() + nextLeft * 1000;
-                    updateTimerUI();
-                }
-            } else {
-                timerRemaining = Math.max(0, (parseInt(timerRemaining, 10) || 0) + deltaSec);
-                updateTimerUI();
-            }
-        }
-
-        function toggleTimer() {
-            if (isTimerRunning) {
-                if (timerEndTimestamp) {
-                    timerRemaining = Math.max(0, Math.ceil((timerEndTimestamp - Date.now()) / 1000));
-                }
-                stopTimerInterval();
-                updateTimerUI();
-            } else {
-                const startSec = timerRemaining > 0 ? timerRemaining : getDefaultRestForActiveExercise();
-                startRestTimer(startSec);
-            }
-        }
-
-        function resetTimer() {
-            stopTimerInterval();
-            timerRemaining = getDefaultRestForActiveExercise();
-            updateTimerUI();
-        }
-
-        function stopTimerInterval() {
-            if (timerInterval) {
-                clearInterval(timerInterval);
-                timerInterval = null;
-            }
-            timerEndTimestamp = null;
-            isTimerRunning = false;
-        }
-
-        function playBeepAlert() {
-            try {
-                const ctx = new (window.AudioContext || window.webkitAudioContext)();
-                const osc = ctx.createOscillator();
-                const gain = ctx.createGain();
-                osc.type = 'sine';
-                osc.frequency.setValueAtTime(880, ctx.currentTime);
-                gain.gain.setValueAtTime(0.15, ctx.currentTime);
-                osc.connect(gain);
-                gain.connect(ctx.destination);
-                osc.start();
-                osc.stop(ctx.currentTime + 0.25);
-            } catch (e) {}
-        }
-
-        // =========================================================================
         // HISTORIAL Y EXPORTACIÓN WHATSAPP
         // =========================================================================
         function openHistoryModal() {
@@ -2571,38 +3267,48 @@
 
         function renderHistoryList() {
             const container = document.getElementById('history-list-container');
-            const history = [...state.profiles[state.activeProfile].history].sort((a, b) => b.timestamp - a.timestamp);
+            const prof = state.profiles[state.activeProfile];
+            const history = [...prof.history].sort((a, b) => b.timestamp - a.timestamp);
 
             if (history.length === 0) {
                 container.innerHTML = `
                     <div class="bg-[#0f1115] border border-dashed border-white/10 rounded-2xl p-6 text-center">
-                        <p class="text-xs text-slate-400">Todavía no hay series registradas para ${state.activeProfile}.</p>
+                        <p class="text-xs text-slate-400">Todavía no hay series registradas para ${escapeHtml(state.activeProfile)}.</p>
                     </div>
                 `;
                 return;
             }
 
-            container.innerHTML = history.map(item => `
-                <div class="bg-[#0f1115] border border-white/5 rounded-2xl p-3 flex items-center justify-between gap-2">
+            container.innerHTML = history.map(item => {
+                const locked = isCalendarDateLocked(prof, item.date) || item.weightLocked;
+                return `
+                <div class="bg-[#0f1115] border ${locked ? 'border-amber-400/25' : 'border-white/5'} rounded-2xl p-3 flex items-center justify-between gap-2">
                     <div class="min-w-0 flex-1">
                         <div class="flex items-center gap-2">
-                            <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-white/5 text-slate-400">${item.date}</span>
+                            <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-white/5 text-slate-400">${escapeHtml(item.date)}</span>
                             <span class="text-[10px] font-black text-limeaccent">Serie ${item.setNumber || 1}</span>
+                            ${locked ? '<i class="ph-fill ph-lock text-amber-300 text-xs" title="Peso bloqueado en calendario"></i>' : ''}
                         </div>
-                        <p class="text-xs font-extrabold text-white truncate mt-1">${item.exerciseName}</p>
+                        <p class="text-xs font-extrabold text-white truncate mt-1">${escapeHtml(item.exerciseName)}</p>
                         <p class="text-xs text-slate-300 mt-0.5">
-                            <strong class="text-white">${item.weight} kg</strong> × <strong>${item.reps} ${formatUnitLabel(item.unit, false)}</strong> • <span class="text-amber-300 font-extrabold">RIR ${item.rir}</span>
+                            <strong class="text-white">${item.weight} kg</strong> × <strong>${escapeHtml(item.reps)} ${formatUnitLabel(item.unit, false)}</strong> • <span class="text-amber-300 font-extrabold">RIR ${escapeHtml(item.rir)}</span>
                         </p>
                     </div>
                     <button onclick="deleteHistoryRecord('${item.id}')" aria-label="Borrar registro" class="w-8 h-8 rounded-xl bg-white/5 text-slate-400 hover:text-rose-400 flex items-center justify-center shrink-0">
-                        <i class="ph-bold ph-trash text-sm"></i>
+                        <i class="ph-bold ${locked ? 'ph-lock' : 'ph-trash'} text-sm"></i>
                     </button>
                 </div>
-            `).join('');
+                `;
+            }).join('');
         }
 
         function deleteHistoryRecord(id) {
             const profileData = state.profiles[state.activeProfile];
+            const target = profileData.history.find(h => h.id === id);
+            if (target && (isCalendarDateLocked(profileData, target.date) || target.weightLocked)) {
+                showToast("🔒 Registro protegido con candado en el calendario", true);
+                return;
+            }
             profileData.history = profileData.history.filter(h => h.id !== id);
             saveState();
             renderHistoryList();
@@ -2616,6 +3322,7 @@
                 'Se borrarán todas las series guardadas de este perfil.',
                 () => {
                     state.profiles[state.activeProfile].history = [];
+                    state.profiles[state.activeProfile].lockedCalendarDates = {};
                     saveState();
                     renderHistoryList();
                     renderAll();
@@ -2731,7 +3438,7 @@
         }
 
         // =====================================================================
-        // BASE GENERAL COMPARTIDA DE EJERCICIOS (TODOS LOS USUARIOS Y FUTUROS)
+        // BASE GENERAL COMPARTIDA DE EJERCICIOS
         // =====================================================================
         const CATALOG_STORAGE_KEY = 'gymtrack_general_exercises_v1';
         let catalogActiveFilter = 'ALL';
@@ -3021,12 +3728,12 @@
                 <div class="bg-[#0f1115] border border-white/10 rounded-2xl p-3 flex items-center justify-between gap-2.5">
                     <div class="min-w-0 flex-1">
                         <div class="flex items-center gap-1.5 flex-wrap">
-                            <span class="text-[9px] font-black uppercase px-2 py-0.5 rounded-full bg-limeaccent/15 text-limeaccent border border-limeaccent/25">${item.tag || 'FUERZA'}</span>
-                            <span class="text-[10px] font-bold text-slate-400 truncate">${item.muscle || 'General'}</span>
+                            <span class="text-[9px] font-black uppercase px-2 py-0.5 rounded-full bg-limeaccent/15 text-limeaccent border border-limeaccent/25">${escapeHtml(item.tag || 'FUERZA')}</span>
+                            <span class="text-[10px] font-bold text-slate-400 truncate">${escapeHtml(item.muscle || 'General')}</span>
                         </div>
-                        <p class="text-xs font-black text-white truncate mt-1">${item.name}</p>
+                        <p class="text-xs font-black text-white truncate mt-1">${escapeHtml(item.name)}</p>
                         <p class="text-[10px] text-slate-400 mt-0.5">
-                            ${item.numSets || 3} series × <span class="text-slate-200 font-bold">${item.targetReps || '10'} ${formatUnitLabel(item.unit, false)}</span> • Desc: ${item.restSeconds || 75}s
+                            ${item.numSets || 3} series × <span class="text-slate-200 font-bold">${escapeHtml(item.targetReps || '10')} ${formatUnitLabel(item.unit, false)}</span> • Desc: ${item.restSeconds || 75}s
                         </p>
                     </div>
                     <div class="flex items-center gap-1.5 shrink-0">
@@ -3265,7 +3972,7 @@
                     }
                     activeSetIndex = 0;
                     saveState();
-                    syncTimerWithCurrentExercise();
+                    syncTimerWithCurrentExercise(true);
                     closeConfirmModal();
                     renderAll();
                     showToast("Nueva sesión lista");
@@ -3276,7 +3983,7 @@
         function exportRoutineJson() {
             try {
                 const payload = {
-                    app: 'GymTrack Pro Sofi',
+                    app: 'GymTrack Pro',
                     exportedAt: new Date().toISOString(),
                     data: state
                 };
@@ -3284,7 +3991,7 @@
                 const url = URL.createObjectURL(blob);
                 const a = document.createElement('a');
                 a.href = url;
-                a.download = `rutina-sofi-${getTodayStr().replace(/\//g, '-')}.json`;
+                a.download = `rutina-${state.activeProfile.toLowerCase()}-${getTodayStr().replace(/\//g, '-')}.json`;
                 document.body.appendChild(a);
                 a.click();
                 document.body.removeChild(a);
@@ -3322,10 +4029,11 @@
                         lastDate: getTodayStr(),
                         profiles: importedProfiles
                     };
+                    enforceAccessPermissions();
                     activeStationIndex = 0;
                     activeSetIndex = 0;
                     saveState();
-                    syncTimerWithCurrentExercise();
+                    syncTimerWithCurrentExercise(true);
                     renderAll();
                     renderHistoryList();
                     showToast("Rutina importada y guardada");
@@ -3340,18 +4048,19 @@
 
         function confirmRestoreDefaultRoutine() {
             openConfirmModal(
-                '¿Restaurar rutina base de Sofi?',
-                'Volverá a los ejercicios y valores iniciales de Sofi.',
+                '¿Restaurar rutina base inicial?',
+                'Volverá a los ejercicios y valores iniciales.',
                 () => {
                     const fresh = JSON.parse(JSON.stringify(DEFAULT_STATE));
                     fresh.lastDate = getTodayStr();
                     Object.keys(fresh.profiles).forEach(u => ensureUserProfileShape(fresh.profiles[u], u));
                     state = fresh;
+                    enforceAccessPermissions();
                     activeTab = 'fuerza';
                     activeStationIndex = 0;
                     activeSetIndex = 0;
                     saveState();
-                    syncTimerWithCurrentExercise();
+                    syncTimerWithCurrentExercise(true);
                     closeConfirmModal();
                     renderAll();
                     renderHistoryList();
@@ -3361,10 +4070,11 @@
         }
 
         window.addEventListener('DOMContentLoaded', () => {
+            enforceAccessPermissions();
             loadExerciseCatalog();
             syncExercisesIntoCatalog(state?.profiles?.[state?.activeProfile]?.exercises || []);
             checkDayRolloverLive();
-            syncTimerWithCurrentExercise();
+            syncTimerWithCurrentExercise(true);
             renderAll();
         });
 
@@ -3385,7 +4095,7 @@
          ===================================================================== -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
-        import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js";
+        import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, signOut, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js";
         import { getFirestore, doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js";
 
         const firebaseConfig = {
@@ -3463,6 +4173,24 @@
             }
         };
 
+        window.createFirebaseAccountForUser = async function(email, password) {
+            if (!email || !password || password.length < 6) {
+                return { ok: false, reason: 'La contraseña debe tener al menos 6 caracteres.' };
+            }
+            try {
+                const secondaryApp = initializeApp(firebaseConfig, "SecondaryUserCreator_" + Date.now());
+                const secondaryAuth = getAuth(secondaryApp);
+                await createUserWithEmailAndPassword(secondaryAuth, email, password);
+                await signOut(secondaryAuth);
+                return { ok: true };
+            } catch (err) {
+                if (err && err.code === 'auth/email-already-in-use') {
+                    return { ok: true, alreadyExists: true };
+                }
+                return { ok: false, reason: (err && err.message) ? err.message : 'No se pudo crear el acceso en Firebase.' };
+            }
+        };
+
         window.handleFirebaseLogout = function() {
             openConfirmModal(
                 '¿Cerrar sesión?',
@@ -3505,6 +4233,7 @@
 
         onAuthStateChanged(auth, (user) => {
             if (!user) {
+                currentAuthEmail = '';
                 if (unsubState) { unsubState(); unsubState = null; }
                 if (unsubCatalog) { unsubCatalog(); unsubCatalog = null; }
                 updateCloudSyncDot('offline');
@@ -3512,6 +4241,12 @@
                 return;
             }
 
+            currentAuthEmail = user.email || '';
+            enforceAccessPermissions();
+            if (!isCurrentSessionAdmin()) {
+                state.activeProfile = getSessionOwner();
+            }
+            renderAll();
             setAuthGateState('authenticated');
             updateCloudSyncDot('syncing');
 
