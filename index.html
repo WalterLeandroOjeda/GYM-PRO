@@ -75,6 +75,42 @@
 </head>
 <body class="min-h-screen flex flex-col pb-32 selection:bg-limeaccent selection:text-darkbg">
 
+    <!-- PANTALLA DE ACCESO PRIVADO (FIREBASE AUTH) -->
+    <div id="auth-gate-screen" class="fixed inset-0 z-50 bg-[#0f1115] flex items-center justify-center p-4">
+        <div class="w-full max-w-sm bg-[#181b22] border border-white/10 rounded-3xl p-6 shadow-2xl">
+            <div class="flex flex-col items-center text-center">
+                <div class="w-14 h-14 rounded-2xl bg-limeaccent/15 border border-limeaccent/40 text-limeaccent flex items-center justify-center mb-3 shadow-lg shadow-limeaccent/10">
+                    <i class="ph-bold ph-barbell text-3xl"></i>
+                </div>
+                <h1 class="text-lg font-black text-white tracking-tight">GymTrack Pro</h1>
+                <p class="text-xs text-slate-400 mt-1">Acceso privado sincronizado en la nube</p>
+            </div>
+
+            <div id="auth-loading-box" class="mt-6 py-4 text-center">
+                <div class="w-7 h-7 border-2 border-limeaccent border-t-transparent rounded-full animate-spin mx-auto"></div>
+                <p class="text-xs text-slate-400 mt-2.5 font-semibold">Verificando sesión...</p>
+            </div>
+
+            <form id="auth-login-form" onsubmit="handleFirebaseLogin(event)" class="hidden mt-5 space-y-3.5">
+                <div>
+                    <label for="login-email" class="block text-[10px] font-extrabold uppercase tracking-wider text-slate-400 mb-1">Correo electrónico</label>
+                    <input type="email" id="login-email" required autocomplete="email" placeholder="tu-correo@ejemplo.com" class="w-full bg-[#0f1115] border border-white/10 focus:border-limeaccent rounded-xl px-3.5 py-2.5 text-sm text-white placeholder-slate-600 outline-none">
+                </div>
+                <div>
+                    <label for="login-password" class="block text-[10px] font-extrabold uppercase tracking-wider text-slate-400 mb-1">Contraseña</label>
+                    <input type="password" id="login-password" required autocomplete="current-password" placeholder="••••••••" class="w-full bg-[#0f1115] border border-white/10 focus:border-limeaccent rounded-xl px-3.5 py-2.5 text-sm text-white placeholder-slate-600 outline-none">
+                </div>
+
+                <p id="auth-error-msg" class="hidden text-[11px] font-bold text-rose-400 bg-rose-500/10 border border-rose-500/25 rounded-xl px-3 py-2"></p>
+
+                <button type="submit" id="auth-submit-btn" class="w-full py-3 rounded-xl bg-limeaccent hover:bg-limedark active:scale-[0.99] text-darkbg font-black text-xs uppercase tracking-wider shadow-lg shadow-limeaccent/20 flex items-center justify-center gap-2 transition-all">
+                    <i class="ph-bold ph-sign-in text-base"></i>
+                    <span>INGRESAR A LA PLANILLA</span>
+                </button>
+            </form>
+        </div>
+    </div>
+
     <!-- Toast de Notificación Flotante -->
     <div id="toast" class="fixed top-4 left-1/2 -translate-x-1/2 z-50 pointer-events-none opacity-0 transition-all duration-300 transform -translate-y-4 w-[92%] max-w-md">
         <div class="bg-[#212530] border border-limeaccent/40 text-white px-4 py-3 rounded-2xl shadow-2xl flex items-center gap-3">
@@ -101,10 +137,10 @@
                     </button>
                 </div>
 
-                <!-- Indicador de Estación y % Rutina -->
+                <!-- Indicador de Estación, Estado Nube y % Rutina -->
                 <div class="text-center min-w-0 flex-1 px-1">
                     <div class="flex items-center justify-center gap-1">
-                        <span class="w-1.5 h-1.5 rounded-full bg-limeaccent shrink-0"></span>
+                        <span id="cloud-sync-dot" title="Estado de sincronización en nube" class="w-1.5 h-1.5 rounded-full bg-amber-400 shrink-0"></span>
                         <p id="header-station-title" class="text-[11px] font-extrabold text-white truncate">Cargando...</p>
                     </div>
                     <p id="header-progress-sub" class="text-[9px] font-bold tracking-normal uppercase text-slate-400 leading-[1.25] mt-0.5">
@@ -112,7 +148,7 @@
                     </p>
                 </div>
 
-                <!-- Botones Rápidos: Candado, Historial y Agregar Ejercicio -->
+                <!-- Botones Rápidos: Candado, Historial, Base, Nuevo y Salir -->
                 <div class="flex items-center gap-1 shrink-0">
                     <button onclick="toggleRoutineLock()" id="btn-routine-lock" aria-label="Bloquear o desbloquear edición de ejercicios" class="w-8 h-8 rounded-xl bg-[#181b22] hover:bg-[#212530] border border-amber-400/30 text-amber-300 flex items-center justify-center transition-colors">
                         <i id="routine-lock-icon" class="ph-fill ph-lock text-base"></i>
@@ -126,6 +162,9 @@
                     </button>
                     <button onclick="openExerciseModal()" aria-label="Nuevo Ejercicio" class="w-8 h-8 rounded-xl bg-[#181b22] hover:bg-[#212530] border border-white/10 text-limeaccent flex items-center justify-center transition-colors">
                         <i class="ph-bold ph-plus text-base"></i>
+                    </button>
+                    <button onclick="handleFirebaseLogout()" aria-label="Cerrar sesión" title="Cerrar sesión" class="w-8 h-8 rounded-xl bg-[#181b22] hover:bg-rose-500/20 border border-white/10 text-slate-400 hover:text-rose-300 flex items-center justify-center transition-colors">
+                        <i class="ph-bold ph-sign-out text-sm"></i>
                     </button>
                 </div>
             </div>
@@ -389,7 +428,7 @@
                     </div>
                     <div>
                         <label for="ex-muscle" class="block text-[11px] font-extrabold uppercase tracking-wider text-slate-400 mb-1">Músculo objetivo *</label>
-                        <input type="text" id="ex-muscle" required placeholder="Ej: Core / Abdomen o Sistema cardiorrespiratorio" class="w-full bg-[#0f1115] border border-white/10 focus:border-limeaccent rounded-xl px-3 py-2.5 text-xs text-white placeholder-slate-600 outline-none">
+                        <input type="text" id="ex-muscle" required placeholder="Ej: Core / Abdomen o Sistema cardiorrespiratorio" class="w-full bg-[#0f1115] border border-white/10 focus:border-limeaccent rounded-xl px-3.5 py-2.5 text-xs text-white placeholder-slate-600 outline-none">
                     </div>
                 </div>
 
@@ -413,7 +452,7 @@
                     </div>
                     <div class="col-span-3">
                         <label for="ex-rest" class="block text-[10px] font-extrabold uppercase tracking-wider text-slate-400 mb-1">Desc (s)</label>
-                        <input type="number" id="ex-rest" step="15" min="15" max="300" value="60" required class="w-full bg-[#0f1115] border border-white/10 focus:border-limeaccent rounded-xl px-2 py-2.5 text-sm font-bold text-center text-white outline-none">
+                        <input type="number" id="ex-rest" step="15" min="15" max="300" value="60" required class="w-full bg-[#0f1115] border border-white/10 focus:border-limeaccent rounded-xl px-2.5 py-2.5 text-sm font-bold text-center text-white outline-none">
                     </div>
                 </div>
 
@@ -615,7 +654,7 @@
     </div>
 
     <!-- =====================================================================
-         LÓGICA JAVASCRIPT COMPLETA
+         LÓGICA JAVASCRIPT COMPLETA + CONEXIÓN FIREBASE (AUTH + FIRESTORE)
          ===================================================================== -->
     <script>
         const STORAGE_KEY = 'gymtrack_stations_v2';
@@ -1139,7 +1178,7 @@
             }
             openConfirmModal(
                 `¿Eliminar usuario "${userName}"?`,
-                'Se borrarán su rutina, bloques e historial guardados en este dispositivo.',
+                'Se borrarán su rutina, bloques e historial guardados.',
                 () => {
                     delete state.profiles[userName];
                     const remaining = getAllUserNames();
@@ -1179,15 +1218,15 @@
                         </div>
                         <div class="flex items-center gap-1 shrink-0">
                             ${!isCurrent ? `
-                                <button onclick="switchProfile('${name.replace(/'/g, "\\'")}'); renderUsersModalList();" class="px-2.5 py-1.5 rounded-xl bg-limeaccent/15 hover:bg-limeaccent/25 text-limeaccent text-[10px] font-black uppercase">
+                                <button onclick="switchProfile('${name.replace(/'/g, "\'")}'); renderUsersModalList();" class="px-2.5 py-1.5 rounded-xl bg-limeaccent/15 hover:bg-limeaccent/25 text-limeaccent text-[10px] font-black uppercase">
                                     USAR
                                 </button>
                             ` : ''}
-                            <button onclick="startEditUser('${name.replace(/'/g, "\\'")}')" aria-label="Editar usuario ${name}" class="w-8 h-8 rounded-xl bg-white/5 hover:bg-white/10 text-slate-200 flex items-center justify-center">
+                            <button onclick="startEditUser('${name.replace(/'/g, "\'")}')" aria-label="Editar usuario ${name}" class="w-8 h-8 rounded-xl bg-white/5 hover:bg-white/10 text-slate-200 flex items-center justify-center">
                                 <i class="ph-bold ph-pencil-simple text-sm"></i>
                             </button>
                             ${canDelete ? `
-                                <button onclick="deleteUserProfile('${name.replace(/'/g, "\\'")}')" aria-label="Eliminar usuario ${name}" class="w-8 h-8 rounded-xl bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 flex items-center justify-center">
+                                <button onclick="deleteUserProfile('${name.replace(/'/g, "\'")}')" aria-label="Eliminar usuario ${name}" class="w-8 h-8 rounded-xl bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 flex items-center justify-center">
                                     <i class="ph-bold ph-trash text-sm"></i>
                                 </button>
                             ` : ''}
@@ -1331,7 +1370,7 @@
             const blocks = ensureSofiBlocks(prof);
             const slug = rawLabel
                 .toLowerCase()
-                .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+                .normalize('NFD').replace(/[̀-ͯ]/g, '')
                 .replace(/[^a-z0-9]+/g, '-')
                 .replace(/^-|-$/g, '') || ('bloque-' + Date.now());
             const uniqueId = blocks.some(b => b.id === slug) ? `${slug}-${Date.now().toString().slice(-3)}` : slug;
@@ -1561,55 +1600,101 @@
         let isTimerRunning = false;
 
         // =========================================================================
-        // PERSISTENCIA Y UTILIDADES
+        // PERSISTENCIA LOCAL + SINCRONIZACIÓN EN TIEMPO REAL CON FIRESTORE
         // =========================================================================
+        function updateCloudSyncDot(status) {
+            const dot = document.getElementById('cloud-sync-dot');
+            if (!dot) return;
+            if (status === 'synced') {
+                dot.className = 'w-1.5 h-1.5 rounded-full bg-limeaccent shrink-0';
+                dot.title = 'Sincronizado en tiempo real con la nube';
+            } else if (status === 'syncing') {
+                dot.className = 'w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse shrink-0';
+                dot.title = 'Guardando cambios en la nube...';
+            } else {
+                dot.className = 'w-1.5 h-1.5 rounded-full bg-rose-400 shrink-0';
+                dot.title = 'Modo local sin conexión a la nube';
+            }
+        }
+
+        function normalizeLoadedState(parsed) {
+            const today = getTodayStr();
+            if (!parsed || !parsed.profiles || typeof parsed.profiles !== 'object' || Object.keys(parsed.profiles).length === 0) {
+                const fresh = JSON.parse(JSON.stringify(DEFAULT_STATE));
+                fresh.lastDate = today;
+                Object.keys(fresh.profiles).forEach(uName => ensureUserProfileShape(fresh.profiles[uName], uName));
+                return fresh;
+            }
+            Object.keys(parsed.profiles).forEach(uName => {
+                ensureUserProfileShape(parsed.profiles[uName], uName);
+            });
+            if (!parsed.activeProfile || !parsed.profiles[parsed.activeProfile]) {
+                parsed.activeProfile = Object.keys(parsed.profiles)[0];
+            }
+            if (!parsed.lastDate) {
+                parsed.lastDate = today;
+            }
+            if (parsed.lastDate !== today) {
+                resetDayChecksInState(parsed);
+                parsed.lastDate = today;
+            }
+            return parsed;
+        }
+
         function loadState() {
             try {
                 const raw = localStorage.getItem(STORAGE_KEY);
                 if (!raw) {
-                    const fresh = JSON.parse(JSON.stringify(DEFAULT_STATE));
-                    fresh.lastDate = getTodayStr();
-                    return fresh;
+                    return normalizeLoadedState(null);
                 }
                 const parsed = JSON.parse(raw);
-                const today = getTodayStr();
-                if (!parsed.profiles || typeof parsed.profiles !== 'object' || Object.keys(parsed.profiles).length === 0) {
-                    const fresh = JSON.parse(JSON.stringify(DEFAULT_STATE));
-                    fresh.lastDate = today;
-                    return fresh;
-                }
-                Object.keys(parsed.profiles).forEach(uName => {
-                    ensureUserProfileShape(parsed.profiles[uName], uName);
-                });
-                if (!parsed.activeProfile || !parsed.profiles[parsed.activeProfile]) {
-                    parsed.activeProfile = Object.keys(parsed.profiles)[0];
-                }
-                if (!parsed.lastDate) {
-                    parsed.lastDate = today;
-                }
-                if (parsed.lastDate !== today) {
-                    resetDayChecksInState(parsed);
-                    parsed.lastDate = today;
-                    localStorage.setItem(STORAGE_KEY, JSON.stringify(parsed));
-                }
-                return parsed;
+                const normalized = normalizeLoadedState(parsed);
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(normalized));
+                return normalized;
             } catch (e) {
-                return JSON.parse(JSON.stringify(DEFAULT_STATE));
+                return normalizeLoadedState(null);
             }
         }
 
-        function saveState() {
+        function saveState(skipCloud = false) {
             try {
                 const keys = Object.keys(state.profiles || {});
                 if (!state.activeProfile || !state.profiles[state.activeProfile]) {
                     state.activeProfile = keys[0] || 'Sofi';
                 }
                 state.lastDate = getTodayStr();
+                state.updatedAt = Date.now();
                 localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+
+                if (!skipCloud && typeof window.pushStateToFirestore === 'function') {
+                    window.pushStateToFirestore(state);
+                }
             } catch (e) {
                 console.error(e);
             }
         }
+
+        window.applyRemoteCloudState = function(remoteState) {
+            if (!remoteState || typeof remoteState !== 'object') return;
+            const currentActiveProfile = state && state.activeProfile ? state.activeProfile : null;
+            const normalized = normalizeLoadedState(remoteState);
+            if (currentActiveProfile && normalized.profiles[currentActiveProfile]) {
+                normalized.activeProfile = currentActiveProfile;
+            }
+            state = normalized;
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+            syncTimerWithCurrentExercise();
+            renderAll();
+            if (!document.getElementById('history-modal').classList.contains('hidden')) {
+                renderHistoryList();
+            }
+            if (!document.getElementById('users-modal').classList.contains('hidden')) {
+                renderUsersModalList();
+            }
+            if (!document.getElementById('days-modal').classList.contains('hidden')) {
+                renderDaysModalList();
+            }
+        };
 
         function getTodayStr() {
             return new Date().toLocaleDateString('es-AR', { day: '2-digit', month: '2-digit', year: 'numeric' });
@@ -1805,10 +1890,10 @@
             const lockBtn = document.getElementById('btn-routine-lock');
             const lockIcon = document.getElementById('routine-lock-icon');
             if (lockBtn && lockIcon) {
-                lockIcon.className = isLocked ? 'ph-fill ph-lock text-lg' : 'ph-fill ph-lock-open text-lg';
+                lockIcon.className = isLocked ? 'ph-fill ph-lock text-base' : 'ph-fill ph-lock-open text-base';
                 lockBtn.className = isLocked
-                    ? 'w-9 h-9 rounded-xl bg-[#181b22] hover:bg-[#212530] border border-amber-400/35 text-amber-300 flex items-center justify-center transition-colors'
-                    : 'w-9 h-9 rounded-xl bg-limeaccent/15 hover:bg-limeaccent/25 border border-limeaccent/40 text-limeaccent flex items-center justify-center transition-colors';
+                    ? 'w-8 h-8 rounded-xl bg-[#181b22] hover:bg-[#212530] border border-amber-400/35 text-amber-300 flex items-center justify-center transition-colors'
+                    : 'w-8 h-8 rounded-xl bg-limeaccent/15 hover:bg-limeaccent/25 border border-limeaccent/40 text-limeaccent flex items-center justify-center transition-colors';
             }
 
             const isDayDone = totalSetsAll > 0 && completedSetsAll === totalSetsAll;
@@ -2544,7 +2629,8 @@
             lines.push(`────────────────────`);
             lines.push(`✅ Total series completadas: ${todays.length}`);
 
-            const text = lines.join('\n');
+            const text = lines.join('
+');
             const ta = document.createElement('textarea');
             ta.value = text;
             ta.style.position = 'fixed';
@@ -2675,15 +2761,27 @@
             } catch (e) {}
 
             const seeded = buildDefaultCatalogFromState(state || DEFAULT_STATE);
-            saveExerciseCatalog(seeded);
+            saveExerciseCatalog(seeded, true);
             return seeded;
         }
 
-        function saveExerciseCatalog(list) {
+        function saveExerciseCatalog(list, skipCloud = false) {
             try {
-                localStorage.setItem(CATALOG_STORAGE_KEY, JSON.stringify(Array.isArray(list) ? list : []));
+                const cleanList = Array.isArray(list) ? list : [];
+                localStorage.setItem(CATALOG_STORAGE_KEY, JSON.stringify(cleanList));
+                if (!skipCloud && typeof window.pushCatalogToFirestore === 'function') {
+                    window.pushCatalogToFirestore(cleanList);
+                }
             } catch (e) {}
         }
+
+        window.applyRemoteCloudCatalog = function(remoteList) {
+            if (!Array.isArray(remoteList)) return;
+            localStorage.setItem(CATALOG_STORAGE_KEY, JSON.stringify(remoteList));
+            if (!document.getElementById('catalog-modal').classList.contains('hidden')) {
+                renderCatalogModalList();
+            }
+        };
 
         function syncExercisesIntoCatalog(exercisesList) {
             if (!Array.isArray(exercisesList) || exercisesList.length === 0) return;
@@ -3028,6 +3126,7 @@
                         name,
                         muscle,
                         targetReps,
+                        unit,
                         restSeconds,
                         notes,
                         videoUrl,
@@ -3040,6 +3139,7 @@
                 const initialSets = Array.from({ length: numSets }, () => ({
                     weight: 0,
                     reps: targetReps,
+                    unit,
                     rir: '2',
                     completed: false
                 }));
@@ -3164,11 +3264,11 @@
             reader.onload = function(e) {
                 try {
                     const parsed = JSON.parse(e.target.result);
-                    const incoming = parsed && parsed.data && parsed.data.profiles && parsed.data.profiles.Sofi
+                    const incoming = parsed && parsed.data && parsed.data.profiles
                         ? parsed.data
-                        : (parsed && parsed.profiles && parsed.profiles.Sofi ? parsed : null);
+                        : (parsed && parsed.profiles ? parsed : null);
                     if (!incoming) {
-                        showToast("El archivo no tiene una rutina válida de Sofi", true);
+                        showToast("El archivo no tiene una rutina válida", true);
                         return;
                     }
                     const importedProfiles = {};
@@ -3203,10 +3303,11 @@
         function confirmRestoreDefaultRoutine() {
             openConfirmModal(
                 '¿Restaurar rutina base de Sofi?',
-                'Volverá a los ejercicios y valores iniciales de Sofi en este navegador.',
+                'Volverá a los ejercicios y valores iniciales de Sofi.',
                 () => {
                     const fresh = JSON.parse(JSON.stringify(DEFAULT_STATE));
                     fresh.lastDate = getTodayStr();
+                    Object.keys(fresh.profiles).forEach(u => ensureUserProfileShape(fresh.profiles[u], u));
                     state = fresh;
                     activeTab = 'fuerza';
                     activeStationIndex = 0;
@@ -3221,7 +3322,7 @@
             );
         }
 
-        // Arrancar aplicación
+        // Arrancar interfaz local inmediata (y luego se sincroniza al autenticar Firebase)
         window.addEventListener('DOMContentLoaded', () => {
             loadExerciseCatalog();
             syncExercisesIntoCatalog(state?.profiles?.[state?.activeProfile]?.exercises || []);
@@ -3237,6 +3338,177 @@
         });
 
         window.addEventListener('focus', checkDayRolloverLive);
+    </script>
+
+    <!-- =====================================================================
+         MÓDULO FIREBASE (AUTHENTICATION + FIRESTORE TIEMPO REAL)
+         ===================================================================== -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
+        import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js";
+        import { getFirestore, doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyBUbRCj6nhtd5tqTfWVBeisns4XFtWOEZY",
+            authDomain: "gymprouser.firebaseapp.com",
+            projectId: "gymprouser",
+            storageBucket: "gymprouser.firebasestorage.app",
+            messagingSenderId: "99403278000",
+            appId: "1:99403278000:web:931e7a386088c6a958bd75",
+            measurementId: "G-HQN90M4FNN"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        const STATE_DOC_REF = doc(db, "gymtrack_shared", "main_state");
+        const CATALOG_DOC_REF = doc(db, "gymtrack_shared", "general_catalog");
+
+        let unsubState = null;
+        let unsubCatalog = null;
+        let isApplyingRemote = false;
+
+        function setAuthGateState(mode, errorText = '') {
+            const gate = document.getElementById('auth-gate-screen');
+            const loadingBox = document.getElementById('auth-loading-box');
+            const loginForm = document.getElementById('auth-login-form');
+            const errEl = document.getElementById('auth-error-msg');
+
+            if (mode === 'authenticated') {
+                gate.classList.add('hidden');
+                return;
+            }
+
+            gate.classList.remove('hidden');
+            if (mode === 'loading') {
+                loadingBox.classList.remove('hidden');
+                loginForm.classList.add('hidden');
+            } else {
+                loadingBox.classList.add('hidden');
+                loginForm.classList.remove('hidden');
+                if (errorText) {
+                    errEl.textContent = errorText;
+                    errEl.classList.remove('hidden');
+                } else {
+                    errEl.classList.add('hidden');
+                }
+            }
+        }
+
+        window.handleFirebaseLogin = async function(e) {
+            e.preventDefault();
+            const email = document.getElementById('login-email').value.trim();
+            const password = document.getElementById('login-password').value;
+            const btn = document.getElementById('auth-submit-btn');
+            const errEl = document.getElementById('auth-error-msg');
+
+            errEl.classList.add('hidden');
+            btn.disabled = true;
+            btn.innerHTML = '<span>CONECTANDO...</span>';
+
+            try {
+                await signInWithEmailAndPassword(auth, email, password);
+            } catch (err) {
+                let msg = 'Correo o contraseña incorrectos.';
+                if (err && err.code === 'auth/too-many-requests') {
+                    msg = 'Demasiados intentos. Esperá un momento y probá de nuevo.';
+                } else if (err && err.code === 'auth/network-request-failed') {
+                    msg = 'Sin conexión a internet para verificar la cuenta.';
+                }
+                setAuthGateState('login', msg);
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = '<i class="ph-bold ph-sign-in text-base"></i><span>INGRESAR A LA PLANILLA</span>';
+            }
+        };
+
+        window.handleFirebaseLogout = function() {
+            openConfirmModal(
+                '¿Cerrar sesión?',
+                'Tendrás que ingresar tu correo y contraseña para volver a ver o editar las rutinas.',
+                async () => {
+                    closeConfirmModal();
+                    if (unsubState) { unsubState(); unsubState = null; }
+                    if (unsubCatalog) { unsubCatalog(); unsubCatalog = null; }
+                    await signOut(auth);
+                    showToast('Sesión cerrada');
+                }
+            );
+        };
+
+        window.pushStateToFirestore = async function(currentState) {
+            if (!auth.currentUser || isApplyingRemote) return;
+            try {
+                updateCloudSyncDot('syncing');
+                const payload = JSON.parse(JSON.stringify(currentState));
+                payload.syncedBy = auth.currentUser.email || 'user';
+                await setDoc(STATE_DOC_REF, payload);
+                updateCloudSyncDot('synced');
+            } catch (err) {
+                console.error('Error guardando estado en Firestore:', err);
+                updateCloudSyncDot('offline');
+            }
+        };
+
+        window.pushCatalogToFirestore = async function(catalogList) {
+            if (!auth.currentUser || isApplyingRemote) return;
+            try {
+                await setDoc(CATALOG_DOC_REF, {
+                    exercises: JSON.parse(JSON.stringify(catalogList)),
+                    updatedAt: Date.now()
+                });
+            } catch (err) {
+                console.error('Error guardando catálogo en Firestore:', err);
+            }
+        };
+
+        onAuthStateChanged(auth, (user) => {
+            if (!user) {
+                if (unsubState) { unsubState(); unsubState = null; }
+                if (unsubCatalog) { unsubCatalog(); unsubCatalog = null; }
+                updateCloudSyncDot('offline');
+                setAuthGateState('login');
+                return;
+            }
+
+            setAuthGateState('authenticated');
+            updateCloudSyncDot('syncing');
+
+            // Suscripción en tiempo real a perfiles, días, pesos e historial
+            unsubState = onSnapshot(STATE_DOC_REF, (snap) => {
+                if (snap.exists()) {
+                    isApplyingRemote = true;
+                    try {
+                        window.applyRemoteCloudState(snap.data());
+                    } finally {
+                        isApplyingRemote = false;
+                    }
+                    updateCloudSyncDot('synced');
+                } else {
+                    // Primera vez en la nube: subir el estado inicial
+                    window.pushStateToFirestore(state);
+                }
+            }, (err) => {
+                console.error('Error escuchando Firestore:', err);
+                updateCloudSyncDot('offline');
+                showToast('Error de permisos en Firestore (revisá Reglas)', true);
+            });
+
+            // Suscripción en tiempo real a la base general de ejercicios
+            unsubCatalog = onSnapshot(CATALOG_DOC_REF, (snap) => {
+                if (snap.exists() && Array.isArray(snap.data().exercises)) {
+                    isApplyingRemote = true;
+                    try {
+                        window.applyRemoteCloudCatalog(snap.data().exercises);
+                    } finally {
+                        isApplyingRemote = false;
+                    }
+                } else {
+                    window.pushCatalogToFirestore(loadExerciseCatalog());
+                }
+            });
+        });
     </script>
 </body>
 </html>
