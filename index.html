@@ -160,51 +160,51 @@
     <header class="sticky top-0 z-30 bg-[#0f1115]/95 backdrop-blur-md border-b border-white/5 px-3 pt-2 pb-1.5">
         <div class="max-w-lg mx-auto">
             <!-- Fila 1: Navegación / Progreso / Perfil y Acciones -->
-            <div class="flex items-center justify-between gap-2">
-                <!-- Selector y Gestión de Usuarios -->
-                <div class="flex items-center gap-1 shrink-0">
-                    <div class="bg-[#181b22] px-2 py-1 rounded-xl border border-limeaccent/30 flex items-center gap-1">
-                        <i class="ph-fill ph-user text-limeaccent text-[11px] shrink-0"></i>
-                        <select id="header-profile-select" onchange="switchProfile(this.value)" aria-label="Seleccionar usuario" class="bg-transparent text-[11px] font-black text-white tracking-wide outline-none cursor-pointer max-w-[64px]">
-                            <option value="Sofi">Sofi</option>
-                        </select>
-                    </div>
-                    <button onclick="openUsersModal()" aria-label="Crear o editar usuarios" class="w-8 h-8 rounded-xl bg-[#181b22] hover:bg-[#212530] border border-white/10 text-limeaccent flex items-center justify-center transition-colors">
-                        <i class="ph-bold ph-user-gear text-sm"></i>
-                    </button>
-                </div>
+<div class="header-top-row">
+    <!-- Selector y Gestión de Usuarios -->
+    <div class="flex items-center gap-1 shrink-0">
+        <div class="bg-[#181b22] px-1.5 py-1 rounded-xl border border-limeaccent/30 flex items-center gap-1">
+            <i class="ph-fill ph-user text-limeaccent text-[11px] shrink-0"></i>
+            <select id="header-profile-select" onchange="switchProfile(this.value)" aria-label="Seleccionar usuario" class="bg-transparent text-[10px] sm:text-[11px] font-black text-white tracking-wide outline-none cursor-pointer max-w-[56px] sm:max-w-[68px]">
+                <option value="Sofi">Sofi</option>
+            </select>
+        </div>
+        <button onclick="openUsersModal()" aria-label="Crear o editar usuarios" class="header-action-btn w-8 h-8 rounded-xl bg-[#181b22] hover:bg-[#212530] border border-white/10 text-limeaccent flex items-center justify-center transition-colors shrink-0">
+            <i class="ph-bold ph-user-gear text-sm"></i>
+        </button>
+    </div>
 
-                <!-- Indicador de Estación, Estado Nube y % Rutina -->
-                <div class="text-center min-w-0 flex-1 px-1">
-                    <div class="flex items-center justify-center gap-1">
-                        <span id="cloud-sync-dot" title="Estado de sincronización en nube" class="w-1.5 h-1.5 rounded-full bg-amber-400 shrink-0"></span>
-                        <p id="header-station-title" class="text-[11px] font-extrabold text-white truncate">Cargando...</p>
-                    </div>
-                    <p id="header-progress-sub" class="text-[9px] font-bold tracking-normal uppercase text-slate-400 leading-[1.25] mt-0.5">
-                        EST. 1/4<br><span class="text-limeaccent">0% RUTINA</span>
-                    </p>
-                </div>
+    <!-- Indicador de Estación, Estado Nube y % Rutina -->
+    <div class="header-center-status px-0.5">
+        <div class="flex items-center justify-center gap-1 min-w-0">
+            <span id="cloud-sync-dot" title="Estado de sincronización en nube" class="w-1.5 h-1.5 rounded-full bg-amber-400 shrink-0"></span>
+            <p id="header-station-title" class="text-[11px] font-extrabold text-white truncate">Cargando...</p>
+        </div>
+        <p id="header-progress-sub" class="text-[9px] font-bold tracking-normal uppercase text-slate-400 leading-[1.25] mt-0.5 truncate">
+            EST. 1/4<br><span class="text-limeaccent">0% RUTINA</span>
+        </p>
+    </div>
 
-                <!-- Botones Rápidos: Candado, Historial, Base, Nuevo y Salir -->
-                <div class="flex items-center gap-1 shrink-0">
-                    <button onclick="toggleRoutineLock()" id="btn-routine-lock" aria-label="Bloquear o desbloquear edición de ejercicios" class="w-8 h-8 rounded-xl bg-[#181b22] hover:bg-[#212530] border border-amber-400/30 text-amber-300 flex items-center justify-center transition-colors">
-                        <i id="routine-lock-icon" class="ph-fill ph-lock text-base"></i>
-                    </button>
-                    <button onclick="openHistoryModal()" aria-label="Ver Historial" class="w-8 h-8 rounded-xl bg-[#181b22] hover:bg-[#212530] border border-white/10 text-slate-200 flex items-center justify-center relative transition-colors">
-                        <i class="ph-bold ph-clock-counter-clockwise text-base"></i>
-                        <span id="history-badge" class="hidden absolute -top-1 -right-1 w-4 h-4 rounded-full bg-limeaccent text-darkbg text-[9px] font-black flex items-center justify-center">0</span>
-                    </button>
-                    <button onclick="openCatalogModal()" aria-label="Base general de ejercicios" class="w-8 h-8 rounded-xl bg-[#181b22] hover:bg-[#212530] border border-limeaccent/25 text-limeaccent flex items-center justify-center transition-colors">
-                        <i class="ph-bold ph-database text-base"></i>
-                    </button>
-                    <button onclick="openExerciseModal()" aria-label="Nuevo Ejercicio" class="w-8 h-8 rounded-xl bg-[#181b22] hover:bg-[#212530] border border-white/10 text-limeaccent flex items-center justify-center transition-colors">
-                        <i class="ph-bold ph-plus text-base"></i>
-                    </button>
-                    <button onclick="handleFirebaseLogout()" aria-label="Cerrar sesión" title="Cerrar sesión" class="w-8 h-8 rounded-xl bg-[#181b22] hover:bg-rose-500/20 border border-white/10 text-slate-400 hover:text-rose-300 flex items-center justify-center transition-colors">
-                        <i class="ph-bold ph-sign-out text-sm"></i>
-                    </button>
-                </div>
-            </div>
+    <!-- Botones Rápidos: Candado, Historial, Base, Nuevo y Salir -->
+    <div class="flex items-center gap-1 shrink-0">
+        <button onclick="toggleRoutineLock()" id="btn-routine-lock" aria-label="Bloquear o desbloquear edición de ejercicios" class="header-action-btn w-8 h-8 rounded-xl bg-[#181b22] hover:bg-[#212530] border border-amber-400/30 text-amber-300 flex items-center justify-center transition-colors shrink-0">
+            <i id="routine-lock-icon" class="ph-fill ph-lock text-base"></i>
+        </button>
+        <button onclick="openHistoryModal()" aria-label="Ver Historial" class="header-action-btn w-8 h-8 rounded-xl bg-[#181b22] hover:bg-[#212530] border border-white/10 text-slate-200 flex items-center justify-center relative transition-colors shrink-0">
+            <i class="ph-bold ph-clock-counter-clockwise text-base"></i>
+            <span id="history-badge" class="hidden absolute -top-1 -right-1 w-4 h-4 rounded-full bg-limeaccent text-darkbg text-[9px] font-black flex items-center justify-center">0</span>
+        </button>
+        <button onclick="openCatalogModal()" aria-label="Base general de ejercicios" class="header-action-btn w-8 h-8 rounded-xl bg-[#181b22] hover:bg-[#212530] border border-limeaccent/25 text-limeaccent flex items-center justify-center transition-colors shrink-0">
+            <i class="ph-bold ph-database text-base"></i>
+        </button>
+        <button onclick="openExerciseModal()" aria-label="Nuevo Ejercicio" class="header-action-btn w-8 h-8 rounded-xl bg-[#181b22] hover:bg-[#212530] border border-white/10 text-limeaccent flex items-center justify-center transition-colors shrink-0">
+            <i class="ph-bold ph-plus text-base"></i>
+        </button>
+        <button onclick="handleFirebaseLogout()" aria-label="Cerrar sesión" title="Cerrar sesión" class="header-action-btn w-8 h-8 rounded-xl bg-[#181b22] hover:bg-rose-500/20 border border-white/10 text-slate-400 hover:text-rose-300 flex items-center justify-center transition-colors shrink-0">
+            <i class="ph-bold ph-sign-out text-sm"></i>
+        </button>
+    </div>
+</div>
 
             <!-- Barra de Progreso Visual Ultra Fina -->
             <div class="w-full h-1 bg-[#181b22] rounded-full overflow-hidden mt-2">
