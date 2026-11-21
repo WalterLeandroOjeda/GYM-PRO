@@ -12,7 +12,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <!-- Phosphor Icons -->
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
-    
+
     <script>
         tailwind.config = {
             darkMode: 'class',
@@ -46,10 +46,10 @@
             -ms-overflow-style: none;
             scrollbar-width: none;
         }
-        input[type=number]::-webkit-inner-spin-button, 
-        input[type=number]::-webkit-outer-spin-button { 
-            -webkit-appearance: none; 
-            margin: 0; 
+        input[type=number]::-webkit-inner-spin-button,
+        input[type=number]::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
         }
         input[type=number] {
             -moz-appearance: textfield;
@@ -158,7 +158,7 @@
                         <i class="ph-bold ph-clock-counter-clockwise text-xs sm:text-base"></i>
                         <span id="history-badge" class="hidden absolute -top-1 -right-1 w-3.5 h-3.5 rounded-full bg-limeaccent text-darkbg text-[8px] font-black flex items-center justify-center">0</span>
                     </button>
-                    <button onclick="openCatalogModal()" aria-label="Base general de ejercicios" title="Base general de ejercicios" class="w-7 h-7 sm:w-8 sm:h-8 rounded-lg sm:rounded-xl bg-[#181b22] hover:bg-[#212530] border border-limeaccent/25 text-limeaccent flex items-center justify-center transition-colors">
+                    <button onclick="openCatalogModal()" aria-label="Base general de ejercicios" title="Base general de ejercicios por grupo muscular" class="w-7 h-7 sm:w-8 sm:h-8 rounded-lg sm:rounded-xl bg-[#181b22] hover:bg-[#212530] border border-limeaccent/25 text-limeaccent flex items-center justify-center transition-colors">
                         <i class="ph-bold ph-database text-xs sm:text-base"></i>
                     </button>
                     <button onclick="openExerciseModal()" aria-label="Nuevo Ejercicio" title="Nuevo ejercicio" class="w-7 h-7 sm:w-8 sm:h-8 rounded-lg sm:rounded-xl bg-[#181b22] hover:bg-[#212530] border border-white/10 text-limeaccent flex items-center justify-center transition-colors">
@@ -175,11 +175,9 @@
                 <div id="top-progress-bar" class="h-full bg-limeaccent transition-all duration-300" style="width: 0%"></div>
             </div>
 
-            <!-- Fila 2A: Días de Entrenamiento (Agregar / Quitar / Nombrar / Reordenar) -->
+            <!-- Fila 2A: Días de Entrenamiento -->
             <div class="mt-2 flex items-center gap-1.5">
-                <div id="training-days-bar" class="flex-1 flex items-center gap-1 overflow-x-auto no-scrollbar bg-[#181b22] p-1 rounded-2xl border border-white/5">
-                    <!-- Renderizado dinámico -->
-                </div>
+                <div id="training-days-bar" class="flex-1 flex items-center gap-1 overflow-x-auto no-scrollbar bg-[#181b22] p-1 rounded-2xl border border-white/5"></div>
                 <button onclick="openDaysModal()" aria-label="Administrar días de entrenamiento" class="h-8 px-2.5 rounded-xl bg-[#181b22] hover:bg-[#212530] border border-white/10 text-limeaccent flex items-center justify-center gap-1 shrink-0 transition-colors text-[10px] font-black uppercase">
                     <i class="ph-bold ph-calendar-plus text-sm"></i>
                     <span>DÍAS</span>
@@ -188,18 +186,14 @@
 
             <!-- Fila 2B: Pestañas Dinámicas de Bloques + Gestor de Bloques -->
             <div class="mt-2 flex items-center gap-1.5">
-                <div id="dynamic-tabs-bar" class="flex-1 flex items-center gap-1 overflow-x-auto no-scrollbar bg-[#181b22] p-1 rounded-2xl border border-white/5">
-                    <!-- Renderizado dinámico -->
-                </div>
+                <div id="dynamic-tabs-bar" class="flex-1 flex items-center gap-1 overflow-x-auto no-scrollbar bg-[#181b22] p-1 rounded-2xl border border-white/5"></div>
                 <button onclick="openBlocksModal()" aria-label="Administrar bloques" class="w-9 h-9 rounded-xl bg-[#181b22] hover:bg-[#212530] border border-white/10 text-limeaccent flex items-center justify-center shrink-0 transition-colors">
                     <i class="ph-bold ph-sliders-horizontal text-base"></i>
                 </button>
             </div>
 
-            <!-- Fila 3: Carrusel Horizontal de Estaciones (Píldoras Numeradas) -->
-            <div id="station-carousel" class="mt-2.5 flex items-center gap-2 overflow-x-auto no-scrollbar pb-1">
-                <!-- Renderizado dinámico -->
-            </div>
+            <!-- Fila 3: Carrusel Horizontal de Estaciones -->
+            <div id="station-carousel" class="mt-2.5 flex items-center gap-2 overflow-x-auto no-scrollbar pb-1"></div>
         </div>
     </header>
 
@@ -221,7 +215,7 @@
         </div>
     </div>
 
-    <!-- BANNER SUGERENCIA DE SUBIR PESO (SEGÚN HISTORIAL PREVIO) -->
+    <!-- BANNER SUGERENCIA DE SUBIR PESO -->
     <div id="progression-suggestion-banner" class="hidden max-w-lg w-full mx-auto px-3.5 pt-2.5">
         <div class="bg-gradient-to-r from-amber-400/15 via-limeaccent/10 to-emerald-500/10 border border-amber-300/40 rounded-2xl px-3.5 py-2.5 flex items-center justify-between gap-2.5">
             <div class="flex items-center gap-2.5 min-w-0">
@@ -240,14 +234,11 @@
     </div>
 
     <!-- CONTENIDO PRINCIPAL: ESTACIÓN ENFOCADA -->
-    <main id="main-station-container" class="flex-1 max-w-lg w-full mx-auto px-3.5 pt-3 space-y-3">
-        <!-- Renderizado dinámico de la estación activa -->
-    </main>
+    <main id="main-station-container" class="flex-1 max-w-lg w-full mx-auto px-3.5 pt-3 space-y-3"></main>
 
     <!-- BARRA INFERIOR FIJA DE CONTROL EN VIVO Y CRONÓMETRO -->
     <footer class="fixed bottom-0 inset-x-0 z-30 bg-[#12141a]/95 backdrop-blur-lg border-t border-white/10 px-3.5 py-2.5">
         <div class="max-w-lg mx-auto">
-            <!-- Fila Superior Footer: Cronómetro de Descanso + Saltar Estación -->
             <div class="flex items-center justify-between gap-2 pb-2 mb-2 border-b border-white/5">
                 <div id="timer-box" class="flex items-center gap-1.5 bg-[#181b22] border border-white/10 px-2 py-1 rounded-xl">
                     <i class="ph-bold ph-timer text-limeaccent text-base shrink-0"></i>
@@ -269,7 +260,6 @@
                 </button>
             </div>
 
-            <!-- Fila Inferior Footer: Navegación + Indicador Serie + Botón Principal COMPLETAR -->
             <div class="flex items-center gap-2">
                 <button type="button" onclick="openHistoryModal()" aria-label="Abrir historial" class="w-11 h-12 rounded-xl bg-[#181b22] border border-white/10 text-slate-300 hover:text-white flex items-center justify-center shrink-0">
                     <i class="ph-bold ph-list-bullets text-xl"></i>
@@ -310,7 +300,6 @@
                 </button>
             </div>
 
-            <!-- Navegación de Mes -->
             <div class="mt-3 flex items-center justify-between bg-[#0f1115] border border-white/10 rounded-2xl px-3 py-2 shrink-0">
                 <button type="button" onclick="changeCalendarMonth(-1)" aria-label="Mes anterior" class="w-8 h-8 rounded-xl bg-white/5 hover:bg-white/10 text-slate-200 flex items-center justify-center">
                     <i class="ph-bold ph-caret-left text-base"></i>
@@ -321,7 +310,6 @@
                 </button>
             </div>
 
-            <!-- Cabecera días de la semana -->
             <div class="mt-2.5 grid grid-cols-7 gap-1 text-center shrink-0">
                 <span class="text-[10px] font-black text-slate-500">LU</span>
                 <span class="text-[10px] font-black text-slate-500">MA</span>
@@ -332,15 +320,9 @@
                 <span class="text-[10px] font-black text-slate-500">DO</span>
             </div>
 
-            <!-- Grilla de días del mes -->
-            <div id="cal-days-grid" class="mt-1 grid grid-cols-7 gap-1 shrink-0">
-                <!-- Renderizado dinámico -->
-            </div>
+            <div id="cal-days-grid" class="mt-1 grid grid-cols-7 gap-1 shrink-0"></div>
 
-            <!-- Panel Detalle del Día Seleccionado + Candado de Peso -->
-            <div id="cal-day-detail-panel" class="mt-3 pt-3 border-t border-white/10 flex-1 overflow-y-auto space-y-2.5 pr-1">
-                <!-- Renderizado dinámico -->
-            </div>
+            <div id="cal-day-detail-panel" class="mt-3 pt-3 border-t border-white/10 flex-1 overflow-y-auto space-y-2.5 pr-1"></div>
         </div>
     </div>
 
@@ -362,7 +344,6 @@
                 </button>
             </div>
 
-            <!-- Botón Destacado Exportar WhatsApp -->
             <div class="mt-3.5 shrink-0">
                 <button onclick="copyWorkoutSummary()" class="w-full py-3.5 px-4 bg-limeaccent hover:bg-limedark active:scale-[0.99] text-darkbg font-black text-xs sm:text-sm rounded-2xl shadow-lg shadow-limeaccent/15 flex items-center justify-center gap-2 transition-all">
                     <i class="ph-fill ph-whatsapp-logo text-xl"></i>
@@ -390,15 +371,12 @@
                 </button>
             </div>
 
-            <!-- Lista Scrolleable de Historial -->
-            <div id="history-list-container" class="flex-1 overflow-y-auto space-y-2.5 pr-1">
-                <!-- Renderizado dinámico -->
-            </div>
+            <div id="history-list-container" class="flex-1 overflow-y-auto space-y-2.5 pr-1"></div>
         </div>
     </div>
 
     <!-- =====================================================================
-         MODAL PARA ADMINISTRAR BLOQUES (AGREGAR / QUITAR PESTAÑAS)
+         MODAL PARA ADMINISTRAR BLOQUES
          ===================================================================== -->
     <div id="blocks-modal" class="fixed inset-0 z-50 hidden bg-black/85 backdrop-blur-sm flex items-end sm:items-center justify-center p-0 sm:p-4">
         <div class="bg-[#181b22] border-t sm:border border-white/10 w-full max-w-lg rounded-t-3xl sm:rounded-3xl p-5 max-h-[88vh] flex flex-col shadow-2xl">
@@ -422,14 +400,12 @@
                 </button>
             </form>
 
-            <div id="blocks-list-container" class="mt-4 flex-1 overflow-y-auto space-y-2 pr-1">
-                <!-- Renderizado dinámico -->
-            </div>
+            <div id="blocks-list-container" class="mt-4 flex-1 overflow-y-auto space-y-2 pr-1"></div>
         </div>
     </div>
 
     <!-- =====================================================================
-         MODAL PARA CREAR / EDITAR ESTACIÓN (SIMPLE O COMBINADA)
+         MODAL PARA CREAR / EDITAR ESTACIÓN (SIMPLE O COMBINADA + ETIQUETAS MUSCULARES)
          ===================================================================== -->
     <div id="exercise-modal" class="fixed inset-0 z-50 hidden bg-black/85 backdrop-blur-sm flex items-end sm:items-center justify-center p-0 sm:p-4">
         <div class="bg-[#181b22] border-t sm:border border-white/10 w-full max-w-lg rounded-t-3xl sm:rounded-3xl p-5 max-h-[92vh] overflow-y-auto shadow-2xl">
@@ -444,8 +420,8 @@
                 <input type="hidden" id="edit-ex-id">
                 <div class="flex items-center justify-between gap-2 bg-[#0f1115] border border-limeaccent/25 rounded-2xl px-3 py-2">
                     <div class="min-w-0">
-                        <p class="text-[10px] font-black uppercase tracking-wider text-limeaccent">Base general guardada</p>
-                        <p class="text-[10px] text-slate-400 truncate">Cargá un ejercicio ya guardado sin empezar de cero</p>
+                        <p class="text-[10px] font-black uppercase tracking-wider text-limeaccent">Base general por grupo muscular</p>
+                        <p class="text-[10px] text-slate-400 truncate">Filtrá por músculo y agregá ejercicios ya guardados</p>
                     </div>
                     <button type="button" onclick="closeExerciseModal(); openCatalogModal();" class="px-2.5 py-1.5 rounded-xl bg-limeaccent/15 hover:bg-limeaccent/25 text-limeaccent font-black text-[10px] uppercase shrink-0 flex items-center gap-1">
                         <i class="ph-bold ph-database text-xs"></i> VER BASE
@@ -458,7 +434,7 @@
                     </select>
                 </div>
 
-                <!-- Selector de Modalidad: Individual vs Combinada (2 ejercicios antes del descanso) -->
+                <!-- Selector de Modalidad: Individual vs Combinada -->
                 <div class="bg-[#0f1115] border border-white/10 rounded-2xl p-3 space-y-2.5">
                     <div class="flex items-center justify-between gap-2">
                         <div class="min-w-0">
@@ -522,9 +498,18 @@
                         </select>
                     </div>
                     <div>
-                        <label for="ex-muscle" class="block text-[11px] font-extrabold uppercase tracking-wider text-slate-400 mb-1">Músculo objetivo *</label>
-                        <input type="text" id="ex-muscle" required placeholder="Ej: Core / Abdomen o Sistema cardiorrespiratorio" class="w-full bg-[#0f1115] border border-white/10 focus:border-limeaccent rounded-xl px-3.5 py-2.5 text-xs text-white placeholder-slate-600 outline-none">
+                        <label for="ex-muscle" class="block text-[11px] font-extrabold uppercase tracking-wider text-slate-400 mb-1">Grupo muscular / Músculo *</label>
+                        <input type="text" id="ex-muscle" required placeholder="Ej: Glúteos, Isquiotibiales" class="w-full bg-[#0f1115] border border-white/10 focus:border-limeaccent rounded-xl px-3.5 py-2.5 text-xs text-white placeholder-slate-600 outline-none">
                     </div>
+                </div>
+
+                <!-- Chips rápidos de grupo muscular para etiquetar y filtrar al armar rutina -->
+                <div class="bg-[#0f1115] border border-white/10 rounded-2xl p-2.5 space-y-1.5">
+                    <div class="flex items-center justify-between gap-2">
+                        <span class="text-[10px] font-black uppercase tracking-wider text-limeaccent">Etiquetas de grupo muscular</span>
+                        <span class="text-[9px] font-bold text-slate-400">Tocá para sumar o quitar</span>
+                    </div>
+                    <div id="ex-muscle-quick-chips" class="flex items-center gap-1.5 flex-wrap"></div>
                 </div>
 
                 <div class="grid grid-cols-12 gap-2">
@@ -569,7 +554,7 @@
     </div>
 
     <!-- =====================================================================
-         MODAL PARA CREAR Y EDITAR USUARIOS (CONTROL TOTAL SOLO PARA WALTER ADMIN)
+         MODAL PARA CREAR Y EDITAR USUARIOS
          ===================================================================== -->
     <div id="users-modal" class="fixed inset-0 z-50 hidden bg-black/85 backdrop-blur-sm flex items-end sm:items-center justify-center p-0 sm:p-4">
         <div class="bg-[#181b22] border-t sm:border border-white/10 w-full max-w-lg rounded-t-3xl sm:rounded-3xl p-5 max-h-[90vh] flex flex-col shadow-2xl">
@@ -586,12 +571,8 @@
                 </button>
             </div>
 
-            <!-- Estado de Rol Actual -->
-            <div id="user-role-banner" class="mt-3 bg-[#0f1115] border border-white/10 rounded-2xl p-3 shrink-0">
-                <!-- Renderizado dinámico -->
-            </div>
+            <div id="user-role-banner" class="mt-3 bg-[#0f1115] border border-white/10 rounded-2xl p-3 shrink-0"></div>
 
-            <!-- Formulario Crear / Editar Usuario -->
             <form id="user-profile-form" onsubmit="saveUserProfile(event)" class="mt-3 bg-[#0f1115] border border-white/10 rounded-2xl p-3.5 space-y-2.5 shrink-0">
                 <input type="hidden" id="user-edit-original-name">
                 <div class="flex items-center justify-between">
@@ -638,18 +619,15 @@
                 </button>
             </form>
 
-            <!-- Lista de Usuarios -->
             <div class="flex items-center justify-between mt-3 mb-2 shrink-0">
                 <span class="text-[11px] font-extrabold uppercase tracking-wider text-slate-400">Usuarios visibles para tu sesión</span>
             </div>
-            <div id="users-list-container" class="flex-1 overflow-y-auto space-y-2 pr-1">
-                <!-- Renderizado dinámico -->
-            </div>
+            <div id="users-list-container" class="flex-1 overflow-y-auto space-y-2 pr-1"></div>
         </div>
     </div>
 
     <!-- =====================================================================
-         MODAL PARA ADMINISTRAR DÍAS DE ENTRENAMIENTO (AGREGAR / EDITAR / MOVER / QUITAR)
+         MODAL PARA ADMINISTRAR DÍAS DE ENTRENAMIENTO
          ===================================================================== -->
     <div id="days-modal" class="fixed inset-0 z-50 hidden bg-black/85 backdrop-blur-sm flex items-end sm:items-center justify-center p-0 sm:p-4">
         <div class="bg-[#181b22] border-t sm:border border-white/10 w-full max-w-lg rounded-t-3xl sm:rounded-3xl p-5 max-h-[88vh] flex flex-col shadow-2xl">
@@ -693,14 +671,12 @@
             <div class="flex items-center justify-between mt-3.5 mb-2 shrink-0">
                 <span class="text-[11px] font-extrabold uppercase tracking-wider text-slate-400">Días configurados (orden actual)</span>
             </div>
-            <div id="days-list-container" class="flex-1 overflow-y-auto space-y-2 pr-1">
-                <!-- Renderizado dinámico -->
-            </div>
+            <div id="days-list-container" class="flex-1 overflow-y-auto space-y-2 pr-1"></div>
         </div>
     </div>
 
     <!-- =====================================================================
-         MODAL DE BIBLIOTECA / BASE GENERAL DE EJERCICIOS
+         MODAL DE BIBLIOTECA / BASE GENERAL DE EJERCICIOS (FILTRO POR MÚSCULO)
          ===================================================================== -->
     <div id="catalog-modal" class="fixed inset-0 z-50 hidden bg-black/85 backdrop-blur-sm flex items-end sm:items-center justify-center p-0 sm:p-4">
         <div class="bg-[#181b22] border-t sm:border border-white/10 w-full max-w-lg rounded-t-3xl sm:rounded-3xl p-5 max-h-[92vh] flex flex-col shadow-2xl">
@@ -710,7 +686,7 @@
                         <i class="ph-bold ph-database text-limeaccent text-xl"></i>
                         Biblioteca General de Ejercicios
                     </h2>
-                    <p class="text-[11px] text-slate-400">Ejercicios guardados para cualquier usuario y futuro perfil</p>
+                    <p class="text-[11px] text-slate-400">Filtrá por grupo muscular al crear o sumar ejercicios a tu rutina</p>
                 </div>
                 <button onclick="closeCatalogModal()" class="w-9 h-9 rounded-full bg-white/5 text-slate-400 hover:text-white flex items-center justify-center">
                     <i class="ph-bold ph-x text-lg"></i>
@@ -722,8 +698,17 @@
                     <i class="ph-bold ph-magnifying-glass text-slate-400 text-sm absolute left-3 top-1/2 -translate-y-1/2"></i>
                     <input type="text" id="catalog-search-input" oninput="renderCatalogModalList()" placeholder="Buscar por nombre, músculo o etiqueta..." class="w-full bg-[#0f1115] border border-white/10 focus:border-limeaccent rounded-xl pl-9 pr-3 py-2 text-xs font-semibold text-white placeholder-slate-500 outline-none">
                 </div>
-                <div id="catalog-filter-chips" class="flex items-center gap-1.5 overflow-x-auto no-scrollbar pb-0.5">
+
+                <!-- Selector desplegable + chips de grupo muscular -->
+                <div class="flex items-center gap-2">
+                    <label for="catalog-muscle-select" class="text-[10px] font-black uppercase tracking-wider text-purple-300 shrink-0">Músculo:</label>
+                    <select id="catalog-muscle-select" onchange="setCatalogMuscleFilter(this.value)" class="flex-1 bg-[#0f1115] border border-purple-400/35 focus:border-purple-400 rounded-xl px-2.5 py-1.5 text-xs font-extrabold text-purple-200 outline-none">
+                        <option value="ALL">Todos los grupos musculares</option>
+                    </select>
                 </div>
+
+                <div id="catalog-muscle-chips" class="flex items-center gap-1.5 overflow-x-auto no-scrollbar pb-0.5"></div>
+                <div id="catalog-filter-chips" class="flex items-center gap-1.5 overflow-x-auto no-scrollbar pb-0.5"></div>
             </div>
 
             <div class="mt-2.5 grid grid-cols-3 gap-1.5 shrink-0">
@@ -739,8 +724,7 @@
                 </label>
             </div>
 
-            <div id="catalog-list-container" class="mt-3 flex-1 overflow-y-auto space-y-2 pr-1">
-            </div>
+            <div id="catalog-list-container" class="mt-3 flex-1 overflow-y-auto space-y-2 pr-1"></div>
         </div>
     </div>
 
@@ -757,7 +741,7 @@
     </div>
 
     <!-- =====================================================================
-         LÓGICA JAVASCRIPT COMPLETA + CONEXIÓN FIREBASE (AUTH + FIRESTORE)
+         LÓGICA JAVASCRIPT COMPLETA + ETIQUETADO Y FILTRO MUSCULAR + FIREBASE
          ===================================================================== -->
     <script>
         const STORAGE_KEY = 'gymtrack_stations_v2';
@@ -767,6 +751,20 @@
             { id: 'movilidad', label: '🔥 MOVILIDAD PREVIA' },
             { id: 'fuerza', label: '🏋️ FUERZA / RUTINA' },
             { id: 'cardio', label: '🏃‍♀️ CARDIO' }
+        ];
+
+        const MUSCLE_GROUP_TAGS = [
+            'Piernas',
+            'Glúteos',
+            'Isquiotibiales',
+            'Cuádriceps',
+            'Espalda',
+            'Pecho',
+            'Hombros',
+            'Bíceps',
+            'Tríceps',
+            'Core / Abdomen',
+            'Cardio'
         ];
 
         function escapeJsAttr(str) {
@@ -782,6 +780,82 @@
                 .replace(/</g, '&lt;')
                 .replace(/>/g, '&gt;')
                 .replace(/"/g, '&quot;');
+        }
+
+        function parseMuscleTags(muscleStr, explicitArray) {
+            const list = [];
+            if (Array.isArray(explicitArray)) {
+                explicitArray.forEach(item => {
+                    const clean = String(item || '').trim();
+                    if (clean) list.push(clean);
+                });
+            }
+            String(muscleStr || '')
+                .split(/[,/•+|]+/)
+                .map(s => s.trim())
+                .filter(Boolean)
+                .forEach(part => {
+                    if (!list.some(existing => existing.toLowerCase() === part.toLowerCase())) {
+                        list.push(part);
+                    }
+                });
+            return list;
+        }
+
+        function matchesMuscleGroup(muscleStr, muscleGroupsArr, selectedGroup) {
+            if (!selectedGroup || selectedGroup === 'ALL') return true;
+            const targetNorm = String(selectedGroup)
+                .trim()
+                .toLowerCase()
+                .normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+
+            const tags = parseMuscleTags(muscleStr, muscleGroupsArr).map(t =>
+                t.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+            );
+
+            if (tags.some(t => t === targetNorm || t.includes(targetNorm) || targetNorm.includes(t))) {
+                return true;
+            }
+
+            const combinedNorm = String(muscleStr || '')
+                .toLowerCase()
+                .normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+            return combinedNorm.includes(targetNorm);
+        }
+
+        function renderExerciseMuscleChips() {
+            const container = document.getElementById('ex-muscle-quick-chips');
+            const input = document.getElementById('ex-muscle');
+            if (!container || !input) return;
+
+            const currentTags = parseMuscleTags(input.value).map(t => t.toLowerCase());
+            container.innerHTML = MUSCLE_GROUP_TAGS.map(group => {
+                const groupLower = group.toLowerCase();
+                const isSelected = currentTags.some(t => t === groupLower || t.includes(groupLower));
+                return `
+                    <button type="button" onclick="toggleMuscleChip('${escapeJsAttr(group)}')" class="px-2 py-1 rounded-lg text-[10px] font-black border transition-colors ${
+                        isSelected
+                            ? 'bg-limeaccent text-darkbg border-limeaccent'
+                            : 'bg-[#181b22] text-slate-300 border-white/10 hover:border-limeaccent/40 hover:text-white'
+                    }">
+                        ${isSelected ? '✓ ' : '+ '}${escapeHtml(group)}
+                    </button>
+                `;
+            }).join('');
+        }
+
+        function toggleMuscleChip(groupLabel) {
+            const input = document.getElementById('ex-muscle');
+            if (!input) return;
+            const tags = parseMuscleTags(input.value);
+            const idx = tags.findIndex(t => t.toLowerCase() === String(groupLabel).toLowerCase());
+            if (idx !== -1) {
+                tags.splice(idx, 1);
+            } else {
+                tags.push(groupLabel);
+            }
+            input.value = tags.join(', ');
+            renderExerciseMuscleChips();
         }
 
         function formatBlockWithEmoji(rawText) {
@@ -805,7 +879,7 @@
         }
 
         // =========================================================================
-        // CONTROL DE PERMISOS Y VISIBILIDAD (WALTER = ADMIN VE TODO / RESTO SOLO LO SUYO)
+        // CONTROL DE PERMISOS Y VISIBILIDAD
         // =========================================================================
         let currentAuthEmail = '';
         let sessionOwnerName = localStorage.getItem(SESSION_ROLE_KEY) || 'Sofi';
@@ -1393,6 +1467,7 @@
                             tag: item.tag || 'FUERZA',
                             name: item.name,
                             muscle: item.muscle || 'General',
+                            muscleGroups: parseMuscleTags(item.muscle, item.muscleGroups),
                             targetReps: String(item.targetReps || '10'),
                             unit,
                             restSeconds: parseInt(item.restSeconds, 10) || 75,
@@ -1791,7 +1866,8 @@
                             category: 'fuerza',
                             tag: 'FUERZA',
                             name: 'Sentadilla Sumo Libre',
-                            muscle: 'Cuádriceps, aductores y glúteos',
+                            muscle: 'Piernas, Cuádriceps, Glúteos',
+                            muscleGroups: ['Piernas', 'Cuádriceps', 'Glúteos'],
                             targetReps: '8',
                             unit: 'reps',
                             restSeconds: 120,
@@ -1808,7 +1884,8 @@
                             category: 'fuerza',
                             tag: 'FUERZA',
                             name: 'Peso Muerto Estricto',
-                            muscle: 'Cadena posterior, dorsales y agarre',
+                            muscle: 'Espalda, Isquiotibiales, Glúteos',
+                            muscleGroups: ['Espalda', 'Isquiotibiales', 'Glúteos'],
                             targetReps: '6',
                             unit: 'reps',
                             restSeconds: 120,
@@ -1835,7 +1912,8 @@
                             category: 'movilidad',
                             tag: 'MOVILIDAD',
                             name: 'Movilidad Torácica (Gato-Camello + Rotaciones)',
-                            muscle: 'Columna torácica y escápulas',
+                            muscle: 'Espalda, Hombros',
+                            muscleGroups: ['Espalda', 'Hombros'],
                             targetReps: '8',
                             unit: 'reps',
                             restSeconds: 45,
@@ -1851,7 +1929,8 @@
                             category: 'movilidad',
                             tag: 'ACTIVACIÓN',
                             name: 'Puente de Glúteo + Bisagra de Cadera sin peso',
-                            muscle: 'Glúteo mayor, medio e isquiotibiales',
+                            muscle: 'Glúteos, Isquiotibiales, Piernas',
+                            muscleGroups: ['Glúteos', 'Isquiotibiales', 'Piernas'],
                             targetReps: '12',
                             unit: 'reps',
                             restSeconds: 45,
@@ -1867,7 +1946,8 @@
                             category: 'fuerza',
                             tag: 'FUERZA',
                             name: 'Peso Muerto Rumano con Mancuernas',
-                            muscle: 'Isquiotibiales, glúteos y antebrazos',
+                            muscle: 'Isquiotibiales, Glúteos, Piernas',
+                            muscleGroups: ['Isquiotibiales', 'Glúteos', 'Piernas'],
                             targetReps: '10',
                             unit: 'reps',
                             restSeconds: 90,
@@ -1885,7 +1965,8 @@
                             category: 'fuerza',
                             tag: 'FUERZA',
                             name: 'Sentadilla Goblet con Mancuerna',
-                            muscle: 'Cuádriceps, glúteos y core',
+                            muscle: 'Cuádriceps, Glúteos, Piernas, Core / Abdomen',
+                            muscleGroups: ['Cuádriceps', 'Glúteos', 'Piernas', 'Core / Abdomen'],
                             targetReps: '10',
                             unit: 'reps',
                             restSeconds: 90,
@@ -1903,7 +1984,8 @@
                             category: 'fuerza',
                             tag: 'SUPERSERIE',
                             name: 'Remo con Mancuerna a 1 Mano en Banco',
-                            muscle: 'Dorsal ancho, romboides y agarre',
+                            muscle: 'Espalda, Bíceps',
+                            muscleGroups: ['Espalda', 'Bíceps'],
                             targetReps: '12',
                             unit: 'reps',
                             restSeconds: 75,
@@ -1920,7 +2002,8 @@
                             category: 'fuerza',
                             tag: 'HIPERTROFIA',
                             name: 'Press Inclinado con Mancuernas',
-                            muscle: 'Pectoral superior, deltoides anterior y tríceps',
+                            muscle: 'Pecho, Hombros, Tríceps',
+                            muscleGroups: ['Pecho', 'Hombros', 'Tríceps'],
                             targetReps: '10',
                             unit: 'reps',
                             restSeconds: 75,
@@ -1937,7 +2020,8 @@
                             category: 'cardio',
                             tag: 'CARDIO',
                             name: 'Cinta / Caminata Inclinada',
-                            muscle: 'Sistema cardiorrespiratorio y resistencia base',
+                            muscle: 'Cardio, Piernas',
+                            muscleGroups: ['Cardio', 'Piernas'],
                             targetReps: '15',
                             unit: 'min',
                             restSeconds: 60,
@@ -1953,7 +2037,8 @@
                             category: 'cardio',
                             tag: 'ISOMÉTRICO',
                             name: 'Plancha Frontal Isométrica',
-                            muscle: 'Core profundo, abdomen y estabilizadores',
+                            muscle: 'Core / Abdomen',
+                            muscleGroups: ['Core / Abdomen'],
                             targetReps: '30',
                             unit: 'seg',
                             restSeconds: 60,
@@ -1996,7 +2081,7 @@
         let showTechnique = true;
 
         // =========================================================================
-        // CRONÓMETRO DE DESCANSO ROBUSTO (POR MARCA DE TIEMPO REAL)
+        // CRONÓMETRO DE DESCANSO ROBUSTO
         // =========================================================================
         let timerRemaining = 90;
         let timerInterval = null;
@@ -2606,8 +2691,8 @@
             const msgEl = document.getElementById('toast-message');
             const iconEl = document.getElementById('toast-icon');
             msgEl.textContent = msg;
-            iconEl.className = isError 
-                ? 'ph-fill ph-warning-circle text-rose-400 text-xl shrink-0' 
+            iconEl.className = isError
+                ? 'ph-fill ph-warning-circle text-rose-400 text-xl shrink-0'
                 : 'ph-fill ph-check-circle text-limeaccent text-xl shrink-0';
             toast.classList.remove('opacity-0', '-translate-y-4');
             toast.classList.add('opacity-100', 'translate-y-0');
@@ -2866,10 +2951,10 @@
                 const comboBadge = isCombinedExercise(ex) ? ' 2X' : '';
                 return `
                     <button onclick="selectStation(${idx})" class="shrink-0 flex items-center gap-2 px-3 py-1.5 rounded-full text-[11px] font-extrabold transition-all border ${
-                        isActive 
-                            ? 'bg-purple-500/20 border-purple-400/70 text-white shadow-sm' 
-                            : allDone 
-                                ? 'bg-limeaccent/10 border-limeaccent/30 text-limeaccent' 
+                        isActive
+                            ? 'bg-purple-500/20 border-purple-400/70 text-white shadow-sm'
+                            : allDone
+                                ? 'bg-limeaccent/10 border-limeaccent/30 text-limeaccent'
                                 : 'bg-[#181b22] border-white/10 text-slate-400 hover:text-white'
                     }">
                         <span class="w-4 h-4 rounded-full text-[10px] font-black flex items-center justify-center ${
@@ -2940,8 +3025,8 @@
                 .sort((a, b) => b.timestamp - a.timestamp);
             const lastRec = prevRecords[0];
 
-            const tagStyle = ex.tag === 'SUPERSERIE' 
-                ? 'bg-purple-500/25 text-purple-300 border-purple-400/40' 
+            const tagStyle = ex.tag === 'SUPERSERIE'
+                ? 'bg-purple-500/25 text-purple-300 border-purple-400/40'
                 : ex.tag === 'MOVILIDAD' || ex.tag === 'ACTIVACIÓN'
                     ? 'bg-amber-500/20 text-amber-300 border-amber-400/30'
                     : 'bg-limeaccent/15 text-limeaccent border-limeaccent/30';
@@ -2951,6 +3036,7 @@
             const comboB = isCombo ? ex.comboSecondary : null;
             const canMoveUp = activeStationIndex > 0;
             const canMoveDown = activeStationIndex < getCurrentExercises().length - 1;
+            const muscleChipsList = parseMuscleTags(ex.muscle, ex.muscleGroups);
 
             container.innerHTML = `
                 <section class="bg-[#181b22] border border-white/10 rounded-3xl overflow-hidden shadow-xl">
@@ -3028,9 +3114,13 @@
                                 </span>
                                 ${isCombo ? '<span class="text-[10px] font-black uppercase tracking-wider px-2.5 py-0.5 rounded-full border bg-purple-500/20 text-purple-200 border-purple-400/40">COMBINADO 2X • DESCANSO AL FINAL</span>' : ''}
                             </div>
-                            <span class="text-[11px] font-bold text-slate-400">
-                                ${escapeHtml(ex.muscle)}
-                            </span>
+                            <div class="flex items-center gap-1 flex-wrap">
+                                ${muscleChipsList.map(mg => `
+                                    <span class="text-[9px] font-black uppercase px-2 py-0.5 rounded-full bg-purple-500/15 text-purple-200 border border-purple-400/25">
+                                        ${escapeHtml(mg)}
+                                    </span>
+                                `).join('')}
+                            </div>
                         </div>
 
                         <div class="mt-2 flex items-start justify-between gap-2">
@@ -3109,8 +3199,8 @@
                     <div class="flex items-center gap-2 min-w-0">
                         <i class="ph-fill ph-flame text-amber-400 text-base shrink-0"></i>
                         <span class="text-[11px] font-extrabold uppercase tracking-wide text-slate-300 truncate">
-                            ${lastRec 
-                                ? `ÚLTIMA: <span class="text-white">${lastRec.weight} KG × ${escapeHtml(lastRec.reps)}</span> <span class="text-limeaccent">(RIR ${escapeHtml(lastRec.rir)})</span>` 
+                            ${lastRec
+                                ? `ÚLTIMA: <span class="text-white">${lastRec.weight} KG × ${escapeHtml(lastRec.reps)}</span> <span class="text-limeaccent">(RIR ${escapeHtml(lastRec.rir)})</span>`
                                 : 'SIN REGISTRO PREVIO'}
                         </span>
                     </div>
@@ -3142,10 +3232,10 @@
                             const isSelected = sIdx === activeSetIndex;
                             return `
                             <div onclick="selectSetRow(${sIdx})" class="p-2.5 rounded-2xl border transition-all flex flex-col gap-2 ${
-                                set.completed 
-                                    ? 'bg-limeaccent/10 border-limeaccent/40' 
-                                    : isSelected 
-                                        ? 'bg-[#212530] border-limeaccent/60 shadow-md' 
+                                set.completed
+                                    ? 'bg-limeaccent/10 border-limeaccent/40'
+                                    : isSelected
+                                        ? 'bg-[#212530] border-limeaccent/60 shadow-md'
                                         : 'bg-[#0f1115] border-white/5'
                             }">
                                 <div class="flex items-center justify-between gap-2">
@@ -3195,10 +3285,10 @@
                                     </div>
 
                                     <button onclick="event.stopPropagation(); toggleSetCompleted(${sIdx})" aria-label="Completar serie ${sIdx + 1}" class="w-8 h-8 rounded-full font-black text-xs flex items-center justify-center shrink-0 transition-all active:scale-90 border ${
-                                        set.completed 
-                                            ? 'bg-limeaccent border-limeaccent text-darkbg shadow-md shadow-limeaccent/30' 
-                                            : isSelected 
-                                                ? 'bg-transparent border-limeaccent text-limeaccent' 
+                                        set.completed
+                                            ? 'bg-limeaccent border-limeaccent text-darkbg shadow-md shadow-limeaccent/30'
+                                            : isSelected
+                                                ? 'bg-transparent border-limeaccent text-limeaccent'
                                                 : 'bg-white/5 border-white/15 text-slate-400'
                                     }">
                                         ${set.completed ? '<i class="ph-bold ph-check text-sm"></i>' : (sIdx + 1)}
@@ -3560,7 +3650,7 @@
         }
 
         // =========================================================================
-        // CREAR / EDITAR / ELIMINAR ESTACIONES (SIMPLE Y COMBINADA)
+        // CREAR / EDITAR / ELIMINAR ESTACIONES
         // =========================================================================
         function handleEditStationClick(exId) {
             const prof = state.profiles[state.activeProfile];
@@ -3621,7 +3711,8 @@
                 populateCategorySelect(ex.category);
                 document.getElementById('ex-name').value = ex.name;
                 document.getElementById('ex-tag').value = ex.tag || 'FUERZA';
-                document.getElementById('ex-muscle').value = ex.muscle;
+                const initialMuscles = parseMuscleTags(ex.muscle, ex.muscleGroups);
+                document.getElementById('ex-muscle').value = initialMuscles.length > 0 ? initialMuscles.join(', ') : (ex.muscle || '');
                 document.getElementById('ex-num-sets').value = ex.sets.length;
                 document.getElementById('ex-target-reps').value = ex.targetReps;
                 document.getElementById('ex-unit').value = normalizeUnit(ex.unit);
@@ -3642,6 +3733,12 @@
                 document.getElementById('ex-unit').value = activeTab === 'cardio' ? 'min' : 'reps';
             }
 
+            renderExerciseMuscleChips();
+            const muscleInput = document.getElementById('ex-muscle');
+            if (muscleInput) {
+                muscleInput.oninput = () => renderExerciseMuscleChips();
+            }
+
             modal.classList.remove('hidden');
         }
 
@@ -3650,10 +3747,11 @@
         }
 
         // =====================================================================
-        // BASE GENERAL COMPARTIDA DE EJERCICIOS
+        // BASE GENERAL COMPARTIDA DE EJERCICIOS + FILTRO POR GRUPO MUSCULAR
         // =====================================================================
         const CATALOG_STORAGE_KEY = 'gymtrack_general_exercises_v1';
         let catalogActiveFilter = 'ALL';
+        let catalogActiveMuscle = 'ALL';
 
         function buildDefaultCatalogFromState(srcState) {
             const items = [];
@@ -3671,12 +3769,14 @@
                         const normName = (ex.name || '').trim().toLowerCase();
                         if (!normName || seenNames.has(normName)) return;
                         seenNames.add(normName);
+                        const mgList = parseMuscleTags(ex.muscle, ex.muscleGroups);
                         items.push({
                             id: 'cat-' + normName.replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') + '-' + (items.length + 1),
                             name: ex.name.trim(),
                             category: ex.category || 'fuerza',
                             tag: ex.tag || 'FUERZA',
-                            muscle: ex.muscle || 'General',
+                            muscle: mgList.length > 0 ? mgList.join(', ') : (ex.muscle || 'General'),
+                            muscleGroups: mgList,
                             targetReps: String(ex.targetReps || '10'),
                             numSets: Array.isArray(ex.sets) && ex.sets.length > 0 ? ex.sets.length : 3,
                             defaultWeight: Array.isArray(ex.sets) && ex.sets[0] ? (parseFloat(ex.sets[0].weight) || 0) : 0,
@@ -3700,7 +3800,10 @@
                 if (raw) {
                     const parsed = JSON.parse(raw);
                     if (Array.isArray(parsed)) {
-                        return parsed;
+                        return parsed.map(item => ({
+                            ...item,
+                            muscleGroups: parseMuscleTags(item.muscle, item.muscleGroups)
+                        }));
                     }
                 }
             } catch (e) {}
@@ -3736,6 +3839,7 @@
             exercisesList.forEach(ex => {
                 if (!ex || !ex.name || !ex.name.trim()) return;
                 const cleanName = ex.name.trim();
+                const mgList = parseMuscleTags(ex.muscle, ex.muscleGroups);
                 const exists = catalog.some(item => (item.name || '').trim().toLowerCase() === cleanName.toLowerCase());
                 if (!exists) {
                     catalog.unshift({
@@ -3743,7 +3847,8 @@
                         name: cleanName,
                         category: ex.category || 'fuerza',
                         tag: ex.tag || 'FUERZA',
-                        muscle: (ex.muscle || 'General').trim(),
+                        muscle: mgList.length > 0 ? mgList.join(', ') : (ex.muscle || 'General').trim(),
+                        muscleGroups: mgList,
                         targetReps: String(ex.targetReps || '10'),
                         numSets: Array.isArray(ex.sets) && ex.sets.length > 0 ? ex.sets.length : 3,
                         defaultWeight: Array.isArray(ex.sets) && ex.sets[0] ? (parseFloat(ex.sets[0].weight) || 0) : 0,
@@ -3770,6 +3875,7 @@
 
             const catalog = loadExerciseCatalog();
             const cleanName = ex.name.trim();
+            const mgList = parseMuscleTags(ex.muscle, ex.muscleGroups);
             const idx = catalog.findIndex(item => (item.name || '').trim().toLowerCase() === cleanName.toLowerCase());
 
             const entry = {
@@ -3777,7 +3883,8 @@
                 name: cleanName,
                 category: ex.category || activeTab || 'fuerza',
                 tag: ex.tag || 'FUERZA',
-                muscle: (ex.muscle || 'General').trim(),
+                muscle: mgList.length > 0 ? mgList.join(', ') : (ex.muscle || 'General').trim(),
+                muscleGroups: mgList,
                 targetReps: String(ex.targetReps || '10'),
                 numSets: Array.isArray(ex.sets) && ex.sets.length > 0 ? ex.sets.length : 3,
                 defaultWeight: Array.isArray(ex.sets) && ex.sets[0] ? (parseFloat(ex.sets[0].weight) || 0) : 0,
@@ -3825,6 +3932,7 @@
 
             const numSets = Math.max(1, Math.min(8, parseInt(item.numSets, 10) || 3));
             const unit = normalizeUnit(item.unit);
+            const mgList = parseMuscleTags(item.muscle, item.muscleGroups);
             const sets = Array.from({ length: numSets }, () => ({
                 weight: parseFloat(item.defaultWeight) || 0,
                 reps: String(item.targetReps || '10'),
@@ -3838,7 +3946,8 @@
                 category: targetCat,
                 tag: item.tag || 'FUERZA',
                 name: item.name,
-                muscle: item.muscle || 'General',
+                muscle: mgList.length > 0 ? mgList.join(', ') : (item.muscle || 'General'),
+                muscleGroups: mgList,
                 targetReps: String(item.targetReps || '10'),
                 unit,
                 restSeconds: parseInt(item.restSeconds, 10) || 75,
@@ -3878,6 +3987,7 @@
 
         function openCatalogModal() {
             catalogActiveFilter = 'ALL';
+            catalogActiveMuscle = 'ALL';
             const searchInput = document.getElementById('catalog-search-input');
             if (searchInput) searchInput.value = '';
             renderCatalogModalList();
@@ -3896,13 +4006,60 @@
             renderCatalogModalList();
         }
 
+        function setCatalogMuscleFilter(muscleGroup) {
+            catalogActiveMuscle = muscleGroup || 'ALL';
+            const sel = document.getElementById('catalog-muscle-select');
+            if (sel) sel.value = catalogActiveMuscle;
+            renderCatalogModalList();
+        }
+
         function renderCatalogModalList() {
             const chipsEl = document.getElementById('catalog-filter-chips');
+            const muscleChipsEl = document.getElementById('catalog-muscle-chips');
+            const muscleSelectEl = document.getElementById('catalog-muscle-select');
             const listEl = document.getElementById('catalog-list-container');
             if (!chipsEl || !listEl) return;
 
             const catalog = loadExerciseCatalog();
             const query = (document.getElementById('catalog-search-input')?.value || '').trim().toLowerCase();
+
+            const muscleOptionsSet = new Set(MUSCLE_GROUP_TAGS);
+            catalog.forEach(item => {
+                parseMuscleTags(item.muscle, item.muscleGroups).forEach(tag => {
+                    if (tag && tag.length <= 28) {
+                        muscleOptionsSet.add(tag);
+                    }
+                });
+            });
+            const muscleOptions = ['ALL', ...Array.from(muscleOptionsSet)];
+
+            if (muscleSelectEl) {
+                muscleSelectEl.innerHTML = muscleOptions.map(m => {
+                    const cnt = m === 'ALL'
+                        ? catalog.length
+                        : catalog.filter(c => matchesMuscleGroup(c.muscle, c.muscleGroups, m)).length;
+                    const label = m === 'ALL' ? `Todos los grupos musculares (${cnt})` : `${m} (${cnt})`;
+                    return `<option value="${escapeHtml(m)}" ${catalogActiveMuscle === m ? 'selected' : ''}>${escapeHtml(label)}</option>`;
+                }).join('');
+            }
+
+            if (muscleChipsEl) {
+                muscleChipsEl.innerHTML = muscleOptions.map(m => {
+                    const active = catalogActiveMuscle === m;
+                    const cnt = m === 'ALL'
+                        ? catalog.length
+                        : catalog.filter(c => matchesMuscleGroup(c.muscle, c.muscleGroups, m)).length;
+                    return `
+                        <button type="button" onclick="setCatalogMuscleFilter('${escapeJsAttr(m)}')" class="shrink-0 px-2.5 py-1 rounded-full text-[10px] font-black border transition-colors ${
+                            active
+                                ? 'bg-purple-400 text-darkbg border-purple-400'
+                                : 'bg-[#0f1115] text-purple-200/80 border-purple-400/20 hover:border-purple-400/50 hover:text-white'
+                        }">
+                            ${m === 'ALL' ? `TODOS MÚSCULOS (${cnt})` : `${escapeHtml(m)} (${cnt})`}
+                        </button>
+                    `;
+                }).join('');
+            }
 
             const tags = ['ALL', ...Array.from(new Set(catalog.map(i => (i.tag || 'FUERZA').toUpperCase())))];
             chipsEl.innerHTML = tags.map(t => {
@@ -3921,8 +4078,9 @@
             const filtered = catalog.filter(item => {
                 const matchTag = catalogActiveFilter === 'ALL' || (item.tag || 'FUERZA').toUpperCase() === catalogActiveFilter;
                 if (!matchTag) return false;
+                if (!matchesMuscleGroup(item.muscle, item.muscleGroups, catalogActiveMuscle)) return false;
                 if (!query) return true;
-                const hay = `${item.name || ''} ${item.muscle || ''} ${item.tag || ''} ${item.notes || ''}`.toLowerCase();
+                const hay = `${item.name || ''} ${item.muscle || ''} ${parseMuscleTags(item.muscle, item.muscleGroups).join(' ')} ${item.tag || ''} ${item.notes || ''}`.toLowerCase();
                 return hay.includes(query);
             });
 
@@ -3930,18 +4088,22 @@
                 listEl.innerHTML = `
                     <div class="bg-[#0f1115] border border-dashed border-white/10 rounded-2xl p-6 text-center">
                         <p class="text-xs font-bold text-slate-300">No hay ejercicios en la base que coincidan</p>
-                        <p class="text-[11px] text-slate-500 mt-1">Creá una estación nueva o tocá "GUARDAR ACTUAL" para sumar ejercicios a la base general.</p>
+                        <p class="text-[11px] text-slate-500 mt-1">Probá cambiar el grupo muscular o tocá "GUARDAR ACTUAL" para sumar ejercicios a la base general.</p>
                     </div>
                 `;
                 return;
             }
 
-            listEl.innerHTML = filtered.map(item => `
+            listEl.innerHTML = filtered.map(item => {
+                const itemMuscles = parseMuscleTags(item.muscle, item.muscleGroups);
+                return `
                 <div class="bg-[#0f1115] border border-white/10 rounded-2xl p-3 flex items-center justify-between gap-2.5">
                     <div class="min-w-0 flex-1">
                         <div class="flex items-center gap-1.5 flex-wrap">
                             <span class="text-[9px] font-black uppercase px-2 py-0.5 rounded-full bg-limeaccent/15 text-limeaccent border border-limeaccent/25">${escapeHtml(item.tag || 'FUERZA')}</span>
-                            <span class="text-[10px] font-bold text-slate-400 truncate">${escapeHtml(item.muscle || 'General')}</span>
+                            ${itemMuscles.map(mg => `
+                                <span class="text-[9px] font-bold px-2 py-0.5 rounded-full bg-purple-500/15 text-purple-200 border border-purple-400/25">${escapeHtml(mg)}</span>
+                            `).join('')}
                         </div>
                         <p class="text-xs font-black text-white truncate mt-1">${escapeHtml(item.name)}</p>
                         <p class="text-[10px] text-slate-400 mt-0.5">
@@ -3957,7 +4119,8 @@
                         </button>
                     </div>
                 </div>
-            `).join('');
+            `;
+            }).join('');
         }
 
         function exportCatalogJson() {
@@ -4002,6 +4165,7 @@
                     incomingArr.forEach(item => {
                         if (!item || !item.name || !String(item.name).trim()) return;
                         const cleanName = String(item.name).trim();
+                        const mgList = parseMuscleTags(item.muscle, item.muscleGroups);
                         const exists = currentCatalog.some(c => (c.name || '').trim().toLowerCase() === cleanName.toLowerCase());
                         if (!exists) {
                             currentCatalog.push({
@@ -4009,7 +4173,8 @@
                                 name: cleanName,
                                 category: item.category || 'fuerza',
                                 tag: item.tag || 'FUERZA',
-                                muscle: String(item.muscle || 'General').trim(),
+                                muscle: mgList.length > 0 ? mgList.join(', ') : String(item.muscle || 'General').trim(),
+                                muscleGroups: mgList,
                                 targetReps: String(item.targetReps || '10'),
                                 numSets: Math.max(1, Math.min(8, parseInt(item.numSets, 10) || 3)),
                                 defaultWeight: parseFloat(item.defaultWeight) || 0,
@@ -4049,7 +4214,9 @@
             const category = document.getElementById('ex-category').value;
             const name = document.getElementById('ex-name').value.trim();
             const tag = isComboMode ? 'SUPERSERIE' : document.getElementById('ex-tag').value;
-            const muscle = document.getElementById('ex-muscle').value.trim();
+            const rawMuscleInput = document.getElementById('ex-muscle').value.trim();
+            const muscleGroups = parseMuscleTags(rawMuscleInput);
+            const muscle = muscleGroups.length > 0 ? muscleGroups.join(', ') : rawMuscleInput;
             const numSets = Math.max(1, Math.min(8, parseInt(document.getElementById('ex-num-sets').value) || 3));
             const targetReps = document.getElementById('ex-target-reps').value.trim() || '10';
             const unit = normalizeUnit(document.getElementById('ex-unit').value);
@@ -4106,6 +4273,7 @@
                         tag,
                         name,
                         muscle,
+                        muscleGroups,
                         targetReps,
                         unit,
                         restSeconds,
@@ -4135,6 +4303,7 @@
                     tag,
                     name,
                     muscle,
+                    muscleGroups,
                     targetReps,
                     unit,
                     restSeconds,
@@ -4483,63 +4652,88 @@
             if (!auth.currentUser || isApplyingRemote) return;
             try {
                 await setDoc(CATALOG_DOC_REF, {
-                    exercises: JSON.parse(JSON.stringify(catalogList)),
-                    updatedAt: Date.now()
+                    exercises: Array.isArray(catalogList) ? catalogList : [],
+                    updatedAt: Date.now(),
+                    syncedBy: auth.currentUser.email || 'user'
                 });
             } catch (err) {
                 console.error('Error guardando catálogo en Firestore:', err);
             }
         };
 
+        function startFirestoreListeners(user) {
+            currentAuthEmail = (user && user.email) ? user.email.toLowerCase() : '';
+            if (unsubState) { unsubState(); unsubState = null; }
+            if (unsubCatalog) { unsubCatalog(); unsubCatalog = null; }
+
+            updateCloudSyncDot('syncing');
+
+            unsubState = onSnapshot(STATE_DOC_REF, async (snap) => {
+                if (!snap.exists()) {
+                    const seedPayload = JSON.parse(JSON.stringify(state));
+                    seedPayload.updatedAt = Date.now();
+                    seedPayload.syncedBy = user.email || 'user';
+                    try {
+                        await setDoc(STATE_DOC_REF, seedPayload);
+                        updateCloudSyncDot('synced');
+                    } catch (e) {
+                        updateCloudSyncDot('offline');
+                    }
+                    return;
+                }
+                const remoteData = snap.data();
+                if (remoteData && remoteData.profiles) {
+                    isApplyingRemote = true;
+                    try {
+                        window.applyRemoteCloudState(remoteData);
+                        updateCloudSyncDot('synced');
+                    } finally {
+                        isApplyingRemote = false;
+                    }
+                }
+            }, (err) => {
+                console.error('Error escuchando estado en Firestore:', err);
+                updateCloudSyncDot('offline');
+            });
+
+            unsubCatalog = onSnapshot(CATALOG_DOC_REF, async (snap) => {
+                if (!snap.exists()) {
+                    const localCat = loadExerciseCatalog();
+                    try {
+                        await setDoc(CATALOG_DOC_REF, {
+                            exercises: localCat,
+                            updatedAt: Date.now(),
+                            syncedBy: user.email || 'user'
+                        });
+                    } catch (e) {}
+                    return;
+                }
+                const remoteCat = snap.data();
+                if (remoteCat && Array.isArray(remoteCat.exercises)) {
+                    isApplyingRemote = true;
+                    try {
+                        window.applyRemoteCloudCatalog(remoteCat.exercises);
+                    } finally {
+                        isApplyingRemote = false;
+                    }
+                }
+            }, (err) => {
+                console.error('Error escuchando catálogo en Firestore:', err);
+            });
+        }
+
+        setAuthGateState('loading');
         onAuthStateChanged(auth, (user) => {
-            if (!user) {
+            if (user) {
+                setAuthGateState('authenticated');
+                startFirestoreListeners(user);
+            } else {
                 currentAuthEmail = '';
                 if (unsubState) { unsubState(); unsubState = null; }
                 if (unsubCatalog) { unsubCatalog(); unsubCatalog = null; }
                 updateCloudSyncDot('offline');
                 setAuthGateState('login');
-                return;
             }
-
-            currentAuthEmail = user.email || '';
-            enforceAccessPermissions();
-            if (!isCurrentSessionAdmin()) {
-                state.activeProfile = getSessionOwner();
-            }
-            renderAll();
-            setAuthGateState('authenticated');
-            updateCloudSyncDot('syncing');
-
-            unsubState = onSnapshot(STATE_DOC_REF, (snap) => {
-                if (snap.exists()) {
-                    isApplyingRemote = true;
-                    try {
-                        window.applyRemoteCloudState(snap.data());
-                    } finally {
-                        isApplyingRemote = false;
-                    }
-                    updateCloudSyncDot('synced');
-                } else {
-                    window.pushStateToFirestore(state);
-                }
-            }, (err) => {
-                console.error('Error escuchando Firestore:', err);
-                updateCloudSyncDot('offline');
-                showToast('Error de permisos en Firestore (revisá Reglas)', true);
-            });
-
-            unsubCatalog = onSnapshot(CATALOG_DOC_REF, (snap) => {
-                if (snap.exists() && Array.isArray(snap.data().exercises)) {
-                    isApplyingRemote = true;
-                    try {
-                        window.applyRemoteCloudCatalog(snap.data().exercises);
-                    } finally {
-                        isApplyingRemote = false;
-                    }
-                } else {
-                    window.pushCatalogToFirestore(loadExerciseCatalog());
-                }
-            });
         });
     </script>
 </body>
