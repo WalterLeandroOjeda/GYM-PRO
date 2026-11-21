@@ -175,7 +175,7 @@
                 <div id="top-progress-bar" class="h-full bg-limeaccent transition-all duration-300" style="width: 0%"></div>
             </div>
 
-            <!-- Fila 2A: Días de Entrenamiento (Agregar / Quitar / Nombrar) -->
+            <!-- Fila 2A: Días de Entrenamiento (Agregar / Quitar / Nombrar / Reordenar) -->
             <div class="mt-2 flex items-center gap-1.5">
                 <div id="training-days-bar" class="flex-1 flex items-center gap-1 overflow-x-auto no-scrollbar bg-[#181b22] p-1 rounded-2xl border border-white/5">
                     <!-- Renderizado dinámico -->
@@ -429,7 +429,7 @@
     </div>
 
     <!-- =====================================================================
-         MODAL PARA CREAR / EDITAR ESTACIÓN (EJERCICIO)
+         MODAL PARA CREAR / EDITAR ESTACIÓN (SIMPLE O COMBINADA)
          ===================================================================== -->
     <div id="exercise-modal" class="fixed inset-0 z-50 hidden bg-black/85 backdrop-blur-sm flex items-end sm:items-center justify-center p-0 sm:p-4">
         <div class="bg-[#181b22] border-t sm:border border-white/10 w-full max-w-lg rounded-t-3xl sm:rounded-3xl p-5 max-h-[92vh] overflow-y-auto shadow-2xl">
@@ -458,8 +458,53 @@
                     </select>
                 </div>
 
+                <!-- Selector de Modalidad: Individual vs Combinada (2 ejercicios antes del descanso) -->
+                <div class="bg-[#0f1115] border border-white/10 rounded-2xl p-3 space-y-2.5">
+                    <div class="flex items-center justify-between gap-2">
+                        <div class="min-w-0">
+                            <p class="text-[10px] font-black uppercase tracking-wider text-purple-300">Modalidad de estación</p>
+                            <p class="text-[10px] text-slate-400">Hacé 2 ejercicios seguidos y descansá recién al terminar ambos</p>
+                        </div>
+                        <div class="flex items-center gap-1 bg-[#181b22] p-1 rounded-xl border border-white/10 shrink-0">
+                            <button type="button" id="mode-btn-simple" onclick="setStationComboMode(false)" class="px-2.5 py-1 rounded-lg text-[10px] font-black uppercase bg-limeaccent text-darkbg transition-colors">
+                                1 EJERCICIO
+                            </button>
+                            <button type="button" id="mode-btn-combo" onclick="setStationComboMode(true)" class="px-2.5 py-1 rounded-lg text-[10px] font-black uppercase text-slate-300 hover:text-white transition-colors">
+                                COMBINADO (2X)
+                            </button>
+                        </div>
+                    </div>
+                    <input type="hidden" id="ex-is-combo" value="false">
+
+                    <div id="combo-second-exercise-box" class="hidden pt-2.5 border-t border-white/10 space-y-2">
+                        <div class="flex items-center justify-between">
+                            <span class="text-[10px] font-black uppercase tracking-wider text-purple-300">2° Ejercicio de la combinación (antes del descanso)</span>
+                            <span class="text-[9px] font-bold text-slate-400">1° Ejercicio = nombre principal</span>
+                        </div>
+                        <input type="text" id="ex-combo-name" placeholder="Ej: Gemelos de Pie con Mancuernas" class="w-full bg-[#181b22] border border-white/10 focus:border-purple-400 rounded-xl px-3 py-2 text-xs font-bold text-white placeholder-slate-500 outline-none">
+                        <div class="grid grid-cols-3 gap-2">
+                            <div>
+                                <label for="ex-combo-reps" class="block text-[9px] font-extrabold uppercase text-slate-400 mb-0.5">Obj. 2° Ej.</label>
+                                <input type="text" id="ex-combo-reps" placeholder="12" class="w-full bg-[#181b22] border border-white/10 focus:border-purple-400 rounded-xl px-2 py-1.5 text-xs font-bold text-center text-white outline-none">
+                            </div>
+                            <div>
+                                <label for="ex-combo-unit" class="block text-[9px] font-extrabold uppercase text-slate-400 mb-0.5">Medida 2°</label>
+                                <select id="ex-combo-unit" class="w-full bg-[#181b22] border border-white/10 rounded-xl px-1.5 py-1.5 text-[11px] font-black text-purple-300 outline-none">
+                                    <option value="reps">REPS</option>
+                                    <option value="seg">SEG</option>
+                                    <option value="min">MIN</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label for="ex-combo-weight" class="block text-[9px] font-extrabold uppercase text-slate-400 mb-0.5">Peso 2° (kg)</label>
+                                <input type="number" id="ex-combo-weight" step="0.5" min="0" value="0" class="w-full bg-[#181b22] border border-white/10 focus:border-purple-400 rounded-xl px-2 py-1.5 text-xs font-bold text-center text-white outline-none">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <div>
-                    <label for="ex-name" class="block text-[11px] font-extrabold uppercase tracking-wider text-slate-400 mb-1">Nombre del ejercicio *</label>
+                    <label for="ex-name" id="ex-name-label" class="block text-[11px] font-extrabold uppercase tracking-wider text-slate-400 mb-1">Nombre del ejercicio *</label>
                     <input type="text" id="ex-name" required placeholder="Ej: Plancha Frontal Isométrica o Cinta" class="w-full bg-[#0f1115] border border-white/10 focus:border-limeaccent rounded-xl px-3.5 py-2.5 text-sm text-white placeholder-slate-600 outline-none">
                 </div>
 
@@ -484,7 +529,7 @@
 
                 <div class="grid grid-cols-12 gap-2">
                     <div class="col-span-3">
-                        <label for="ex-num-sets" class="block text-[10px] font-extrabold uppercase tracking-wider text-slate-400 mb-1">Series</label>
+                        <label for="ex-num-sets" class="block text-[10px] font-extrabold uppercase tracking-wider text-slate-400 mb-1">Rondas/Series</label>
                         <input type="number" id="ex-num-sets" min="1" max="8" value="3" required class="w-full bg-[#0f1115] border border-white/10 focus:border-limeaccent rounded-xl px-2.5 py-2.5 text-sm font-bold text-center text-white outline-none">
                     </div>
                     <div class="col-span-3">
@@ -604,7 +649,7 @@
     </div>
 
     <!-- =====================================================================
-         MODAL PARA ADMINISTRAR DÍAS DE ENTRENAMIENTO (AGREGAR / EDITAR / QUITAR)
+         MODAL PARA ADMINISTRAR DÍAS DE ENTRENAMIENTO (AGREGAR / EDITAR / MOVER / QUITAR)
          ===================================================================== -->
     <div id="days-modal" class="fixed inset-0 z-50 hidden bg-black/85 backdrop-blur-sm flex items-end sm:items-center justify-center p-0 sm:p-4">
         <div class="bg-[#181b22] border-t sm:border border-white/10 w-full max-w-lg rounded-t-3xl sm:rounded-3xl p-5 max-h-[88vh] flex flex-col shadow-2xl">
@@ -614,7 +659,7 @@
                         <i class="ph-bold ph-calendar-check text-limeaccent text-xl"></i>
                         Días de Entrenamiento
                     </h2>
-                    <p class="text-[11px] text-slate-400">Creá días por grupo muscular (ej: Día 1 - Pierna, Día 2 - Torso)</p>
+                    <p class="text-[11px] text-slate-400">Creá, renombrá o reordená días con las flechas ↑ / ↓ sin borrar</p>
                 </div>
                 <button onclick="closeDaysModal()" class="w-9 h-9 rounded-full bg-white/5 text-slate-400 hover:text-white flex items-center justify-center">
                     <i class="ph-bold ph-x text-lg"></i>
@@ -646,7 +691,7 @@
             </form>
 
             <div class="flex items-center justify-between mt-3.5 mb-2 shrink-0">
-                <span class="text-[11px] font-extrabold uppercase tracking-wider text-slate-400">Días configurados</span>
+                <span class="text-[11px] font-extrabold uppercase tracking-wider text-slate-400">Días configurados (orden actual)</span>
             </div>
             <div id="days-list-container" class="flex-1 overflow-y-auto space-y-2 pr-1">
                 <!-- Renderizado dinámico -->
@@ -776,7 +821,6 @@
             if (currentAuthEmail) {
                 const emailLower = currentAuthEmail.trim().toLowerCase();
 
-                // 1. Buscar coincidencia exacta por correo asignado en el perfil
                 const matchedByEmail = allKeys.find(k => {
                     const p = profiles[k];
                     return p && p.assignedEmail && String(p.assignedEmail).trim().toLowerCase() === emailLower;
@@ -787,7 +831,6 @@
                     return matchedByEmail;
                 }
 
-                // 2. Si el correo contiene "walter", automáticamente es Walter (Admin)
                 if (emailLower.includes('walter')) {
                     const walterKey = allKeys.find(k => isAdminUser(k)) || 'Walter';
                     sessionOwnerName = walterKey;
@@ -795,7 +838,6 @@
                     return walterKey;
                 }
 
-                // 3. Buscar si el correo contiene el nombre de algún usuario estándar (ej: sofi@...)
                 const nonAdminKeys = allKeys.filter(k => !isAdminUser(k));
                 const matchedByNameInEmail = nonAdminKeys.find(k => emailLower.includes(k.trim().toLowerCase()));
                 if (matchedByNameInEmail) {
@@ -804,7 +846,6 @@
                     return matchedByNameInEmail;
                 }
 
-                // 4. Cualquier otro correo que NO sea Walter nunca tiene acceso Admin: se le asigna su perfil estándar
                 if (nonAdminKeys.length > 0) {
                     const fallbackUser = nonAdminKeys[0];
                     sessionOwnerName = fallbackUser;
@@ -813,7 +854,6 @@
                 }
             }
 
-            // Antes de autenticar por correo, nunca exponer privilegios Admin por defecto
             const nonAdminDefault = allKeys.find(k => !isAdminUser(k));
             return nonAdminDefault || allKeys[0] || 'Sofi';
         }
@@ -828,13 +868,11 @@
                 return all;
             }
             const owner = getSessionOwner();
-            // Los usuarios normales SOLO ven su propio perfil (nunca el de Walter ni el de otros)
             return all.filter(name => !isAdminUser(name) && name === owner);
         }
 
         function enforceAccessPermissions() {
             if (!state || !state.profiles) return;
-            // Asegurar que exista el perfil Admin "Walter"
             const hasWalter = Object.keys(state.profiles).some(k => isAdminUser(k));
             if (!hasWalter) {
                 state.profiles['Walter'] = ensureUserProfileShape({
@@ -932,6 +970,27 @@
             syncTimerWithCurrentExercise();
             renderAll();
             showToast(`Día activo: ${target.name}`);
+        }
+
+        function moveTrainingDay(dayId, delta) {
+            const prof = ensureUserProfileShape(state.profiles[state.activeProfile], state.activeProfile);
+            if (ensureRoutineLockedFlag(prof)) {
+                showToast("🔒 Tocá el candado superior para desbloquear el reordenamiento", true);
+                return;
+            }
+            const days = ensureTrainingDays(prof);
+            const idx = days.findIndex(d => d.id === dayId);
+            if (idx === -1) return;
+            const targetIdx = idx + delta;
+            if (targetIdx < 0 || targetIdx >= days.length) return;
+
+            const [moved] = days.splice(idx, 1);
+            days.splice(targetIdx, 0, moved);
+
+            saveState();
+            renderDaysModalList();
+            renderAll();
+            showToast(`"${moved.name}" movido a posición #${targetIdx + 1}`);
         }
 
         function openDaysModal() {
@@ -1071,30 +1130,39 @@
             if (!container) return;
             const prof = ensureUserProfileShape(state.profiles[state.activeProfile], state.activeProfile);
             const days = ensureTrainingDays(prof);
-            container.innerHTML = days.map(d => {
+            container.innerHTML = days.map((d, dIdx) => {
                 const isCur = prof.activeDayId === d.id;
                 const exCnt = (d.exercises || []).length;
                 const canDel = days.length > 1;
+                const canMoveUp = dIdx > 0;
+                const canMoveDown = dIdx < days.length - 1;
                 return `
                     <div class="bg-[#0f1115] border ${isCur ? 'border-limeaccent/50' : 'border-white/10'} rounded-2xl p-3 flex items-center justify-between gap-2">
                         <div class="min-w-0 flex-1">
                             <div class="flex items-center gap-1.5">
+                                <span class="text-[10px] font-black px-1.5 py-0.5 rounded bg-white/5 text-slate-400">#${dIdx + 1}</span>
                                 <span class="text-xs font-black text-white truncate">${escapeHtml(d.name)}</span>
                                 ${isCur ? '<span class="px-2 py-0.5 rounded-full bg-limeaccent/15 text-limeaccent text-[9px] font-black uppercase">ACTIVO</span>' : ''}
                             </div>
                             <p class="text-[10px] text-slate-400 mt-0.5">${exCnt} ${exCnt === 1 ? 'estación' : 'estaciones'}</p>
                         </div>
                         <div class="flex items-center gap-1 shrink-0">
+                            <button type="button" onclick="moveTrainingDay('${d.id}', -1)" ${!canMoveUp ? 'disabled' : ''} aria-label="Mover día hacia arriba" title="Subir día" class="w-7 h-8 rounded-xl bg-white/5 hover:bg-white/10 disabled:opacity-30 text-slate-200 flex items-center justify-center">
+                                <i class="ph-bold ph-arrow-up text-xs"></i>
+                            </button>
+                            <button type="button" onclick="moveTrainingDay('${d.id}', 1)" ${!canMoveDown ? 'disabled' : ''} aria-label="Mover día hacia abajo" title="Bajar día" class="w-7 h-8 rounded-xl bg-white/5 hover:bg-white/10 disabled:opacity-30 text-slate-200 flex items-center justify-center">
+                                <i class="ph-bold ph-arrow-down text-xs"></i>
+                            </button>
                             ${!isCur ? `
-                                <button onclick="switchTrainingDay('${d.id}'); renderDaysModalList();" class="px-2.5 py-1.5 rounded-xl bg-limeaccent/15 hover:bg-limeaccent/25 text-limeaccent text-[10px] font-black uppercase">
+                                <button type="button" onclick="switchTrainingDay('${d.id}'); renderDaysModalList();" class="px-2.5 py-1.5 rounded-xl bg-limeaccent/15 hover:bg-limeaccent/25 text-limeaccent text-[10px] font-black uppercase">
                                     USAR
                                 </button>
                             ` : ''}
-                            <button onclick="startEditTrainingDay('${d.id}')" aria-label="Editar día ${escapeHtml(d.name)}" class="w-8 h-8 rounded-xl bg-white/5 hover:bg-white/10 text-slate-200 flex items-center justify-center">
+                            <button type="button" onclick="startEditTrainingDay('${d.id}')" aria-label="Editar día ${escapeHtml(d.name)}" class="w-8 h-8 rounded-xl bg-white/5 hover:bg-white/10 text-slate-200 flex items-center justify-center">
                                 <i class="ph-bold ph-pencil-simple text-sm"></i>
                             </button>
                             ${canDel ? `
-                                <button onclick="removeTrainingDay('${d.id}')" aria-label="Eliminar día ${escapeHtml(d.name)}" class="w-8 h-8 rounded-xl bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 flex items-center justify-center">
+                                <button type="button" onclick="removeTrainingDay('${d.id}')" aria-label="Eliminar día ${escapeHtml(d.name)}" class="w-8 h-8 rounded-xl bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 flex items-center justify-center">
                                     <i class="ph-bold ph-trash text-sm"></i>
                                 </button>
                             ` : ''}
@@ -2263,7 +2331,6 @@
                     </button>
                 </div>
 
-                <!-- Formulario rápido para anotar un día que se te pasó -->
                 <form onsubmit="addRetroactiveWorkoutLog(event)" class="bg-[#0f1115] border border-white/10 rounded-2xl p-3 space-y-2 ${locked ? 'opacity-60' : ''}">
                     <div class="flex items-center justify-between">
                         <span class="text-[10px] font-black uppercase tracking-wider text-sky-300">Anotar ejercicio en ${dateStr}</span>
@@ -2311,7 +2378,6 @@
                     </button>
                 </form>
 
-                <!-- Registros guardados en la fecha seleccionada -->
                 <div class="space-y-1.5">
                     ${dayRecords.length === 0 ? `
                         <p class="text-[11px] text-slate-500 text-center py-2">No hay pesos registrados en ${dateStr}.</p>
@@ -2562,6 +2628,46 @@
             return state.profiles[state.activeProfile].exercises.filter(e => e.category === activeTab);
         }
 
+        function isCombinedExercise(ex) {
+            return Boolean(ex && ex.isCombo && ex.comboSecondary && String(ex.comboSecondary.name || '').trim());
+        }
+
+        function moveStationInBlock(exId, delta) {
+            const prof = ensureUserProfileShape(state.profiles[state.activeProfile], state.activeProfile);
+            if (ensureRoutineLockedFlag(prof)) {
+                showToast("🔒 Tocá el candado superior para desbloquear el reordenamiento", true);
+                return;
+            }
+            const allEx = prof.exercises || [];
+            const tabIndices = [];
+            allEx.forEach((item, idx) => {
+                if (item.category === activeTab) tabIndices.push(idx);
+            });
+            const posInTab = tabIndices.findIndex(globalIdx => allEx[globalIdx].id === exId);
+            if (posInTab === -1) return;
+            const newPosInTab = posInTab + delta;
+            if (newPosInTab < 0 || newPosInTab >= tabIndices.length) return;
+
+            const currentGlobalIdx = tabIndices[posInTab];
+            const targetGlobalIdx = tabIndices[newPosInTab];
+            const [movedEx] = allEx.splice(currentGlobalIdx, 1);
+            allEx.splice(targetGlobalIdx, 0, movedEx);
+
+            if (Array.isArray(prof.days)) {
+                const curDay = getActiveTrainingDay(prof);
+                if (curDay) {
+                    curDay.exercises = allEx;
+                }
+            }
+
+            activeStationIndex = newPosInTab;
+            activeSetIndex = 0;
+            saveState();
+            syncTimerWithCurrentExercise();
+            renderAll();
+            showToast(`"${movedEx.name}" movido a estación #${newPosInTab + 1}`);
+        }
+
         // =========================================================================
         // NAVEGACIÓN ENTRE PERFILES, PESTAÑAS Y ESTACIONES
         // =========================================================================
@@ -2749,12 +2855,15 @@
             if (activeStationIndex >= exercises.length) activeStationIndex = 0;
             const currentEx = exercises[activeStationIndex];
 
-            document.getElementById('header-station-title').textContent = `"${currentEx.name}"`;
+            document.getElementById('header-station-title').textContent = isCombinedExercise(currentEx)
+                ? `"${currentEx.name} + ${currentEx.comboSecondary.name}"`
+                : `"${currentEx.name}"`;
             document.getElementById('header-progress-sub').innerHTML = `<span class="whitespace-nowrap">${dayLabel}</span> • <span class="whitespace-nowrap">EST. ${activeStationIndex + 1}/${exercises.length}</span><br><span class="text-limeaccent whitespace-nowrap">${pctRoutine}% RUTINA</span>`;
 
             carousel.innerHTML = exercises.map((ex, idx) => {
                 const isActive = idx === activeStationIndex;
                 const allDone = ex.sets.length > 0 && ex.sets.every(s => s.completed);
+                const comboBadge = isCombinedExercise(ex) ? ' 2X' : '';
                 return `
                     <button onclick="selectStation(${idx})" class="shrink-0 flex items-center gap-2 px-3 py-1.5 rounded-full text-[11px] font-extrabold transition-all border ${
                         isActive 
@@ -2766,7 +2875,7 @@
                         <span class="w-4 h-4 rounded-full text-[10px] font-black flex items-center justify-center ${
                             isActive ? 'bg-purple-400 text-darkbg' : allDone ? 'bg-limeaccent text-darkbg' : 'bg-white/10 text-slate-300'
                         }">${allDone ? '✓' : idx + 1}</span>
-                        <span class="max-w-[140px] truncate uppercase">${escapeHtml(ex.name)}</span>
+                        <span class="max-w-[140px] truncate uppercase">${escapeHtml(ex.name)}${comboBadge}</span>
                     </button>
                 `;
             }).join('');
@@ -2838,6 +2947,10 @@
                     : 'bg-limeaccent/15 text-limeaccent border-limeaccent/30';
 
             const lockedNow = ensureRoutineLockedFlag(state.profiles[state.activeProfile]);
+            const isCombo = isCombinedExercise(ex);
+            const comboB = isCombo ? ex.comboSecondary : null;
+            const canMoveUp = activeStationIndex > 0;
+            const canMoveDown = activeStationIndex < getCurrentExercises().length - 1;
 
             container.innerHTML = `
                 <section class="bg-[#181b22] border border-white/10 rounded-3xl overflow-hidden shadow-xl">
@@ -2848,6 +2961,15 @@
                             </div>
                         ` : `
                             <div class="px-4 py-5 flex flex-col items-center justify-center text-center relative">
+                                <div class="absolute top-2.5 left-2.5 z-10 flex items-center gap-1">
+                                    <button type="button" onclick="moveStationInBlock('${ex.id}', -1)" ${!canMoveUp ? 'disabled' : ''} aria-label="Mover estación arriba" title="Subir estación en el orden" class="w-7 h-7 rounded-lg border bg-[#0f1115]/90 hover:bg-white/10 disabled:opacity-30 border-white/10 text-slate-200 flex items-center justify-center transition-colors">
+                                        <i class="ph-bold ph-arrow-up text-xs"></i>
+                                    </button>
+                                    <button type="button" onclick="moveStationInBlock('${ex.id}', 1)" ${!canMoveDown ? 'disabled' : ''} aria-label="Mover estación abajo" title="Bajar estación en el orden" class="w-7 h-7 rounded-lg border bg-[#0f1115]/90 hover:bg-white/10 disabled:opacity-30 border-white/10 text-slate-200 flex items-center justify-center transition-colors">
+                                        <i class="ph-bold ph-arrow-down text-xs"></i>
+                                    </button>
+                                </div>
+
                                 <div class="absolute top-2.5 right-2.5 z-10 flex items-center gap-1">
                                     <button onclick="saveExerciseToGeneralCatalog('${ex.id}')" aria-label="Guardar ejercicio en base general" title="Guardar en base general" class="w-7 h-7 rounded-lg border bg-[#0f1115]/90 hover:bg-limeaccent/20 border-limeaccent/30 text-limeaccent flex items-center justify-center transition-colors">
                                         <i class="ph-bold ph-bookmark-simple text-xs"></i>
@@ -2900,9 +3022,12 @@
 
                     <div class="p-4">
                         <div class="flex items-center justify-between gap-2 flex-wrap">
-                            <span class="text-[10px] font-black uppercase tracking-wider px-2.5 py-0.5 rounded-full border ${tagStyle}">
-                                ${escapeHtml(ex.tag)}
-                            </span>
+                            <div class="flex items-center gap-1.5 flex-wrap">
+                                <span class="text-[10px] font-black uppercase tracking-wider px-2.5 py-0.5 rounded-full border ${tagStyle}">
+                                    ${escapeHtml(ex.tag)}
+                                </span>
+                                ${isCombo ? '<span class="text-[10px] font-black uppercase tracking-wider px-2.5 py-0.5 rounded-full border bg-purple-500/20 text-purple-200 border-purple-400/40">COMBINADO 2X • DESCANSO AL FINAL</span>' : ''}
+                            </div>
                             <span class="text-[11px] font-bold text-slate-400">
                                 ${escapeHtml(ex.muscle)}
                             </span>
@@ -2917,6 +3042,14 @@
                                 <span>Quitar</span>
                             </button>
                         </div>
+
+                        ${isCombo && comboB ? `
+                            <div class="mt-2.5 bg-purple-500/10 border border-purple-400/30 rounded-2xl p-2.5 space-y-1">
+                                <p class="text-[10px] font-black uppercase tracking-wider text-purple-200">Cadena antes de descansar (${ex.restSeconds || 90}s):</p>
+                                <p class="text-xs font-extrabold text-white">1° A: ${escapeHtml(ex.name)} <span class="text-limeaccent">(${escapeHtml(activeSet.reps)} ${formatUnitLabel(activeSet.unit || ex.unit, false)} • ${activeSet.weight} kg)</span></p>
+                                <p class="text-xs font-extrabold text-purple-200">2° B: ${escapeHtml(comboB.name)} <span class="text-white">(${escapeHtml(activeSet.comboBReps || comboB.targetReps || ex.targetReps)} ${formatUnitLabel(activeSet.comboBUnit || comboB.unit || ex.unit, false)} • ${activeSet.comboBWeight !== undefined ? activeSet.comboBWeight : (comboB.weight || 0)} kg)</span></p>
+                            </div>
+                        ` : ''}
 
                         <div class="mt-3 bg-[#0f1115] border border-white/5 rounded-2xl overflow-hidden">
                             <button onclick="toggleTechniqueBox()" class="w-full px-3.5 py-2.5 flex items-center justify-between text-left">
@@ -2991,7 +3124,7 @@
                         <div class="flex items-center gap-2">
                             <i class="ph-bold ph-check-circle text-limeaccent text-base"></i>
                             <span class="text-xs font-black uppercase tracking-wider text-white">
-                                SERIES (${completedSetsCount}/${ex.sets.length})
+                                ${isCombo ? 'RONDAS COMBINADAS' : 'SERIES'} (${completedSetsCount}/${ex.sets.length})
                             </span>
                         </div>
 
@@ -3017,7 +3150,7 @@
                             }">
                                 <div class="flex items-center justify-between gap-2">
                                     <div class="flex items-center gap-2 min-w-0">
-                                        <span class="text-xs font-black ${isSelected || set.completed ? 'text-limeaccent' : 'text-slate-400'}">S${sIdx + 1}</span>
+                                        <span class="text-xs font-black ${isSelected || set.completed ? 'text-limeaccent' : 'text-slate-400'}">${isCombo ? 'R' : 'S'}${sIdx + 1}</span>
                                         <div class="flex items-center gap-1 bg-black/40 px-2 py-1 rounded-lg border border-white/5" onclick="event.stopPropagation()">
                                             <input type="text" value="${escapeHtml(set.reps)}" onchange="updateSetReps(${sIdx}, this.value)" aria-label="Valor serie ${sIdx + 1}" class="w-8 bg-transparent text-center text-xs font-extrabold text-white outline-none">
                                             <select onchange="updateSetUnit(${sIdx}, this.value)" aria-label="Unidad serie ${sIdx + 1}" class="bg-transparent text-[10px] text-limeaccent font-extrabold outline-none cursor-pointer">
@@ -3028,9 +3161,21 @@
                                         </div>
                                     </div>
                                     <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400">
-                                        ${set.completed ? 'Completada' : isSelected ? 'Serie activa' : 'Pendiente'}
+                                        ${set.completed ? 'Completada' : isSelected ? 'Ronda activa' : 'Pendiente'}
                                     </span>
                                 </div>
+
+                                ${isCombo && comboB ? `
+                                    <div class="flex items-center justify-between gap-2 bg-purple-500/10 border border-purple-400/20 rounded-xl px-2.5 py-1.5" onclick="event.stopPropagation()">
+                                        <span class="text-[10px] font-black text-purple-200 truncate flex-1">+ ${escapeHtml(comboB.name)}</span>
+                                        <div class="flex items-center gap-1 shrink-0">
+                                            <input type="text" value="${escapeHtml(set.comboBReps || comboB.targetReps || ex.targetReps)}" onchange="updateComboSetBReps(${sIdx}, this.value)" class="w-8 bg-black/50 border border-white/10 rounded px-1 py-0.5 text-[11px] font-extrabold text-center text-white outline-none">
+                                            <span class="text-[9px] font-bold text-purple-300">${formatUnitLabel(set.comboBUnit || comboB.unit || ex.unit, false)}</span>
+                                            <input type="number" step="0.5" min="0" value="${set.comboBWeight !== undefined ? set.comboBWeight : (comboB.weight || 0)}" onchange="updateComboSetBWeight(${sIdx}, this.value)" class="w-12 bg-black/50 border border-white/10 rounded px-1 py-0.5 text-[11px] font-black text-center text-purple-200 outline-none">
+                                            <span class="text-[9px] font-bold text-slate-400">kg</span>
+                                        </div>
+                                    </div>
+                                ` : ''}
 
                                 <div class="flex items-center justify-between gap-2">
                                     <div class="flex items-center gap-1.5 flex-wrap" onclick="event.stopPropagation()">
@@ -3156,6 +3301,23 @@
             renderAll();
         }
 
+        function updateComboSetBReps(setIndex, val) {
+            const list = getCurrentExercises();
+            const ex = list[activeStationIndex];
+            if (!ex || !ex.sets[setIndex]) return;
+            ex.sets[setIndex].comboBReps = val.trim() || (ex.comboSecondary && ex.comboSecondary.targetReps) || ex.targetReps;
+            saveState();
+        }
+
+        function updateComboSetBWeight(setIndex, val) {
+            const list = getCurrentExercises();
+            const ex = list[activeStationIndex];
+            if (!ex || !ex.sets[setIndex]) return;
+            const parsed = parseFloat(val);
+            ex.sets[setIndex].comboBWeight = (!isNaN(parsed) && parsed >= 0) ? parsed : 0;
+            saveState();
+        }
+
         function toggleSetCompleted(setIndex) {
             const list = getCurrentExercises();
             const ex = list[activeStationIndex];
@@ -3167,10 +3329,20 @@
             if (setObj.completed) {
                 const todayStr = getTodayStr();
                 const prof = state.profiles[state.activeProfile];
+                const isCombo = isCombinedExercise(ex);
+                const comboB = isCombo ? ex.comboSecondary : null;
+                const bReps = isCombo ? (setObj.comboBReps || comboB.targetReps || ex.targetReps) : '';
+                const bWeight = isCombo ? (setObj.comboBWeight !== undefined ? setObj.comboBWeight : (comboB.weight || 0)) : 0;
+                const bUnit = isCombo ? normalizeUnit(setObj.comboBUnit || comboB.unit || ex.unit) : normalizeUnit(setObj.unit || ex.unit);
+
+                const recordedName = isCombo && comboB
+                    ? `${ex.name} + ${comboB.name} (${setObj.reps}${formatUnitLabel(setObj.unit || ex.unit, false)} / ${bReps}${formatUnitLabel(bUnit, false)} @ ${bWeight}kg)`
+                    : ex.name;
+
                 prof.history.push({
                     id: 'rec-' + Date.now() + '-' + setIndex,
                     exerciseId: ex.id,
-                    exerciseName: ex.name,
+                    exerciseName: recordedName,
                     setNumber: setIndex + 1,
                     weight: setObj.weight,
                     reps: setObj.reps,
@@ -3201,6 +3373,8 @@
                 }
                 if (allRoutineDoneNow) {
                     showToast("DIA DE ENTRENAMIENTO COMPLETADO 👍🏻");
+                } else if (isCombo && comboB) {
+                    showToast(`✓ Ronda ${setIndex + 1} (${ex.name} + ${comboB.name}) • Descanso ${ex.restSeconds || 90}s`);
                 } else {
                     showToast(`✓ S${setIndex + 1} guardada: ${setObj.weight}kg × ${setObj.reps} (RIR ${setObj.rir})`);
                 }
@@ -3232,6 +3406,9 @@
                 weight: lastSet.weight,
                 reps: lastSet.reps,
                 rir: lastSet.rir,
+                comboBReps: lastSet.comboBReps,
+                comboBUnit: lastSet.comboBUnit,
+                comboBWeight: lastSet.comboBWeight,
                 completed: false
             });
             saveState();
@@ -3383,7 +3560,7 @@
         }
 
         // =========================================================================
-        // CREAR / EDITAR / ELIMINAR ESTACIONES
+        // CREAR / EDITAR / ELIMINAR ESTACIONES (SIMPLE Y COMBINADA)
         // =========================================================================
         function handleEditStationClick(exId) {
             const prof = state.profiles[state.activeProfile];
@@ -3403,11 +3580,38 @@
             confirmDeleteExercise(exId);
         }
 
+        function setStationComboMode(isCombo) {
+            const hiddenInput = document.getElementById('ex-is-combo');
+            const comboBox = document.getElementById('combo-second-exercise-box');
+            const simpleBtn = document.getElementById('mode-btn-simple');
+            const comboBtn = document.getElementById('mode-btn-combo');
+            const nameLabel = document.getElementById('ex-name-label');
+
+            if (hiddenInput) hiddenInput.value = isCombo ? 'true' : 'false';
+            if (comboBox) comboBox.classList.toggle('hidden', !isCombo);
+            if (nameLabel) {
+                nameLabel.textContent = isCombo ? '1° Ejercicio de la combinación *' : 'Nombre del ejercicio *';
+            }
+            if (simpleBtn && comboBtn) {
+                simpleBtn.className = !isCombo
+                    ? 'px-2.5 py-1 rounded-lg text-[10px] font-black uppercase bg-limeaccent text-darkbg transition-colors'
+                    : 'px-2.5 py-1 rounded-lg text-[10px] font-black uppercase text-slate-300 hover:text-white transition-colors';
+                comboBtn.className = isCombo
+                    ? 'px-2.5 py-1 rounded-lg text-[10px] font-black uppercase bg-purple-400 text-darkbg transition-colors'
+                    : 'px-2.5 py-1 rounded-lg text-[10px] font-black uppercase text-slate-300 hover:text-white transition-colors';
+            }
+        }
+
         function openExerciseModal(exId = null) {
             const modal = document.getElementById('exercise-modal');
             const form = document.getElementById('exercise-form');
             form.reset();
             document.getElementById('edit-ex-id').value = '';
+            setStationComboMode(false);
+            document.getElementById('ex-combo-name').value = '';
+            document.getElementById('ex-combo-reps').value = '';
+            document.getElementById('ex-combo-unit').value = 'reps';
+            document.getElementById('ex-combo-weight').value = '0';
 
             if (exId) {
                 const ex = state.profiles[state.activeProfile].exercises.find(e => e.id === exId);
@@ -3424,6 +3628,14 @@
                 document.getElementById('ex-rest').value = ex.restSeconds || 90;
                 document.getElementById('ex-notes').value = ex.notes;
                 document.getElementById('ex-video').value = ex.videoUrl || '';
+
+                if (isCombinedExercise(ex)) {
+                    setStationComboMode(true);
+                    document.getElementById('ex-combo-name').value = ex.comboSecondary.name || '';
+                    document.getElementById('ex-combo-reps').value = ex.comboSecondary.targetReps || ex.targetReps;
+                    document.getElementById('ex-combo-unit').value = normalizeUnit(ex.comboSecondary.unit || ex.unit);
+                    document.getElementById('ex-combo-weight').value = ex.comboSecondary.weight || 0;
+                }
             } else {
                 document.getElementById('ex-modal-title').textContent = `Nueva Estación (${state.activeProfile})`;
                 populateCategorySelect(activeTab);
@@ -3828,9 +4040,15 @@
             const profileData = state.profiles[state.activeProfile];
             const editId = document.getElementById('edit-ex-id').value;
 
+            const isComboMode = document.getElementById('ex-is-combo').value === 'true';
+            const comboBName = document.getElementById('ex-combo-name').value.trim();
+            const comboBReps = document.getElementById('ex-combo-reps').value.trim();
+            const comboBUnit = normalizeUnit(document.getElementById('ex-combo-unit').value);
+            const comboBWeight = Math.max(0, parseFloat(document.getElementById('ex-combo-weight').value) || 0);
+
             const category = document.getElementById('ex-category').value;
             const name = document.getElementById('ex-name').value.trim();
-            const tag = document.getElementById('ex-tag').value;
+            const tag = isComboMode ? 'SUPERSERIE' : document.getElementById('ex-tag').value;
             const muscle = document.getElementById('ex-muscle').value.trim();
             const numSets = Math.max(1, Math.min(8, parseInt(document.getElementById('ex-num-sets').value) || 3));
             const targetReps = document.getElementById('ex-target-reps').value.trim() || '10';
@@ -3839,6 +4057,20 @@
             const notes = document.getElementById('ex-notes').value.trim();
             const videoUrl = document.getElementById('ex-video').value.trim();
 
+            if (isComboMode && !comboBName) {
+                showToast("Completá el nombre del 2° ejercicio para la estación combinada", true);
+                return;
+            }
+
+            const comboSecondary = isComboMode
+                ? {
+                    name: comboBName,
+                    targetReps: comboBReps || targetReps,
+                    unit: comboBUnit,
+                    weight: comboBWeight
+                }
+                : null;
+
             if (editId) {
                 const idx = profileData.exercises.findIndex(item => item.id === editId);
                 if (idx !== -1) {
@@ -3846,10 +4078,26 @@
                     const updatedSets = [];
                     for (let i = 0; i < numSets; i++) {
                         if (oldEx.sets[i]) {
-                            updatedSets.push({ ...oldEx.sets[i], reps: targetReps, unit });
+                            updatedSets.push({
+                                ...oldEx.sets[i],
+                                reps: targetReps,
+                                unit,
+                                comboBReps: isComboMode ? (oldEx.sets[i].comboBReps || (comboSecondary && comboSecondary.targetReps) || targetReps) : undefined,
+                                comboBUnit: isComboMode ? (oldEx.sets[i].comboBUnit || comboBUnit) : undefined,
+                                comboBWeight: isComboMode ? (oldEx.sets[i].comboBWeight !== undefined ? oldEx.sets[i].comboBWeight : comboBWeight) : undefined
+                            });
                         } else {
                             const lastW = oldEx.sets[oldEx.sets.length - 1]?.weight || 0;
-                            updatedSets.push({ weight: lastW, reps: targetReps, unit, rir: '2', completed: false });
+                            updatedSets.push({
+                                weight: lastW,
+                                reps: targetReps,
+                                unit,
+                                rir: '2',
+                                comboBReps: isComboMode ? ((comboSecondary && comboSecondary.targetReps) || targetReps) : undefined,
+                                comboBUnit: isComboMode ? comboBUnit : undefined,
+                                comboBWeight: isComboMode ? comboBWeight : undefined,
+                                completed: false
+                            });
                         }
                     }
                     profileData.exercises[idx] = {
@@ -3863,6 +4111,8 @@
                         restSeconds,
                         notes,
                         videoUrl,
+                        isCombo: isComboMode,
+                        comboSecondary,
                         sets: updatedSets
                     };
                 }
@@ -3874,6 +4124,9 @@
                     reps: targetReps,
                     unit,
                     rir: '2',
+                    comboBReps: isComboMode ? ((comboSecondary && comboSecondary.targetReps) || targetReps) : undefined,
+                    comboBUnit: isComboMode ? comboBUnit : undefined,
+                    comboBWeight: isComboMode ? comboBWeight : undefined,
                     completed: false
                 }));
                 profileData.exercises.push({
@@ -3887,6 +4140,8 @@
                     restSeconds,
                     notes,
                     videoUrl,
+                    isCombo: isComboMode,
+                    comboSecondary,
                     sets: initialSets
                 });
                 activeTab = category;
@@ -3894,7 +4149,12 @@
                 activeStationIndex = newCatList.length - 1;
                 activeSetIndex = 0;
                 syncExercisesIntoCatalog([profileData.exercises[profileData.exercises.length - 1]]);
-                showToast("Nueva estación agregada y guardada en base");
+                showToast(isComboMode ? "Estación combinada creada" : "Nueva estación agregada y guardada en base");
+            }
+
+            if (Array.isArray(profileData.days)) {
+                const curDay = getActiveTrainingDay(profileData);
+                if (curDay) curDay.exercises = profileData.exercises;
             }
 
             saveState();
